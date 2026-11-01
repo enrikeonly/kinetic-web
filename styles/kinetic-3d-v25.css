@@ -1,0 +1,551 @@
+/* === docs/styles/kinetic-3d-v25.css ===
+ * KINETIC OS v2.5 — Motor Visual 3D Volumétrico Cyber-Obsidian & M3 High-Contrast Light
+ * Paridad estética 100% con commit ba6d465
+ */
+
+:root,
+html[data-theme="dark"] {
+  --knt-bg: #050505;
+  --knt-surface: #080C12;
+  --knt-card: #0C1018;
+  --knt-card-elevated: #101622;
+  --knt-cyan: #00F0FF;
+  --knt-purple: #9D4EDD;
+  --knt-green: #00FF66;
+  --knt-amber: #FFB800;
+  --knt-text: #FFFFFF;
+  --knt-text-sec: #CBD5E1;
+  --knt-muted: #94A3B8;
+  --knt-cyan-ink: #00F0FF;
+  --knt-purple-ink: #D8B4FE;
+  --knt-green-ink: #00FF66;
+  --knt-amber-ink: #FFB800;
+  --knt-glass-bg: rgba(8, 12, 18, 0.78);
+  --knt-bubble-bg: rgba(12, 16, 24, 0.72);
+  --knt-border-subtle: rgba(255, 255, 255, 0.14);
+  --knt-top-spec: rgba(255, 255, 255, 0.28);
+  --knt-bottom-base: #020408;
+  --knt-input-bg: #080C12;
+  --knt-shadow-card: 0 16px 36px rgba(0, 0, 0, 0.62), 0 0 24px rgba(0, 240, 255, 0.08);
+  --knt-wordmark-grad: linear-gradient(90deg, #FFFFFF 0%, #D9FCFF 52%, #00F0FF 100%);
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --knt-bg: #F4F7FB;
+  --knt-surface: #E9EFF8;
+  --knt-card: #FFFFFF;
+  --knt-card-elevated: #F8FAFC;
+  --knt-cyan: #00F0FF;
+  --knt-purple: #9D4EDD;
+  --knt-green: #00FF66;
+  --knt-amber: #FFB800;
+  --knt-text: #0A0E17;
+  --knt-text-sec: #1E293B;
+  --knt-muted: #475569;
+  --knt-cyan-ink: #006B82;
+  --knt-purple-ink: #6D28D9;
+  --knt-green-ink: #047857;
+  --knt-amber-ink: #B45309;
+  --knt-glass-bg: rgba(255, 255, 255, 0.86);
+  --knt-bubble-bg: rgba(255, 255, 255, 0.82);
+  --knt-border-subtle: #CBD5E1;
+  --knt-top-spec: #FFFFFF;
+  --knt-bottom-base: #94A3B8;
+  --knt-input-bg: #FFFFFF;
+  --knt-shadow-card: 0 14px 30px rgba(15, 23, 42, 0.1), 0 0 18px rgba(0, 184, 212, 0.12);
+  --knt-wordmark-grad: linear-gradient(90deg, #0A0E17 0%, #006B82 55%, #7C3AED 100%);
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  background-color: var(--knt-bg) !important;
+  color: var(--knt-text) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Candado Anti-Zoom iOS Safari (>= 16px inquebrantable) */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+  line-height: 1.35;
+}
+
+.knt-wordmark {
+  font-family: 'Space Grotesk', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  background: var(--knt-wordmark-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.knt-glass-header {
+  background: var(--knt-glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1.8px solid rgba(0, 240, 255, 0.32);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="light"] .knt-glass-header {
+  border-bottom: 2px solid #00B8D4;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.knt-bubble-glass {
+  background: var(--knt-bubble-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ============================================================================
+ * TARJETAS VOLUMÉTRICAS 3D (BISEL SUPERIOR 1.8px + SOPORTE FÍSICO 4.4px–4.8px)
+ * ============================================================================ */
+.knt-card-3d {
+  background: var(--knt-card);
+  border-radius: 20px;
+  border: 1.2px solid var(--knt-border-subtle);
+  border-top: 1.8px solid var(--knt-top-spec);
+  border-bottom: 4.6px solid var(--knt-bottom-base);
+  box-shadow: var(--knt-shadow-card);
+  transition: transform 0.16s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.knt-card-3d-cyan {
+  background: var(--knt-card);
+  border-radius: 20px;
+  border: 1.2px solid rgba(0, 240, 255, 0.44);
+  border-top: 1.8px solid #B8FFFF;
+  border-bottom: 4.6px solid #006B78;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), 0 0 22px rgba(0, 240, 255, 0.14);
+}
+
+html[data-theme="light"] .knt-card-3d-cyan {
+  background: #FFFFFF;
+  border-color: #06B6D4;
+  border-top-color: #A5F3FC;
+  border-bottom-color: #00B8D4;
+  box-shadow: 0 12px 26px rgba(0, 184, 212, 0.16);
+}
+
+.knt-card-3d-purple {
+  background: var(--knt-card);
+  border-radius: 20px;
+  border: 1.2px solid rgba(157, 78, 221, 0.5);
+  border-top: 1.8px solid #E9D5FF;
+  border-bottom: 4.6px solid #5A189A;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), 0 0 22px rgba(157, 78, 221, 0.16);
+}
+
+html[data-theme="light"] .knt-card-3d-purple {
+  background: #FFFFFF;
+  border-color: #9333EA;
+  border-top-color: #E9D5FF;
+  border-bottom-color: #7C3AED;
+  box-shadow: 0 12px 26px rgba(124, 58, 237, 0.15);
+}
+
+.knt-card-3d-green {
+  background: var(--knt-card);
+  border-radius: 20px;
+  border: 1.2px solid rgba(0, 255, 102, 0.45);
+  border-top: 1.8px solid #B9FFD6;
+  border-bottom: 4.6px solid #007A33;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 102, 0.13);
+}
+
+html[data-theme="light"] .knt-card-3d-green {
+  background: #FFFFFF;
+  border-color: #10B981;
+  border-top-color: #A7F3D0;
+  border-bottom-color: #059669;
+  box-shadow: 0 12px 26px rgba(16, 185, 129, 0.15);
+}
+
+.knt-card-3d-amber {
+  background: var(--knt-card);
+  border-radius: 20px;
+  border: 1.2px solid rgba(255, 184, 0, 0.52);
+  border-top: 1.8px solid #FFE89E;
+  border-bottom: 4.6px solid #9A6700;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 184, 0, 0.16);
+}
+
+html[data-theme="light"] .knt-card-3d-amber {
+  background: #FFFFFF;
+  border-color: #F59E0B;
+  border-top-color: #FDE68A;
+  border-bottom-color: #D97706;
+  box-shadow: 0 12px 26px rgba(245, 158, 11, 0.16);
+}
+
+/* ============================================================================
+ * BOTONES Y CHIPS VOLUMÉTRICOS 3D
+ * ============================================================================ */
+.knt-btn-3d {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 13px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  text-decoration: none;
+  transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.knt-btn-3d:hover {
+  filter: brightness(1.06);
+}
+
+.knt-btn-3d:active {
+  transform: translateY(2px);
+}
+
+.knt-btn-cyan {
+  background: #00F0FF;
+  color: #050505 !important;
+  border: 1.2px solid #5CEEFF;
+  border-top: 1.8px solid #D6FFFF;
+  border-bottom: 4.5px solid #008A99;
+  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.32);
+}
+
+.knt-btn-green {
+  background: #00FF66;
+  color: #050505 !important;
+  border: 1.2px solid #6BFF9E;
+  border-top: 1.8px solid #D4FFE4;
+  border-bottom: 4.5px solid #00993D;
+  box-shadow: 0 8px 20px rgba(0, 255, 102, 0.28);
+}
+
+.knt-btn-purple {
+  background: #9D4EDD;
+  color: #FFFFFF !important;
+  border: 1.2px solid #C77DFF;
+  border-top: 1.8px solid #F3E8FF;
+  border-bottom: 4.5px solid #5A189A;
+  box-shadow: 0 8px 20px rgba(157, 78, 221, 0.34);
+}
+
+.knt-btn-amber {
+  background: #FFB800;
+  color: #050505 !important;
+  border: 1.2px solid #FFD24D;
+  border-top: 1.8px solid #FFF0B8;
+  border-bottom: 4.5px solid #996B00;
+  box-shadow: 0 8px 20px rgba(255, 184, 0, 0.3);
+}
+
+.knt-btn-ghost-cyan {
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--knt-cyan-ink);
+  border: 1.2px solid rgba(0, 240, 255, 0.48);
+  border-top: 1.8px solid #B8FFFF;
+  border-bottom: 4.2px solid #006B78;
+  box-shadow: 0 6px 16px rgba(0, 240, 255, 0.15);
+}
+
+html[data-theme="light"] .knt-btn-ghost-cyan {
+  background: #ECFEFF;
+  color: #005F73;
+  border-color: #06B6D4;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #00B8D4;
+}
+
+.knt-btn-ghost-purple {
+  background: rgba(157, 78, 221, 0.14);
+  color: var(--knt-purple-ink);
+  border: 1.2px solid rgba(157, 78, 221, 0.52);
+  border-top: 1.8px solid #E9D5FF;
+  border-bottom: 4.2px solid #5A189A;
+  box-shadow: 0 6px 16px rgba(157, 78, 221, 0.16);
+}
+
+html[data-theme="light"] .knt-btn-ghost-purple {
+  background: #F5F3FF;
+  color: #5B21B6;
+  border-color: #9333EA;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #7C3AED;
+}
+
+.knt-chip-3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 11px;
+  padding: 7px 12px;
+  font-size: 11.5px;
+  font-weight: 800;
+  background: var(--knt-surface);
+  color: var(--knt-text);
+  border: 1.2px solid var(--knt-border-subtle);
+  border-top: 1.8px solid var(--knt-top-spec);
+  border-bottom: 4.2px solid var(--knt-bottom-base);
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.knt-chip-3d.active-cyan {
+  background: #00F0FF;
+  color: #050505 !important;
+  border-color: #5CEEFF;
+  border-top-color: #E0FFFF;
+  border-bottom-color: #008A99;
+  box-shadow: 0 6px 16px rgba(0, 240, 255, 0.28);
+}
+
+.knt-chip-3d.active-purple {
+  background: #9D4EDD;
+  color: #FFFFFF !important;
+  border-color: #C77DFF;
+  border-top-color: #F3E8FF;
+  border-bottom-color: #5A189A;
+  box-shadow: 0 6px 16px rgba(157, 78, 221, 0.28);
+}
+
+/* ============================================================================
+ * INPUTS 3D ANTI-ZOOM 16PX
+ * ============================================================================ */
+.knt-input-3d {
+  width: 100%;
+  background: var(--knt-input-bg);
+  color: var(--knt-text);
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 16px !important;
+  font-weight: 600;
+  border: 1.2px solid rgba(0, 240, 255, 0.32);
+  border-top: 1.8px solid var(--knt-top-spec);
+  border-bottom: 4.2px solid #006B78;
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+html[data-theme="light"] .knt-input-3d {
+  background: #FFFFFF;
+  color: #0A0E17;
+  border-color: #38BDF8;
+  border-top-color: #E0F2FE;
+  border-bottom-color: #00B8D4;
+}
+
+.knt-input-3d:focus {
+  border-color: #00F0FF;
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.18);
+}
+
+/* ============================================================================
+ * MEDALLÓN 3D DE 26x26PX (231 DISCIPLINAS: FITNESS CIAN / WELLNESS PÚRPURA)
+ * ============================================================================ */
+.knt-medallion-26 {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-style: solid;
+  border-width: 1.2px;
+  border-top-width: 1.8px;
+  border-bottom-width: 3.4px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.knt-medallion-cyan {
+  background: #06222E;
+  color: #00F0FF;
+  border-color: rgba(0, 240, 255, 0.48);
+  border-top-color: #99FFFF;
+  border-bottom-color: #006B78;
+}
+
+html[data-theme="light"] .knt-medallion-cyan {
+  background: #E0F2FE;
+  color: #0284C7;
+  border-color: #7DD3FC;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #0284C7;
+}
+
+.knt-medallion-purple {
+  background: #220B38;
+  color: #E0AAFF;
+  border-color: rgba(199, 125, 255, 0.5);
+  border-top-color: #E0AAFF;
+  border-bottom-color: #5A189A;
+}
+
+html[data-theme="light"] .knt-medallion-purple {
+  background: #F3E8FF;
+  color: #7C3AED;
+  border-color: #C4B5FD;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #7C3AED;
+}
+
+/* ============================================================================
+ * MAPA 3D DE SALA TIPO CINE (HASTA 50 ESTACIONES • COACH STAGE SIEMPRE #FFF)
+ * ============================================================================ */
+.knt-stage-bar {
+  background: linear-gradient(180deg, #0F172A 0%, #060911 100%) !important;
+  color: #FFFFFF !important;
+  border-radius: 14px;
+  border: 1.2px solid rgba(0, 240, 255, 0.55);
+  border-top: 1.8px solid #B8FFFF;
+  border-bottom: 4.4px solid #006B78;
+  box-shadow: 0 8px 24px rgba(0, 240, 255, 0.22);
+}
+
+.knt-spot-btn {
+  border-radius: 10px;
+  padding: 6px 4px;
+  font-size: 10.5px;
+  font-weight: 900;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.knt-spot-free {
+  background: rgba(0, 255, 102, 0.12);
+  color: var(--knt-green-ink);
+  border: 1.2px solid rgba(0, 255, 102, 0.48);
+  border-top: 1.8px solid #B9FFD6;
+  border-bottom: 3.8px solid #007A33;
+}
+
+html[data-theme="light"] .knt-spot-free {
+  background: #ECFDF5;
+  color: #047857;
+  border-color: #10B981;
+  border-top-color: #FFFFFF;
+  border-bottom-color: #059669;
+}
+
+.knt-spot-selected {
+  background: #00F0FF !important;
+  color: #050505 !important;
+  border: 1.2px solid #5CEEFF !important;
+  border-top: 1.8px solid #FFFFFF !important;
+  border-bottom: 4.2px solid #007E8C !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.55);
+  transform: translateY(-1px) scale(1.03);
+}
+
+.knt-spot-occupied {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--knt-muted);
+  border: 1.2px solid rgba(148, 163, 184, 0.25);
+  border-top: 1.8px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 3.8px solid rgba(15, 23, 42, 0.55);
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+html[data-theme="light"] .knt-spot-occupied {
+  background: #E2E8F0;
+  color: #64748B;
+  border-color: #CBD5E1;
+  border-top-color: #F8FAFC;
+  border-bottom-color: #94A3B8;
+}
+
+/* ============================================================================
+ * COFRE 3D ARTICULADO & LÁSER ÓPTICO QR TOTP 60s
+ * ============================================================================ */
+@keyframes kntLaserScan {
+  0% { top: 6%; }
+  50% { top: 88%; }
+  100% { top: 6%; }
+}
+
+.knt-laser-line {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent, #00F0FF, #00FF66, transparent);
+  box-shadow: 0 0 12px #00F0FF;
+  animation: kntLaserScan 2.6s ease-in-out infinite;
+}
+
+@keyframes kntChestFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+.knt-chest-stage {
+  animation: kntChestFloat 3.4s ease-in-out infinite;
+}
+
+.knt-chest-lid {
+  transform-origin: center bottom;
+  transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.knt-chest-open .knt-chest-lid {
+  transform: translateY(-14px) rotateX(26deg) scale(1.03);
+}
+
+.knt-chest-beam {
+  opacity: 0;
+  transform: scaleY(0.3);
+  transform-origin: bottom center;
+  transition: opacity 0.35s ease, transform 0.4s ease;
+}
+
+.knt-chest-open .knt-chest-beam {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* Scrollbar sutil */
+.knt-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.knt-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.35);
+  border-radius: 999px;
+}
+
+/* Cabecera Desliza / Toca para Cerrar en Modales */
+.knt-swipe-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: var(--knt-surface);
+  border: 1.2px solid var(--knt-border-subtle);
+  border-top: 1.8px solid var(--knt-top-spec);
+  border-bottom: 3.8px solid var(--knt-bottom-base);
+  cursor: pointer;
+}
