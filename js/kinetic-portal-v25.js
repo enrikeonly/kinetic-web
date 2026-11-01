@@ -1,16 +1,17 @@
 // === docs/js/kinetic-portal-v25.js === //
-// Controlador Reactivo Tri-Modo (Dark/Light + ES/EN) + Simuladores 3D + Deeplinks + Supabase + Concierge IA
+// Controlador Reactivo Tri-Modo (Dark/Light + ES/EN) + Simuladores 3D + Candado Pre-Lanzamiento + Pre-Registro Waitlist + Concierge IA
 
 (function () {
-  const CFG = window.KINETIC_PORTAL_CONFIG;
-  const I18N = window.KINETIC_I18N_V25;
+  const CFG = window.KINETIC_PORTAL_CONFIG || {};
+  const I18N = window.KINETIC_I18N_V25 || {};
   const DISCIPLINES = window.KINETIC_231_DISCIPLINES || [];
-  const VENUES = window.KINETIC_CABO_VENUES || [];
+  const DEMO_VENUES = window.KINETIC_DEMO_VENUES || [];
   const MEMBERSHIPS = window.KINETIC_MEMBERSHIPS_DATA || [];
   const LEGAL_DOCS = window.KINETIC_LEGAL_DOCS_V25 || {};
+  const ENABLE_DIRECT_APK_DOWNLOAD = Boolean(CFG.enableDirectApkDownload);
 
   const STUDIO_PRESETS = {
-    reformer: { code: 'RF', priceKc: 280, es: 'Cama Reformer', en: 'Reformer Bed', coachEs: 'COACH PILATES REFORMER', coachEn: 'REFORMER PILATES COACH' },
+    reformer: { code: 'RF', priceKc: 280, es: 'Cama Reformer', en: 'Reformer Bed', coachEs: 'INSTRUCTOR PILATES REFORMER', coachEn: 'REFORMER PILATES INSTRUCTOR' },
     cycling: { code: 'BK', priceKc: 240, es: 'Bici Spinning', en: 'Spin Bike', coachEs: 'PODIUM RHYTHM CYCLING', coachEn: 'RHYTHM CYCLING PODIUM' },
     barre: { code: 'BR', priceKc: 250, es: 'Estación Barre', en: 'Barre Station', coachEs: 'ESPEJO PRINCIPAL BARRE', coachEn: 'FRONT BARRE MIRROR' },
     boxing: { code: 'BX', priceKc: 220, es: 'Saco de Boxeo', en: 'Heavy Bag', coachEs: 'RING / TARIMA DE COMBATE', coachEn: 'COMBAT RING / STAGE' },
@@ -36,8 +37,8 @@
     showFilterDrawer: true,
     showSortDrawer: false,
     discExpandedAll: false,
-    venueZone: 'all',
-    venuesExpandedAll: false,
+    selectedDiscId: null,
+    venueCat: 'all',
     studioEquip: 'reformer',
     studioCap: 32,
     selectedSpot: 7,
@@ -49,8 +50,8 @@
   };
 
   function t(key) {
-    const dict = I18N[state.lang] || I18N.es;
-    return dict[key] !== undefined ? dict[key] : (I18N.es[key] || key);
+    const dict = I18N[state.lang] || I18N.es || {};
+    return dict[key] !== undefined ? dict[key] : ((I18N.es && I18N.es[key]) || key);
   }
 
   function escapeHtml(str) {
@@ -79,6 +80,29 @@
     return '🏋️';
   }
 
+  function scrollToSimulator(targetTab) {
+    if (targetTab && ['explore', 'studio', 'club', 'vault'].indexOf(targetTab) !== -1) {
+      state.heroSimTab = targetTab;
+      renderHeroSimulator();
+    }
+    const simCard = document.getElementById('heroSimulatorCard') || document.getElementById('inicio-hero');
+    if (simCard && typeof simCard.scrollIntoView === 'function') {
+      simCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function handleApkDownload() {
+    if (ENABLE_DIRECT_APK_DOWNLOAD) {
+      const anchor = document.getElementById('directApkDownloadAnchor');
+      if (anchor) {
+        anchor.setAttribute('href', CFG.directApkPath || '/downloads/Kinetic.apk');
+        anchor.click();
+        return;
+      }
+    }
+    openModal('apkEarlyAccessModal');
+  }
+
   // ==========================================================================
   // 1. APLICACIÓN DE TEMA Y LENGUAJE REACTIVO SIN RECARGAR
   // ==========================================================================
@@ -91,6 +115,23 @@
     document.querySelectorAll('[data-theme-label]').forEach(function (el) {
       el.textContent = isLight ? '☀️ ' + t('themeLightLabel') : '🌙 ' + t('themeDarkLabel');
     });
+  }
+
+  function syncRegistrationModalCopy() {
+    const isB2B = state.regMode === 'b2b';
+    const b2cBtn = document.getElementById('regTabBtn_b2c');
+    const b2bBtn = document.getElementById('regTabBtn_b2b');
+    const nameLabel = document.getElementById('regNameLabelEl');
+    const nameInput = document.getElementById('regName');
+    const submitBtn = document.getElementById('regSubmitBtn');
+
+    if (b2cBtn) b2cBtn.className = !isB2B ? 'knt-chip-3d active-cyan flex-1 justify-center' : 'knt-chip-3d flex-1 justify-center';
+    if (b2bBtn) b2bBtn.className = isB2B ? 'knt-chip-3d active-purple flex-1 justify-center' : 'knt-chip-3d flex-1 justify-center';
+    if (nameLabel) nameLabel.textContent = isB2B ? t('regNameLabelB2B') : t('regNameLabelB2C');
+    if (nameInput) nameInput.setAttribute('placeholder', isB2B ? t('regNamePlaceholderB2B') : t('regNamePlaceholderB2C'));
+    if (submitBtn && !submitBtn.disabled) {
+      submitBtn.textContent = isB2B ? t('regSubmitBtnB2B') : t('regSubmitBtnB2C');
+    }
   }
 
   function applyLanguage(nextLang) {
@@ -124,6 +165,7 @@
     });
 
     applyTheme(state.theme);
+    syncRegistrationModalCopy();
     renderHeroSimulator();
     renderDisciplinesExplorer();
     renderVenuesExplorer();
@@ -136,7 +178,7 @@
   }
 
   // ==========================================================================
-  // 2. SIMULADOR 3D EN VIVO DEL HERO (4 TABS + QR TOTP 60s)
+  // 2. SIMULADOR EN VIVO DEL HERO (4 TABS • LLAVE QR DINÁMICA)
   // ==========================================================================
   function renderHeroSimulator() {
     const body = document.getElementById('heroSimViewport');
@@ -158,13 +200,13 @@
         '<div class="space-y-3">' +
         '  <div class="rounded-2xl overflow-hidden border border-cyan-400/40" style="background:var(--knt-surface)">' +
         '    <div class="relative h-36">' +
-        '      <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80" alt="Kinetic Oficial" class="w-full h-full object-cover" />' +
+        '      <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=900&q=80" alt="Sede Oficial Kinetic" class="w-full h-full object-cover" />' +
         '      <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>' +
-        '      <span class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/80 border border-[#00F0FF] text-[10px] font-black text-[#00F0FF]">● ' + (isEn ? 'STRENGTH & CROSSFIT' : 'FUERZA & CROSSFIT') + '</span>' +
+        '      <span class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-lg bg-black/80 border border-[#00F0FF] text-[10px] font-black text-[#00F0FF]">● ' + (isEn ? 'STRENGTH & CONDITIONING' : 'FUERZA & RENDIMIENTO') + '</span>' +
         '      <span class="absolute top-2.5 right-2.5 px-2 py-1 rounded-lg bg-[#00FF66] text-[#050505] text-[10px] font-black">★ 5.0</span>' +
         '      <div class="absolute bottom-2.5 left-3 right-3 text-white">' +
-        '        <div class="font-bold text-sm">Kinetic Oficial • Cabo San Lucas</div>' +
-        '        <div class="text-[11px] text-slate-200">06:00 – 22:00 • ' + (isEn ? '40% Escrow / 60% QR' : '40% Escrow / 60% QR') + '</div>' +
+        '        <div class="font-bold text-sm">' + (isEn ? 'Official Kinetic Venue • High Performance' : 'Sede Oficial Kinetic • Alto Rendimiento') + '</div>' +
+        '        <div class="text-[11px] text-slate-200">06:00 – 22:00 • ' + (isEn ? '40% Hold / 60% QR Key' : '40% Apartado / 60% Llave QR') + '</div>' +
         '      </div>' +
         '    </div>' +
         '    <div class="p-3 flex items-center justify-between gap-2">' +
@@ -193,18 +235,18 @@
     } else if (state.heroSimTab === 'studio') {
       body.innerHTML =
         '<div class="space-y-2.5">' +
-        '  <div class="knt-stage-bar py-2 px-3 text-center text-[10px] font-black tracking-widest">COACH STAGE / MIRROR ZONE</div>' +
+        '  <div class="knt-stage-bar py-2 px-3 text-center text-[10px] font-black tracking-widest">' + (isEn ? 'INSTRUCTOR STAGE & MIRROR' : 'ZONA DEL INSTRUCTOR Y ESPEJO') + '</div>' +
         '  <div class="grid grid-cols-4 gap-1.5">' +
         [1, 2, 3, 4, 5, 6, 7, 8].map(function (n) {
           const occ = n === 2 || n === 5;
           const sel = n === 3;
           const cls = sel ? 'knt-spot-btn knt-spot-selected' : occ ? 'knt-spot-btn knt-spot-occupied' : 'knt-spot-btn knt-spot-free';
-          return '<div class="' + cls + '">RF-' + String(n).padStart(2, '0') + '<div class="text-[9px]">' + (sel ? '★ TÚ' : occ ? '🔒' : 'LIBRE') + '</div></div>';
+          return '<div class="' + cls + '">RF-' + String(n).padStart(2, '0') + '<div class="text-[9px]">' + (sel ? (isEn ? '★ YOU' : '★ TÚ') : occ ? '🔒' : (isEn ? 'FREE' : 'LIBRE')) + '</div></div>';
         }).join('') +
         '  </div>' +
         '  <div class="p-3 rounded-xl border border-cyan-400/35 flex items-center justify-between" style="background:var(--knt-surface)">' +
-        '    <div class="text-[11px] font-bold">' + (isEn ? 'Station RF-03 • Anonymous Mode' : 'Estación RF-03 • 100% Anónima') + '</div>' +
-        '    <a href="#sala-3d" class="knt-btn-3d knt-btn-cyan px-3 py-1.5 text-[10px]">' + (isEn ? '50 SPOTS ›' : '50 LUGARES ›') + '</a>' +
+        '    <div class="text-[11px] font-bold">' + (isEn ? 'Spot RF-03 • 100% Anonymous' : 'Estación RF-03 • 100% Anónima') + '</div>' +
+        '    <a href="#sala-3d" class="knt-btn-3d knt-btn-cyan px-3 py-1.5 text-[10px] no-underline">' + (isEn ? '50 SPOTS ›' : '50 LUGARES ›') + '</a>' +
         '  </div>' +
         '</div>';
     } else if (state.heroSimTab === 'club') {
@@ -233,17 +275,81 @@
         '  <div class="text-[10px] font-black uppercase mb-1" style="color:var(--knt-green-ink)">● ' + (isEn ? 'DYNAMIC OPTICAL KEY ACTIVE' : 'LLAVE ÓPTICA DINÁMICA ACTIVA') + '</div>' +
         '  <div class="w-28 h-28 mx-auto my-2 rounded-2xl bg-[#040508] border-2 border-[#00F0FF] flex flex-col items-center justify-center relative overflow-hidden text-white">' +
         '    <div class="knt-laser-line"></div>' +
-        '    <div class="text-xl font-mono font-black tracking-widest text-[#00F0FF]">QR•TOTP</div>' +
+        '    <div class="text-base font-mono font-black tracking-wider text-[#00F0FF]">' + (isEn ? 'QR KEY' : 'LLAVE QR') + '</div>' +
         '    <div data-qr-timer class="text-xs font-black text-[#00FF66] mt-1">' + state.qrSeconds + 's</div>' +
         '  </div>' +
-        '  <div class="text-[11px] font-bold">' + (isEn ? 'Rotates every 60s • Settles 60% at Front Desk' : 'Rotación criptográfica 60s • Liquida 60% en Puerta') + '</div>' +
+        '  <div class="text-[11px] font-bold">' + (isEn ? 'Renews every 60s • Covers 60% at Reception' : 'Se renueva cada 60s • Cubre el 60% en Recepción') + '</div>' +
         '</div>';
     }
   }
 
   // ==========================================================================
-  // 3. EXPLORADOR DE LOS 2 UNIVERSOS (231 DISCIPLINAS CON MEDALLÓN 26x26PX)
+  // 3. CATÁLOGO DE 231 DISCIPLINAS (TARJETAS SOLO LECTURA CON FICHA INLINE)
   // ==========================================================================
+  function buildDisciplineSummary(d, isEn) {
+    const isWell = d.div === 'wellness';
+    if (isWell) {
+      return isEn
+        ? 'Official Wellness & Clinical Recovery discipline in the KINETIC catalog. Sessions include appointment or cabin selection, 40% Escrow reservation protection, 60-second Dynamic Optical QR Key check-in at reception, and Zen / Prestige progress in KinetiClub.'
+        : 'Disciplina oficial del universo Wellness, Recuperación y Spa dentro del catálogo KINETIC. Permite elegir horario o cabina disponible, asegurar tu cita con el 40% de apartado, validar tu llegada con Llave Óptica Dinámica QR de 60 segundos y sumar progreso Zen en KinetiClub.';
+    }
+    return isEn
+      ? 'Official Fitness & Sports discipline in the KINETIC catalog. Includes exact 3D station or court selection (up to 50 spots), 40% Escrow reservation hold, 60-second Dynamic Optical QR Key check-in at reception, and verified athletic XP in KinetiClub.'
+      : 'Disciplina oficial del universo Fitness y Deporte dentro del catálogo KINETIC. Permite elegir tu lugar, estación o cancha exacta antes de llegar, apartar con el 40%, validar tu acceso con Llave Óptica Dinámica QR de 60 segundos y ganar experiencia deportiva en KinetiClub.';
+  }
+
+  function renderDisciplineReadOnlyPanel() {
+    const panel = document.getElementById('disciplineReadOnlyPanel');
+    if (!panel) return;
+    if (!state.selectedDiscId) {
+      panel.classList.add('hidden');
+      panel.innerHTML = '';
+      return;
+    }
+
+    const found = DISCIPLINES.find(function (x) { return Number(x.id) === Number(state.selectedDiscId); });
+    if (!found) {
+      panel.classList.add('hidden');
+      panel.innerHTML = '';
+      return;
+    }
+
+    const isEn = state.lang === 'en';
+    const isWell = found.div === 'wellness';
+    const cardCls = isWell ? 'knt-card-3d-purple' : 'knt-card-3d-cyan';
+    const medCls = isWell ? 'knt-medallion-26 knt-medallion-purple' : 'knt-medallion-26 knt-medallion-cyan';
+    const divLabel = isWell
+      ? 'WELLNESS & SPA'
+      : (isEn ? 'FITNESS & SPORTS' : 'FITNESS & DEPORTE');
+    const title = isEn ? found.en : found.es;
+    const altTitle = isEn ? found.es : found.en;
+    const summaryText = buildDisciplineSummary(found, isEn);
+
+    panel.classList.remove('hidden');
+    panel.innerHTML =
+      '<div class="' + cardCls + ' p-4 sm:p-5">' +
+      '  <div class="flex flex-wrap items-start justify-between gap-3">' +
+      '    <div class="flex items-center gap-3">' +
+      '      <span class="' + medCls + '" style="width:38px;height:38px;font-size:17px">' + iconGlyph(found.icon) + '</span>' +
+      '      <div>' +
+      '        <div class="text-[10px] font-black uppercase tracking-wider" style="color:var(--knt-cyan-ink)">' +
+      escapeHtml(found.code) + ' • ' + escapeHtml(divLabel) + ' • ' + (isEn ? 'READ-ONLY OVERVIEW' : 'FICHA INFORMATIVA') +
+      '        </div>' +
+      '        <h4 class="font-display text-lg sm:text-xl font-extrabold">' + escapeHtml(title) + '</h4>' +
+      '        <div class="text-[11px] font-bold" style="color:var(--knt-muted)">' + (isEn ? 'ES: ' : 'EN: ') + escapeHtml(altTitle) + '</div>' +
+      '      </div>' +
+      '    </div>' +
+      '    <div class="flex items-center gap-2">' +
+      '      <button type="button" onclick="window.kineticPortal.scrollToSimulator(\'studio\')" class="knt-btn-3d knt-btn-cyan px-3.5 py-2 text-[10.5px] uppercase">' +
+      (isEn ? '🧪 VIEW IN SIMULATOR ›' : '🧪 VER EN SIMULADOR ›') +
+      '      </button>' +
+      '      <button type="button" onclick="window.kineticPortal.closeDisciplinePanel()" class="knt-chip-3d px-2.5 py-1.5 text-[10.5px]">✕</button>' +
+      '    </div>' +
+      '  </div>' +
+      '  <p class="text-xs sm:text-sm leading-relaxed mt-3" style="color:var(--knt-text-sec)">' + escapeHtml(summaryText) + '</p>' +
+      '</div>';
+  }
+
   function renderDisciplinesExplorer() {
     const grid = document.getElementById('disciplinesGrid');
     const countLabel = document.getElementById('disciplinesCountBadge');
@@ -305,92 +411,78 @@
       }
     }
 
+    renderDisciplineReadOnlyPanel();
+
     grid.innerHTML = visibleItems.map(function (d) {
       const isWell = d.div === 'wellness';
       const medCls = isWell ? 'knt-medallion-26 knt-medallion-purple' : 'knt-medallion-26 knt-medallion-cyan';
       const label = isEn ? d.en : d.es;
       const tag = isWell
-        ? (isEn ? 'WELLNESS & SPA' : 'WELLNESS & SPA')
+        ? 'WELLNESS & SPA'
         : (isEn ? 'FITNESS & SPORTS' : 'FITNESS & DEPORTE');
       const tagColor = isWell ? 'var(--knt-purple-ink)' : 'var(--knt-cyan-ink)';
+      const activeCls = Number(state.selectedDiscId) === Number(d.id) ? ' knt-disc-card-active' : '';
       return (
-        '<a href="' + CFG.webAppUrl + '" target="_blank" rel="noopener noreferrer" class="knt-card-3d p-2.5 flex items-center gap-2.5 hover:scale-[1.01] no-underline">' +
+        '<button type="button" onclick="window.kineticPortal.selectDisciplineCard(' + Number(d.id) + ')" class="knt-card-3d' + activeCls + ' p-2.5 flex items-center gap-2.5 hover:scale-[1.01] text-left cursor-pointer w-full">' +
         '  <span class="' + medCls + '">' + iconGlyph(d.icon) + '</span>' +
         '  <span class="min-w-0 flex-1 text-left">' +
         '    <span class="block text-xs font-extrabold truncate" style="color:var(--knt-text)">' + escapeHtml(label) + '</span>' +
-        '    <span class="block text-[9px] font-black tracking-wider uppercase" style="color:' + tagColor + '">' + d.code + ' • ' + tag + '</span>' +
+        '    <span class="block text-[9px] font-black tracking-wider uppercase" style="color:' + tagColor + '">' + escapeHtml(d.code) + ' • ' + tag + '</span>' +
         '  </span>' +
-        '</a>'
+        '</button>'
       );
     }).join('');
   }
 
   // ==========================================================================
-  // 4. EXPLORADOR DE SEDES Y ESPECIALISTAS EN LOS CABOS (GOOGLE MAPS 3D + 06:00-22:00)
+  // 4. SEDES Y ESPECIALISTAS DESTACADOS (4 EJEMPLOS DEMO ANÓNIMOS)
   // ==========================================================================
   function renderVenuesExplorer() {
     const grid = document.getElementById('venuesGrid');
-    const moreBtn = document.getElementById('toggleAllVenuesBtn');
     if (!grid) return;
     const isEn = state.lang === 'en';
 
-    ['all', 'csl', 'corredor', 'sjc'].forEach(function (z) {
-      const chip = document.getElementById('zoneChip_' + z);
+    ['all', 'clubes', 'boutique', 'wellness'].forEach(function (c) {
+      const chip = document.getElementById('catChip_' + c);
       if (!chip) return;
-      chip.className = z === state.venueZone ? 'knt-chip-3d active-cyan' : 'knt-chip-3d';
+      chip.className = c === state.venueCat ? 'knt-chip-3d active-cyan' : 'knt-chip-3d';
     });
 
-    const filtered = VENUES.filter(function (v) {
-      if (state.venueZone === 'all') return true;
-      return v.zona === state.venueZone;
-    }).sort(function (a, b) {
-      if (Number(b.activo) !== Number(a.activo)) return Number(b.activo) - Number(a.activo);
-      return b.rating - a.rating;
+    const filtered = DEMO_VENUES.filter(function (v) {
+      if (state.venueCat === 'all') return true;
+      return v.cat === state.venueCat;
     });
 
-    const visible = state.venuesExpandedAll ? filtered : filtered.slice(0, 6);
-
-    if (moreBtn) {
-      if (filtered.length <= 6) {
-        moreBtn.style.display = 'none';
-      } else {
-        moreBtn.style.display = 'inline-flex';
-        moreBtn.textContent = state.venuesExpandedAll
-          ? (isEn ? 'SHOW FEATURED VENUES ▲' : 'VER SOLO SEDES DESTACADAS ▲')
-          : (isEn ? 'EXPLORE ALL ' + filtered.length + ' LOS CABOS VENUES ▼' : 'VER LAS ' + filtered.length + ' SEDES DE LOS CABOS ▼');
-      }
-    }
-
-    grid.innerHTML = visible.map(function (v) {
+    grid.innerHTML = filtered.map(function (v) {
       const cardCls = v.esEspecialista ? 'knt-card-3d-purple' : 'knt-card-3d-cyan';
-      const badgeTxt = v.esEspecialista ? t('badgeSpec') : v.activo ? t('badgeClub') : t('badgeCatalog');
+      const badgeTxt = isEn ? v.badgeEn : v.badgeEs;
+      const venueName = isEn ? v.nombreEn : v.nombreEs;
       const discLabel = isEn ? v.discEn : v.discEs;
+      const zoneLabel = isEn ? v.ubicacionEn : v.ubicacionEs;
       const hoursLabel = isEn ? v.horariosEn : v.horariosEs;
       const bio = isEn ? v.bioEn : v.bioEs;
-      const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.lat + ',' + v.lng);
-      const deepShareUrl = CFG.webAppUrl + '/?sede=' + encodeURIComponent(v.nombre);
 
       return (
         '<article class="' + cardCls + ' overflow-hidden flex flex-col justify-between">' +
         '  <div>' +
         '    <div class="relative h-44">' +
-        '      <img src="' + escapeHtml(v.portada) + '" alt="' + escapeHtml(v.nombre) + '" loading="lazy" class="w-full h-full object-cover" />' +
+        '      <img src="' + escapeHtml(v.portada) + '" alt="' + escapeHtml(venueName) + '" loading="lazy" class="w-full h-full object-cover" />' +
         '      <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>' +
         '      <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/80 border border-white/25 text-[9.5px] font-black text-[#00F0FF] uppercase">' + escapeHtml(badgeTxt) + '</span>' +
         '      <span class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-[#FFB800] text-[#050505] text-[10px] font-black">★ ' + Number(v.rating).toFixed(1) + '</span>' +
         '      <div class="absolute bottom-3 left-3 right-3 text-white">' +
-        '        <h4 class="font-display text-base font-extrabold leading-tight">' + escapeHtml(v.nombre) + '</h4>' +
-        '        <p class="text-[11px] text-cyan-200 font-bold mt-0.5">' + escapeHtml(discLabel) + ' • ' + escapeHtml(v.ubicacion) + '</p>' +
+        '        <h4 class="font-display text-base font-extrabold leading-tight">' + escapeHtml(venueName) + '</h4>' +
+        '        <p class="text-[11px] text-cyan-200 font-bold mt-0.5">' + escapeHtml(discLabel) + ' • ' + escapeHtml(zoneLabel) + '</p>' +
         '      </div>' +
         '    </div>' +
         '    <div class="p-4 space-y-2.5">' +
-        '      <p class="text-xs leading-relaxed line-clamp-2" style="color:var(--knt-text-sec)">' + escapeHtml(bio) + '</p>' +
+        '      <p class="text-xs leading-relaxed" style="color:var(--knt-text-sec)">' + escapeHtml(bio) + '</p>' +
         '      <div class="text-[11px] font-extrabold flex items-center gap-1.5" style="color:var(--knt-cyan-ink)">🕒 ' + escapeHtml(hoursLabel) + '</div>' +
         '    </div>' +
         '  </div>' +
         '  <div class="px-4 pb-4 pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2">' +
-        '    <a href="' + mapsUrl + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d knt-btn-ghost-cyan py-2.5 px-3 text-[10.5px] text-center">' + t('mapsBtnLabel') + '</a>' +
-        '    <a href="' + deepShareUrl + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d knt-btn-cyan py-2.5 px-3 text-[10.5px] text-center">' + t('bookVenueBtn') + '</a>' +
+        '    <button type="button" onclick="window.kineticPortal.scrollToSimulator(\'explore\')" class="knt-btn-3d knt-btn-ghost-cyan py-2.5 px-3 text-[10.5px] text-center uppercase">' + t('demoExploreSimBtn') + '</button>' +
+        '    <button type="button" onclick="window.kineticPortal.scrollToSimulator(\'studio\')" class="knt-btn-3d knt-btn-cyan py-2.5 px-3 text-[10.5px] text-center uppercase">' + t('demoSpotSimBtn') + '</button>' +
         '  </div>' +
         '</article>'
       );
@@ -482,7 +574,7 @@
   }
 
   // ==========================================================================
-  // 6. ESCALERA DE 5 MEMBRESÍAS VIP VOLUMÉTRICAS 3D
+  // 6. ESCALERA VISUAL DE 5 MEMBRESÍAS VIP (FOTOS + ICONOS 3D + BARRAS)
   // ==========================================================================
   function renderMemberships() {
     const grid = document.getElementById('membershipsGrid');
@@ -493,38 +585,61 @@
       const cardCls = m.tone === 'cyan' ? 'knt-card-3d-cyan' : m.tone === 'amber' ? 'knt-card-3d-amber' : 'knt-card-3d';
       const btnCls = m.id === 'platinum' ? 'knt-btn-cyan' : m.id === 'gold' ? 'knt-btn-amber' : m.id === 'silver' ? 'knt-btn-ghost-cyan' : 'knt-btn-ghost-purple';
       const ribbon = m.popular
-        ? '<span class="absolute -top-3 right-4 px-3 py-0.5 rounded-full bg-[#FFB800] text-[#050505] font-black text-[9.5px] uppercase">' + t('popularRibbon') + '</span>'
+        ? '<span class="absolute top-2.5 right-2.5 z-10 px-2.5 py-0.5 rounded-full bg-[#FFB800] text-[#050505] font-black text-[9px] uppercase">' + t('popularRibbon') + '</span>'
         : m.legend
-          ? '<span class="absolute -top-3 right-4 px-3 py-0.5 rounded-full bg-[#00F0FF] text-[#050505] font-black text-[9.5px] uppercase">' + t('legendRibbon') + '</span>'
+          ? '<span class="absolute top-2.5 right-2.5 z-10 px-2.5 py-0.5 rounded-full bg-[#00F0FF] text-[#050505] font-black text-[9px] uppercase">' + t('legendRibbon') + '</span>'
           : '';
       const perks = (isEn ? m.perksEn : m.perksEs).map(function (p) {
-        return '<li class="flex items-start gap-1.5"><span>✓</span><span>' + escapeHtml(p) + '</span></li>';
+        return '<li class="flex items-start gap-1.5"><span style="color:var(--knt-green-ink)">✓</span><span>' + escapeHtml(p) + '</span></li>';
       }).join('');
+      const starsTxt = isEn ? m.starsEn : m.stars;
+      const benefitLabel = isEn ? 'VIP Power' : 'Nivel Beneficios';
 
       return (
-        '<div class="' + cardCls + ' p-5 flex flex-col justify-between relative">' +
+        '<div class="' + cardCls + ' overflow-hidden flex flex-col justify-between relative">' +
         ribbon +
         '  <div>' +
-        '    <span class="inline-block text-[9.5px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg border" style="border-color:var(--knt-border-subtle);color:var(--knt-cyan-ink)">' +
+        '    <div class="relative h-28">' +
+        '      <img src="' + escapeHtml(m.photo) + '" alt="' + escapeHtml(m.titleEs) + '" loading="lazy" class="w-full h-full object-cover" />' +
+        '      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>' +
+        '      <span class="absolute top-2.5 left-2.5 w-8 h-8 rounded-lg bg-black/80 border border-white/25 flex items-center justify-center text-base">' + (m.icon || '⚡') + '</span>' +
+        '      <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">' +
+        '        <h3 class="font-display text-lg font-extrabold leading-none">' + escapeHtml(isEn ? m.titleEn : m.titleEs) + '</h3>' +
+        '        <span class="text-[9px] font-black text-[#FFB800]">' + escapeHtml(starsTxt) + '</span>' +
+        '      </div>' +
+        '    </div>' +
+        '    <div class="p-4">' +
+        '      <span class="inline-block text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border" style="border-color:var(--knt-border-subtle);color:var(--knt-cyan-ink)">' +
         escapeHtml(isEn ? m.badgeEn : m.badgeEs) +
-        '    </span>' +
-        '    <h3 class="font-display text-lg font-extrabold mt-2.5">' + escapeHtml(isEn ? m.titleEn : m.titleEs) + '</h3>' +
-        '    <div class="font-display text-3xl font-extrabold mt-1">' + m.price + ' <span class="text-xs font-bold" style="color:var(--knt-muted)">MXN/' + (isEn ? 'mo' : 'mes') + '</span></div>' +
-        '    <div class="text-xs font-black mt-1" style="color:var(--knt-cyan-ink)">' + escapeHtml(isEn ? m.kcEn : m.kcEs) + '</div>' +
-        '    <ul class="mt-4 pt-3 border-t space-y-2 text-xs leading-relaxed" style="border-color:var(--knt-border-subtle);color:var(--knt-text-sec)">' +
+        '      </span>' +
+        '      <div class="font-display text-2xl font-extrabold mt-2">' + m.price + ' <span class="text-[11px] font-bold" style="color:var(--knt-muted)">MXN/' + (isEn ? 'mo' : 'mes') + '</span></div>' +
+        '      <div class="text-xs font-black mt-0.5" style="color:var(--knt-cyan-ink)">' + escapeHtml(isEn ? m.kcEn : m.kcEs) + '</div>' +
+        '      <div class="mt-3">' +
+        '        <div class="flex items-center justify-between text-[9.5px] font-extrabold mb-1" style="color:var(--knt-muted)">' +
+        '          <span>' + benefitLabel + '</span>' +
+        '          <span>' + m.progressPct + '%</span>' +
+        '        </div>' +
+        '        <div class="knt-progress-track">' +
+        '          <div class="knt-progress-fill" style="width:' + m.progressPct + '%;background:' + m.barColor + '"></div>' +
+        '        </div>' +
+        '      </div>' +
+        '      <ul class="mt-3.5 pt-3 border-t space-y-1.5 text-[11.5px] font-semibold leading-snug" style="border-color:var(--knt-border-subtle);color:var(--knt-text-sec)">' +
         perks +
-        '    </ul>' +
+        '      </ul>' +
+        '    </div>' +
         '  </div>' +
-        '  <a href="' + CFG.webAppUrl + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d ' + btnCls + ' w-full py-3 mt-5 text-[11px]">' +
+        '  <div class="px-4 pb-4">' +
+        '    <button type="button" onclick="window.kineticPortal.scrollToSimulator(\'vault\')" class="knt-btn-3d ' + btnCls + ' w-full py-2.5 text-[11px] uppercase">' +
         t('choosePlanBtn') +
-        '  </a>' +
+        '    </button>' +
+        '  </div>' +
         '</div>'
       );
     }).join('');
   }
 
   // ==========================================================================
-  // 7. SIMULADOR DE COFRE 3D CYBER-OBSIDIAN (4 RAREZAS)
+  // 7. SIMULADOR DE COFRE VOLUMÉTRICO 3D (4 RAREZAS)
   // ==========================================================================
   function renderChestSimulator() {
     const stage = document.getElementById('chest3DStage');
@@ -569,7 +684,7 @@
   }
 
   // ==========================================================================
-  // 8. SELECTOR B2B DE LAS 231 DISCIPLINAS
+  // 8. SELECTOR DE LAS 231 DISCIPLINAS EN EL MODAL DE SOCIOS
   // ==========================================================================
   function renderB2BDisciplineOptions() {
     const sel = document.getElementById('b2bDiscSelect');
@@ -589,82 +704,27 @@
   }
 
   // ==========================================================================
-  // 9. SOPORTE DE DEEPLINKS EN VIVO (?sede= y ?event= / ?evento=)
+  // 9. SOPORTE DE DEEPLINKS (?sede= y ?event= / ?evento=) CON CANDADO 31 DIC
   // ==========================================================================
-  async function detectAndLoadDeepLinks() {
+  function detectAndLoadDeepLinks() {
     const params = new URLSearchParams(window.location.search);
     const rawSede = (params.get('sede') || params.get('club') || '').trim();
     const rawEvent = (params.get('event') || params.get('evento') || '').trim();
     if (!rawSede && !rawEvent) return;
 
     if (rawSede) {
-      const q = rawSede.toLowerCase();
-      let match = VENUES.find(function (v) {
-        return v.id.toLowerCase() === q || v.nombre.toLowerCase() === q || v.nombre.toLowerCase().includes(q);
-      });
-
-      if (!match) {
-        try {
-          const resp = await fetch(
-            CFG.supabaseUrl + '/rest/v1/afiliados?nombre=ilike.*' + encodeURIComponent(rawSede) + '*&select=id,nombre,disciplina,ubicacion,horarios,rating,portada_url&limit=1',
-            { headers: { apikey: CFG.supabaseAnonKey, Authorization: 'Bearer ' + CFG.supabaseAnonKey } }
-          );
-          if (resp.ok) {
-            const rows = await resp.json();
-            if (Array.isArray(rows) && rows[0]) {
-              match = {
-                id: rows[0].id,
-                nombre: rows[0].nombre,
-                discEs: rows[0].disciplina || 'Fuerza',
-                discEn: rows[0].disciplina || 'Strength',
-                ubicacion: rows[0].ubicacion || 'Los Cabos, B.C.S.',
-                horariosEs: rows[0].horarios || '06:00 a 22:00',
-                horariosEn: rows[0].horarios || '06:00 – 22:00',
-                rating: rows[0].rating || 5.0,
-              };
-            }
-          }
-        } catch (_) {}
-      }
-
       state.deepLinkData = {
         type: 'sede',
-        title: match ? match.nombre : rawSede,
-        subEs: match ? match.discEs + ' • ' + match.ubicacion + ' • ★ ' + Number(match.rating || 5).toFixed(1) : 'Sede Oficial en Red Kinetic • Los Cabos, B.C.S.',
-        subEn: match ? match.discEn + ' • ' + match.ubicacion + ' • ★ ' + Number(match.rating || 5).toFixed(1) : 'Verified Venue on Kinetic Network • Los Cabos, B.C.S.',
-        targetUrl: CFG.webAppUrl + '/?sede=' + encodeURIComponent(match ? match.nombre : rawSede),
+        title: rawSede,
+        subEs: 'Sede verificada en la red KINETIC • Acceso público el 31 de diciembre de 2026',
+        subEn: 'Verified venue on the KINETIC network • Public launch December 31, 2026',
       };
     } else if (rawEvent) {
-      let evTitle = rawEvent;
-      let evClub = 'Sede Verificada Los Cabos';
-      let evPrice = 250;
-
-      try {
-        const filterCol = /^[0-9a-f-]{20,}$/i.test(rawEvent)
-          ? 'id=eq.' + encodeURIComponent(rawEvent)
-          : 'nombre_servicio=ilike.*' + encodeURIComponent(rawEvent) + '*';
-        const resp = await fetch(
-          CFG.supabaseUrl + '/rest/v1/servicios?' + filterCol + '&select=id,nombre_servicio,negocio_nombre,categoria,precio_kc,hora_inicio&limit=1',
-          { headers: { apikey: CFG.supabaseAnonKey, Authorization: 'Bearer ' + CFG.supabaseAnonKey } }
-        );
-        if (resp.ok) {
-          const rows = await resp.json();
-          if (Array.isArray(rows) && rows[0]) {
-            evTitle = rows[0].nombre_servicio || rawEvent;
-            evClub = rows[0].negocio_nombre || evClub;
-            evPrice = Number(rows[0].precio_kc) || 250;
-          }
-        }
-      } catch (_) {}
-
-      const esc = Math.round(evPrice * 0.4);
-      const door = evPrice - esc;
       state.deepLinkData = {
         type: 'event',
-        title: evTitle,
-        subEs: evClub + ' • Aparta con ' + esc + ' KC (40% Escrow) + ' + door + ' KC (60% QR TOTP)',
-        subEn: evClub + ' • Hold with ' + esc + ' KC (40% Escrow) + ' + door + ' KC (60% QR TOTP)',
-        targetUrl: CFG.webAppUrl + '/?event=' + encodeURIComponent(rawEvent),
+        title: rawEvent,
+        subEs: 'Sesión deportiva KINETIC • Reserva 40% Escrow + 60% Llave QR (Lanzamiento 31 Dic 2026)',
+        subEn: 'KINETIC session • 40% Escrow Hold + 60% QR Key (Launch Dec 31, 2026)',
       };
     }
 
@@ -693,8 +753,8 @@
         '    <div class="font-display text-sm sm:text-base font-extrabold">' + escapeHtml(d.title) + ' — <span class="font-semibold text-xs" style="color:var(--knt-text-sec)">' + escapeHtml(sub) + '</span></div>' +
         '  </div>' +
         '  <div class="flex flex-wrap items-center gap-2">' +
-        '    <a href="' + escapeHtml(d.targetUrl) + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d knt-btn-cyan px-3.5 py-2 text-[10.5px]">' + t('dlOpenWeb') + '</a>' +
-        '    <a href="' + CFG.apkBuildUrl + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d knt-btn-green px-3.5 py-2 text-[10.5px]">' + t('dlDownloadApk') + '</a>' +
+        '    <button type="button" onclick="window.kineticPortal.openPreLaunchModal()" class="knt-btn-3d knt-btn-cyan px-3.5 py-2 text-[10.5px]">' + t('dlOpenWeb') + '</button>' +
+        '    <button type="button" onclick="window.kineticPortal.handleApkDownload()" class="knt-btn-3d knt-btn-green px-3.5 py-2 text-[10.5px]">' + t('dlDownloadApk') + '</button>' +
         '    <button type="button" onclick="window.kineticPortal.dismissDeepLink()" class="knt-chip-3d text-[10px]">' + t('dlDismiss') + '</button>' +
         '  </div>' +
         '</div>';
@@ -706,70 +766,104 @@
         '<h3 class="font-display text-2xl font-extrabold mb-2">' + escapeHtml(d.title) + '</h3>' +
         '<p class="text-xs sm:text-sm mb-5" style="color:var(--knt-text-sec)">' + escapeHtml(sub) + '</p>' +
         '<div class="space-y-2.5">' +
-        '  <a href="' + escapeHtml(d.targetUrl) + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs">' + t('dlOpenWeb') + '</a>' +
-        '  <a href="' + CFG.apkBuildUrl + '" target="_blank" rel="noopener noreferrer" class="knt-btn-3d knt-btn-green w-full py-3.5 text-xs">' + t('dlDownloadApk') + '</a>' +
+        '  <button type="button" onclick="window.kineticPortal.closeModal(\'deepLinkModal\');window.kineticPortal.openPreLaunchModal()" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs">' + t('dlOpenWeb') + '</button>' +
+        '  <button type="button" onclick="window.kineticPortal.closeModal(\'deepLinkModal\');window.kineticPortal.handleApkDownload()" class="knt-btn-3d knt-btn-green w-full py-3.5 text-xs">' + t('dlDownloadApk') + '</button>' +
         '</div>';
     }
   }
 
   // ==========================================================================
-  // 10. REGISTRO WAITLIST EN SUPABASE (public.fundadores_waitlist)
+  // 10. CONEXIÓN EN VIVO DE PRE-REGISTRO B2C / B2B CON ADMIN HUB
   // ==========================================================================
   async function insertWaitlistRecord(payload) {
-    const resp = await fetch(CFG.supabaseUrl + '/rest/v1/fundadores_waitlist', {
+    const endpoint = CFG.supabaseUrl + '/rest/v1/fundadores_waitlist';
+    const headers = {
+      'Content-Type': 'application/json',
+      apikey: CFG.supabaseAnonKey,
+      Authorization: 'Bearer ' + CFG.supabaseAnonKey,
+      Prefer: 'return=minimal',
+    };
+
+    // Esquema primario activo en producción (sincronizado con Admin Hub)
+    const primaryBody = {
+      nombre: payload.nombre,
+      email: payload.email,
+      whatsapp: payload.telefono,
+      perfil_interes: payload.tipo_perfil,
+      zona: payload.ciudad_zona,
+      disciplina_favorita: payload.disciplina_interes,
+      origen: 'kineticapp.com.mx',
+    };
+
+    const resp = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        apikey: CFG.supabaseAnonKey,
-        Authorization: 'Bearer ' + CFG.supabaseAnonKey,
-        Prefer: 'return=minimal',
-      },
-      body: JSON.stringify({
-        nombre: payload.nombre,
-        email: payload.email,
-        whatsapp: payload.whatsapp,
-        perfil_interes: payload.perfil_interes,
-        disciplina_favorita: payload.disciplina_favorita,
-        zona: payload.zona,
-        origen: 'kineticapp.com.mx',
-      }),
+      headers: headers,
+      body: JSON.stringify(primaryBody),
     });
-    return resp.ok || resp.status === 201 || resp.status === 409;
+
+    if (resp.ok || resp.status === 201 || resp.status === 409) {
+      return true;
+    }
+
+    // Respaldo automático de compatibilidad extendida de columnas
+    if (resp.status === 400) {
+      const altResp = await fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          nombre: payload.nombre,
+          email: payload.email,
+          telefono: payload.telefono,
+          tipo_perfil: payload.tipo_perfil,
+          ciudad_zona: payload.ciudad_zona,
+          disciplina_interes: payload.disciplina_interes,
+          origen: 'kineticapp.com.mx',
+        }),
+      });
+      return altResp.ok || altResp.status === 201 || altResp.status === 409;
+    }
+
+    return false;
   }
 
   async function submitModalRegistration(e) {
     e.preventDefault();
     const isEn = state.lang === 'en';
+    const isB2B = state.regMode === 'b2b';
     const name = document.getElementById('regName').value.trim();
     const email = document.getElementById('regEmail').value.trim().toLowerCase();
     const phone = document.getElementById('regPhone').value.trim();
-    const zone = document.getElementById('regZone').value;
+    const zone = document.getElementById('regZone').value.trim();
     const interest = document.getElementById('regInterest').value.trim();
     const btn = document.getElementById('regSubmitBtn');
     const msg = document.getElementById('regFeedbackMsg');
-    if (!name || !email || !phone) return;
+    if (!name || !email || !phone || !zone) return;
 
     btn.disabled = true;
-    btn.textContent = isEn ? 'SYNCING WITH SUPABASE...' : 'GUARDANDO EN SUPABASE...';
+    btn.textContent = isEn ? 'SENDING PRE-REGISTRATION...' : 'ENVIANDO PRE-REGISTRO...';
 
+    let ok = false;
     try {
-      await insertWaitlistRecord({
+      ok = await insertWaitlistRecord({
         nombre: name,
         email: email,
-        whatsapp: phone,
-        perfil_interes: state.regMode === 'b2b' ? 'Socio B2B (Club / Especialista)' : 'Atleta VIP B2C',
-        disciplina_favorita: interest || 'KINETIC OS v2.5',
-        zona: zone,
+        telefono: phone,
+        tipo_perfil: isB2B ? 'Socio B2B (Club / Especialista)' : 'Atleta B2C (Acceso Prioritario)',
+        ciudad_zona: zone,
+        disciplina_interes: interest || (isB2B ? 'Afiliación Comercial' : 'Acceso Prioritario'),
       });
     } catch (_) {}
 
     btn.disabled = false;
-    btn.textContent = isEn ? '✓ REGISTERED IN SUPABASE VAULT' : '✓ REGISTRADO EN SUPABASE';
+    btn.textContent = ok
+      ? (isEn ? '✓ PRE-REGISTRATION CONFIRMED' : '✓ PRE-REGISTRO RECIBIDO')
+      : (isB2B ? t('regSubmitBtnB2B') : t('regSubmitBtnB2C'));
+
     if (msg) {
       msg.classList.remove('hidden');
       msg.textContent = isEn
-        ? 'Welcome, ' + name + '! Your record is saved in fundadores_waitlist (origen: kineticapp.com.mx).'
-        : '¡Listo, ' + name + '! Tu registro quedó guardado en fundadores_waitlist (origen: kineticapp.com.mx).';
+        ? 'Thank you, ' + name + '! Your priority access pre-registration has been received by our team.'
+        : '¡Gracias, ' + name + '! Tu pre-registro quedó registrado en nuestra lista oficial de atención prioritaria.';
     }
     document.getElementById('dualRegForm').reset();
   }
@@ -779,36 +873,43 @@
     const isEn = state.lang === 'en';
     const name = document.getElementById('b2bName').value.trim();
     const type = document.getElementById('b2bType').value;
-    const zone = document.getElementById('b2bZone').value;
+    const zone = document.getElementById('b2bZone').value.trim();
     const disc = document.getElementById('b2bDiscSelect').value;
     const phone = document.getElementById('b2bPhone').value.trim();
     const email = document.getElementById('b2bEmail').value.trim().toLowerCase();
     const btn = document.getElementById('b2bSubmitBtn');
     const feedback = document.getElementById('b2bFeedbackMsg');
-    if (!name || !phone || !email) return;
+    if (!name || !phone || !email || !zone) return;
 
     btn.disabled = true;
-    btn.textContent = isEn ? 'SAVING AFFILIATE IN SUPABASE...' : 'REGISTRANDO AFILIACIÓN EN SUPABASE...';
+    btn.textContent = isEn ? 'SENDING PARTNER APPLICATION...' : 'ENVIANDO SOLICITUD DE SOCIO...';
 
+    let ok = false;
     try {
-      await insertWaitlistRecord({
+      ok = await insertWaitlistRecord({
         nombre: name,
         email: email,
-        whatsapp: phone,
-        perfil_interes: 'Afiliado B2B • ' + type,
-        disciplina_favorita: disc,
-        zona: zone,
+        telefono: phone,
+        tipo_perfil: 'Socio B2B • ' + type,
+        ciudad_zona: zone,
+        disciplina_interes: disc,
       });
     } catch (_) {}
 
     btn.disabled = false;
-    btn.textContent = isEn ? '✓ B2B APPLICATION REGISTERED' : '✓ SOLICITUD B2B REGISTRADA';
+    btn.textContent = ok
+      ? (isEn ? '✓ PARTNER PRE-REGISTRATION SENT' : '✓ PRE-REGISTRO DE SOCIO ENVIADO')
+      : t('b2bSubmitBtnLabel');
+
     if (feedback) {
       feedback.classList.remove('hidden');
       feedback.textContent = isEn
-        ? 'Saved in Supabase! Our Los Cabos B2B team will contact ' + name + ' shortly.'
-        : '¡Guardado en Supabase! Nuestro equipo B2B en Los Cabos contactará a ' + name + ' de inmediato.';
+        ? 'Application received! Our partnerships team will review ' + name + ' and reach out shortly.'
+        : '¡Solicitud recibida! Nuestro equipo de alianzas revisará el perfil de ' + name + ' y se pondrá en contacto contigo.';
     }
+    const form = document.getElementById('partnerPreRegForm');
+    if (form) form.reset();
+    renderB2BDisciplineOptions();
   }
 
   // ==========================================================================
@@ -820,8 +921,8 @@
     if (welcome) welcome.innerHTML = formatBoldMarkdown(t('aiWelcome'));
     if (!wrap) return;
     const prompts = state.lang === 'en'
-      ? ['40/60 Escrow & 60s QR', '50-Spot 3D Studio Map', 'VIP Memberships & Rollover', 'B2B 80/20 SPEI Wednesdays']
-      : ['Escrow 40/60 y QR 60s', 'Mapa 3D de 50 Estaciones', 'Membresías VIP y Rollover', 'Afiliación B2B 80/20 SPEI'];
+      ? ['Launch Dec 31, 2026', '40/60 Hold & 60s QR Key', '50-Spot 3D Studio Map', 'VIP Tiers & Rollover', 'Partner Network & SPEI']
+      : ['Lanzamiento 31 Dic 2026', 'Reserva 40/60 y Llave QR', 'Mapa 3D de 50 Estaciones', 'Membresías VIP y Rollover', 'Equipo de Socios y SPEI'];
 
     wrap.innerHTML = prompts.map(function (p) {
       return '<button type="button" onclick="window.kineticPortal.askAiPreset(\'' + p.replace(/'/g, "\\'") + '\')" class="knt-chip-3d text-[10.5px] py-1.5 px-2.5">' + escapeHtml(p) + '</button>';
@@ -861,7 +962,12 @@
     if (!el) return;
     el.classList.add('hidden');
     el.classList.remove('flex');
-    document.body.style.overflow = '';
+    const anyOpen = Array.from(document.querySelectorAll('.fixed.inset-0')).some(function (m) {
+      return !m.classList.contains('hidden');
+    });
+    if (!anyOpen) {
+      document.body.style.overflow = '';
+    }
   }
 
   window.kineticPortal = {
@@ -876,6 +982,17 @@
     setHeroTab: function (tab) {
       state.heroSimTab = tab;
       renderHeroSimulator();
+    },
+    scrollToSimulator: scrollToSimulator,
+    openPreLaunchModal: function () {
+      openModal('preLaunchModal');
+    },
+    handleApkDownload: handleApkDownload,
+    openPartnerModal: function () {
+      const feedback = document.getElementById('b2bFeedbackMsg');
+      if (feedback) feedback.classList.add('hidden');
+      renderB2BDisciplineOptions();
+      openModal('partnerB2BModal');
     },
     onSearchDiscipline: function (val) {
       state.discQuery = val || '';
@@ -901,12 +1018,22 @@
       state.discExpandedAll = !state.discExpandedAll;
       renderDisciplinesExplorer();
     },
-    setVenueZone: function (z) {
-      state.venueZone = z;
-      renderVenuesExplorer();
+    selectDisciplineCard: function (discId) {
+      state.selectedDiscId = Number(state.selectedDiscId) === Number(discId) ? null : Number(discId);
+      renderDisciplinesExplorer();
+      if (state.selectedDiscId) {
+        const panel = document.getElementById('disciplineReadOnlyPanel');
+        if (panel && typeof panel.scrollIntoView === 'function') {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
     },
-    toggleAllVenues: function () {
-      state.venuesExpandedAll = !state.venuesExpandedAll;
+    closeDisciplinePanel: function () {
+      state.selectedDiscId = null;
+      renderDisciplinesExplorer();
+    },
+    setVenueCategory: function (cat) {
+      state.venueCat = cat;
       renderVenuesExplorer();
     },
     setStudioEquip: function (eq) {
@@ -932,20 +1059,12 @@
     },
     openRegistrationModal: function (mode) {
       state.regMode = mode === 'b2b' ? 'b2b' : 'b2c';
-      const b2cBtn = document.getElementById('regTabBtn_b2c');
-      const b2bBtn = document.getElementById('regTabBtn_b2b');
-      const liveLink = document.getElementById('regGoLiveAppLink');
       const msg = document.getElementById('regFeedbackMsg');
+      const btn = document.getElementById('regSubmitBtn');
       if (msg) msg.classList.add('hidden');
-      if (b2cBtn) b2cBtn.className = state.regMode === 'b2c' ? 'knt-chip-3d active-cyan flex-1 justify-center' : 'knt-chip-3d flex-1 justify-center';
-      if (b2bBtn) b2bBtn.className = state.regMode === 'b2b' ? 'knt-chip-3d active-purple flex-1 justify-center' : 'knt-chip-3d flex-1 justify-center';
-      if (liveLink) liveLink.href = state.regMode === 'b2b' ? CFG.webAppUrl + '/register_b2b' : CFG.webAppUrl + '/register';
+      if (btn) btn.disabled = false;
+      syncRegistrationModalCopy();
       openModal('registrationModal');
-    },
-    openLiveIframeModal: function () {
-      const iframe = document.getElementById('liveExpoAppIframe');
-      if (iframe && !iframe.src) iframe.src = CFG.webAppUrl;
-      openModal('liveAppModal');
     },
     openLegalModal: function (docKey) {
       const doc = LEGAL_DOCS[docKey] || LEGAL_DOCS.waiver;
@@ -964,14 +1083,6 @@
     },
     submitModalRegistration: submitModalRegistration,
     submitB2BSectionForm: submitB2BSectionForm,
-    openB2BWhatsApp: function () {
-      const name = (document.getElementById('b2bName')?.value || 'Mi Sede en Los Cabos').trim();
-      const disc = document.getElementById('b2bDiscSelect')?.value || 'Pilates / Fitness';
-      const txt = encodeURIComponent(
-        '⚡ *AFILIACIÓN B2B KINETIC OS v2.5*\n• Sede/Especialista: ' + name + '\n• Disciplina: ' + disc + '\nHola Dirección Kinetic, solicito activar mi Terminal B2B ($0 renta mensual • 80/20 SPEI).'
-      );
-      window.open('https://wa.me/' + CFG.whatsappNumber + '?text=' + txt, '_blank', 'noopener,noreferrer');
-    },
     toggleAiConcierge: function () {
       state.aiOpen = !state.aiOpen;
       const panel = document.getElementById('aiConciergeDrawer');
@@ -1002,7 +1113,7 @@
     },
   };
 
-  // Reloj TOTP de 60 segundos en vivo
+  // Reloj dinámico de Llave Óptica QR de 60 segundos
   setInterval(function () {
     state.qrSeconds = state.qrSeconds <= 1 ? 60 : state.qrSeconds - 1;
     document.querySelectorAll('[data-qr-timer]').forEach(function (el) {

@@ -1,6 +1,5 @@
 /* === docs/styles/kinetic-3d-v25.css ===
- * KINETIC OS v2.5 — Motor Visual 3D Volumétrico Cyber-Obsidian & M3 High-Contrast Light
- * Paridad estética 100% con commit ba6d465
+ * KINETIC — Motor Visual 3D Volumétrico Cyber-Obsidian & M3 High-Contrast Light
  */
 
 :root,
@@ -477,8 +476,34 @@ html[data-theme="light"] .knt-spot-occupied {
 }
 
 /* ============================================================================
- * COFRE 3D ARTICULADO & LÁSER ÓPTICO QR TOTP 60s
+ * COFRE 3D ARTICULADO, BARRAS VISUALES & LÁSER ÓPTICO QR 60s
  * ============================================================================ */
+.knt-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+html[data-theme="light"] .knt-progress-track {
+  background: #E2E8F0;
+  border-color: #CBD5E1;
+}
+
+.knt-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.knt-disc-card-active {
+  border-color: #00F0FF !important;
+  border-top-color: #D6FFFF !important;
+  border-bottom-color: #008A99 !important;
+  box-shadow: 0 10px 24px rgba(0, 240, 255, 0.24) !important;
+}
 @keyframes kntLaserScan {
   0% { top: 6%; }
   50% { top: 88%; }
