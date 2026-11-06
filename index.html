@@ -1,230 +1,1067 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark" translate="no" class="notranslate scroll-smooth">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="google" content="notranslate" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>KINETIC — La Red Élite de Entrenamiento, Deporte y Wellness</title>
-  <meta name="description" content="KINETIC — La Red Élite de Entrenamiento, Deporte y Wellness: 231 Disciplinas Fitness & Wellness, 100+ Especialistas y Sedes en Expansión Continua, Mapa 3D de Sala hasta 50 estaciones, Reserva 40% Escrow + 60% Llave Óptica QR de 60s y 99 Niveles en KinetiClub." />
+  <title>KINETIC — El Sistema Operativo del Entrenamiento y Bienestar Élite</title>
+  <meta name="description" content="La red unificada de clubes deportivos, estudios boutique y especialistas de alto rendimiento en Los Cabos, B.C.S. Custodia Escrow 40/60 y Llaves Dinámicas QR TOTP." />
 
-  <!-- Open Graph Oficial -->
-  <meta property="og:title" content="KINETIC — La Red Élite de Entrenamiento, Deporte y Wellness" />
-  <meta property="og:description" content="1 KC = $1.00 MXN Neto. Elige tu lugar exacto antes de llegar con 40% en Custodia Escrow y cubre el 60% en recepción con tu Llave Óptica Dinámica QR de 60 segundos." />
+  <!-- Open Graph -->
+  <meta property="og:title" content="KINETIC — El Sistema Operativo del Entrenamiento y Bienestar Élite" />
+  <meta property="og:description" content="Red unificada en Los Cabos, B.C.S. 231 disciplinas, 52 clubes, Escrow 40/60 y validación instantánea con Llave Dinámica QR TOTP de 60s." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kineticapp.com.mx" />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=85" />
+  <meta property="og:site_name" content="KineticApp S.A.S." />
 
-  <!-- Inicialización síncrona de tema para cero parpadeo (Zero-FOUC) -->
-  <script>
-    (function () {
-      try {
-        var savedTheme = localStorage.getItem('kinetic_web_theme_v25');
-        if (savedTheme === 'light' || savedTheme === 'dark') {
-          document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-      } catch (_) {}
-    })();
-  </script>
+  <!-- Favicon Vectorial Oficial -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300F0FF'/%3E%3Cstop offset='100%25' stop-color='%23A855F7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23050505' stroke='%2300F0FF' stroke-width='2.5'/%3E%3Cpath d='M36 8L14 36h16l-4 20 24-28H34l2-20z' fill='url(%23g)'/%3E%3C/svg%3E" />
 
-  <!-- Favicon Vectorial Oficial Kinetic -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300F0FF'/%3E%3Cstop offset='100%25' stop-color='%239D4EDD'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23050505' stroke='%2300F0FF' stroke-width='3'/%3E%3Cpath d='M36 8L14 36h16l-4 20 24-28H34l2-20z' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <style>
+    /* === RESET Y GENÉTICA KINETIC === */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <!-- Tipografías Oficiales -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet" />
+    html {
+      scroll-behavior: smooth;
+      background-color: #050505;
+      color: #FFFFFF;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
 
-  <!-- Tailwind CSS CDN + Motor Volumétrico 3D KINETIC -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Space Grotesk', 'sans-serif'],
-          },
-        },
-      },
-    };
-  </script>
-  <link rel="stylesheet" href="./styles/kinetic-3d-v25.css" />
+    body {
+      background-color: #050505;
+      color: #FFFFFF;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Resplandor ambiental de fondo */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 550px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0, 240, 255, 0.12) 0%, rgba(168, 85, 247, 0.05) 45%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === NAVBAR TÁCTICO === */
+    .navbar {
+      width: 100%;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5, 5, 5, 0.82);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo-svg {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      border: 1px solid #00F0FF;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+      background: #090C12;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #FFFFFF;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #00F0FF;
+      padding: 2px 7px;
+      background: rgba(0, 240, 255, 0.10);
+      border: 1px solid rgba(0, 240, 255, 0.28);
+      border-radius: 4px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-ghost {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.85);
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-ghost:hover {
+      border-color: #00F0FF;
+      color: #00F0FF;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.2);
+    }
+
+    .btn-nav-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #050505;
+      padding: 9px 18px;
+      border-radius: 8px;
+      background: #00F0FF;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-primary:hover {
+      background: #38F8FF;
+      transform: translateY(-1px);
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.6);
+    }
+
+    /* === HERO PRINCIPAL === */
+    .hero {
+      padding: 88px 0 64px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.32);
+      border-radius: 999px;
+      padding: 7px 18px;
+      margin-bottom: 32px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    }
+
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #00F0FF;
+      box-shadow: 0 0 8px #00F0FF;
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .hero-badge-text {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #00F0FF;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5.5vw, 56px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.12;
+      max-width: 960px;
+      margin: 0 auto 24px;
+      background: linear-gradient(180deg, #FFFFFF 30%, rgba(255, 255, 255, 0.72) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(16px, 2vw, 19px);
+      font-weight: 400;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 740px;
+      margin: 0 auto 44px;
+    }
+
+    /* 3 Botones de Acción directos */
+    .hero-cta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      max-width: 860px;
+      margin: 0 auto 52px;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 26px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      min-width: 240px;
+    }
+
+    .btn-cta-apk {
+      background: linear-gradient(135deg, #00F0FF 0%, #00B8D4 100%);
+      color: #050505;
+      box-shadow: 0 0 28px rgba(0, 240, 255, 0.35);
+      border: 1px solid #00F0FF;
+    }
+
+    .btn-cta-apk:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(0, 240, 255, 0.6);
+      background: #38F8FF;
+    }
+
+    .btn-cta-web {
+      background: rgba(12, 16, 24, 0.75);
+      color: #FFFFFF;
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.18);
+      backdrop-filter: blur(14px);
+    }
+
+    .btn-cta-web:hover {
+      border-color: #A855F7;
+      color: #A855F7;
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(168, 85, 247, 0.38);
+    }
+
+    .btn-cta-waitlist {
+      background: rgba(12, 16, 24, 0.75);
+      color: #FFFFFF;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .btn-cta-waitlist:hover {
+      border-color: #00F0FF;
+      color: #00F0FF;
+      transform: translateY(-2px);
+      box-shadow: 0 0 26px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Métricas rápidas de impacto */
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 22px 28px;
+      background: rgba(12, 16, 24, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      backdrop-filter: blur(16px);
+    }
+
+    .metric-col {
+      text-align: center;
+    }
+
+    .metric-num {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #00F0FF;
+    }
+
+    .metric-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 2px;
+    }
+
+    /* === SECCIONES Y ENCABEZADOS === */
+    .section {
+      padding: 96px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      color: #00F0FF;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 3.8vw, 38px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 56px;
+      line-height: 1.6;
+    }
+
+    /* === BLOQUE 2: LOS 4 PILARES DEL ECOSISTEMA === */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .card-pillar {
+      background: rgba(12, 16, 24, 0.65);
+      border: 1px solid rgba(0, 240, 255, 0.18);
+      border-radius: 16px;
+      padding: 36px 32px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-pillar:hover {
+      border-color: rgba(0, 240, 255, 0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0, 240, 255, 0.12);
+    }
+
+    .card-pillar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .card-pillar-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(0, 240, 255, 0.10);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00F0FF;
+      font-size: 20px;
+    }
+
+    .card-pillar-metric {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #00F0FF;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.22);
+    }
+
+    .card-pillar-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+
+    .card-pillar-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* === BLOQUE 3: EFECTO BORROSO TÁCTICO (STEALTH BLUR SHIELD) === */
+    .stealth-shield-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 179, 0, 0.10);
+      border: 1px solid rgba(255, 179, 0, 0.35);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #FFB300;
+      margin-bottom: 20px;
+    }
+
+    .memberships-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .card-membership {
+      background: rgba(12, 16, 24, 0.65);
+      border: 1px solid rgba(0, 240, 255, 0.18);
+      border-radius: 16px;
+      padding: 32px 26px;
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .membership-tier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .tier-name {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+    }
+
+    .tier-badge {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .tier-silver { color: #E2E8F0; border: 1px solid rgba(226, 232, 240, 0.3); background: rgba(226, 232, 240, 0.08); }
+    .tier-gold { color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.35); background: rgba(245, 158, 11, 0.08); }
+    .tier-platinum { color: #00F0FF; border: 1px solid rgba(0, 240, 255, 0.35); background: rgba(0, 240, 255, 0.08); }
+
+    /* Envoltorio del desenfoque táctico */
+    .stealth-blur-zone {
+      position: relative;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Contenido deliberadamente desenfocado */
+    .blurred-content {
+      filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+      opacity: 0.32;
+    }
+
+    .simulated-price {
+      font-size: 32px;
+      font-weight: 900;
+      color: #00F0FF;
+      margin-bottom: 12px;
+    }
+
+    .simulated-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Insignia superpuesta en relieve */
+    .classified-overlay-tag {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      background: rgba(5, 5, 5, 0.94);
+      border: 1px solid #FFB300;
+      box-shadow: 0 0 20px rgba(255, 179, 0, 0.25);
+      border-radius: 8px;
+      padding: 12px 10px;
+      text-align: center;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .classified-overlay-text {
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #FFB300;
+      line-height: 1.35;
+    }
+
+    /* Tarjeta B2B de Alianzas */
+    .card-b2b-classified {
+      background: rgba(12, 16, 24, 0.65);
+      border: 1px solid rgba(168, 85, 247, 0.28);
+      border-radius: 16px;
+      padding: 32px 30px;
+      backdrop-filter: blur(16px);
+      position: relative;
+    }
+
+    .b2b-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .b2b-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #FFFFFF;
+    }
+
+    .b2b-tag {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: #A855F7;
+    }
+
+    .b2b-desc {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.65);
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    /* === BLOQUE 4: WAITLIST DE ACCESO PRIORITARIO === */
+    .waitlist-card {
+      background: rgba(12, 16, 24, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.32);
+      box-shadow: 0 0 36px rgba(0, 240, 255, 0.12);
+      border-radius: 20px;
+      padding: 48px 36px;
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .waitlist-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 540px;
+      margin: 28px auto 0;
+    }
+
+    .role-toggle-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .role-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-btn.active {
+      border-color: #00F0FF;
+      background: rgba(0, 240, 255, 0.12);
+      color: #00F0FF;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+
+    .input-field {
+      width: 100%;
+      height: 52px;
+      background: rgba(5, 5, 5, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      padding: 0 18px;
+      font-size: 16px; /* Mandatorio Kinetic para evitar zoom en iOS */
+      color: #FFFFFF;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: #00F0FF;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.28);
+    }
+
+    .input-field::placeholder {
+      color: rgba(255, 255, 255, 0.38);
+      font-size: 14px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 52px;
+      border-radius: 10px;
+      background: #00F0FF;
+      color: #050505;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: #38F8FF;
+      transform: translateY(-1px);
+      box-shadow: 0 0 32px rgba(0, 240, 255, 0.6);
+    }
+
+    .waitlist-feedback {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(0, 240, 255, 0.10);
+      border: 1px solid #00F0FF;
+      color: #00F0FF;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    /* === FOOTER INSTITUCIONAL === */
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 56px 0 40px;
+      text-align: center;
+      background: #030406;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .footer-link {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.65);
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: #00F0FF;
+    }
+
+    .footer-dot {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .footer-legal-text {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 8px;
+    }
+
+    .footer-lock {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: rgba(0, 240, 255, 0.7);
+      margin-top: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .pillars-grid {
+        grid-template-columns: 1fr;
+      }
+      .memberships-grid {
+        grid-template-columns: 1fr;
+      }
+      .metrics-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .hero-cta-grid {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-cta {
+        min-width: unset;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-<body class="antialiased">
+<body>
 
-  <!-- Ancla de descarga directa .APK preparada para activación sin redirecciones externas -->
-  <a id="directApkDownloadAnchor" href="/downloads/Kinetic.apk" download="Kinetic.apk" class="hidden" aria-hidden="true"></a>
-
-  <!-- ===================================================================== -->
-  <!-- HEADER FIJO SUPERIOR (TRI-MODO: ES/EN + DARK/LIGHT + CTAs 3D)         -->
-  <!-- ===================================================================== -->
-  <header class="fixed top-0 left-0 right-0 z-50 knt-glass-header">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between gap-2">
-      <!-- Marca KINETIC -->
-      <a href="#" class="flex items-center gap-2.5 shrink-0 no-underline">
-        <div class="w-10 h-10 rounded-xl bg-[#050505] border border-[#00F0FF] flex items-center justify-center shadow-[0_0_14px_rgba(0,240,255,0.35)]">
-          <svg class="w-6 h-6" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-            <defs>
-              <linearGradient id="kntBoltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#00F0FF" />
-                <stop offset="100%" stop-color="#9D4EDD" />
-              </linearGradient>
-            </defs>
-            <path d="M36 8L14 36h16l-4 20 24-28H34l2-20z" fill="url(#kntBoltGrad)" />
+  <!-- 1. NAVBAR TÁCTICO -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="brand-wrap">
+        <div class="brand-logo-svg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
           </svg>
         </div>
-        <div>
-          <span class="knt-wordmark text-base sm:text-xl block leading-none">KINETIC</span>
-          <span data-i18n="brandSub" class="text-[9px] font-black tracking-[0.18em] uppercase block mt-0.5" style="color:var(--knt-cyan-ink)">FITNESS • DEPORTE • WELLNESS</span>
-        </div>
-      </a>
-
-      <!-- Navegación Desktop -->
-      <nav class="hidden xl:flex items-center gap-4 text-[11px] font-extrabold uppercase tracking-wider">
-        <a href="#explorar-universos" data-i18n="navExplore" class="hover:opacity-80 no-underline" style="color:var(--knt-text)">231 Disciplinas</a>
-        <a href="#sala-3d" data-i18n="navStudio" class="hover:opacity-80 no-underline" style="color:var(--knt-text)">Lugar Exacto 3D</a>
-        <a href="#membresias" data-i18n="navMemberships" class="hover:opacity-80 no-underline" style="color:var(--knt-text)">Membresías VIP</a>
-        <a href="#kineticlub" data-i18n="navKinetiClub" class="hover:opacity-80 no-underline" style="color:var(--knt-text)">KinetiClub</a>
-        <a href="#ecosistema-b2b" data-i18n="navB2B" class="hover:opacity-80 no-underline" style="color:var(--knt-text)">Socios</a>
-      </nav>
-
-      <!-- Controles Reactivos ES/EN + Dark/Light + CTAs -->
-      <div class="flex items-center gap-1.5 sm:gap-2">
-        <!-- Switch ES / EN -->
-        <div class="inline-flex items-center gap-1 p-0.5 rounded-xl border" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)">
-          <button type="button" data-lang-btn="es" onclick="window.kineticPortal.setLang('es')" class="knt-chip-3d active-cyan px-2 py-1 text-[10px]">ES</button>
-          <button type="button" data-lang-btn="en" onclick="window.kineticPortal.setLang('en')" class="knt-chip-3d px-2 py-1 text-[10px]">EN</button>
-        </div>
-
-        <!-- Switch Dark / Light -->
-        <button type="button" onclick="window.kineticPortal.toggleTheme()" class="knt-chip-3d px-2.5 py-1.5 text-[10px]" aria-label="Toggle Theme">
-          <span data-theme-label>🌙 OSCURO</span>
-        </button>
-
-        <!-- CTAs Desktop (Candado Pre-Lanzamiento 31 Dic 2026) -->
-        <button type="button" onclick="window.kineticPortal.openPreLaunchModal()" data-i18n="ctaPreviewApp" class="hidden lg:inline-flex knt-btn-3d knt-btn-cyan px-3 py-2 text-[10.5px] uppercase">
-          👁️ VISTA PREVIA DE LA APP
-        </button>
-        <button type="button" onclick="window.kineticPortal.handleApkDownload()" data-i18n="ctaApk" class="hidden md:inline-flex knt-btn-3d knt-btn-green px-3 py-2 text-[10.5px] uppercase">
-          🤖 DESCARGAR .APK ANDROID
-        </button>
-        <button type="button" onclick="window.kineticPortal.openRegistrationModal('b2c')" data-i18n="ctaRegister" class="hidden sm:inline-flex knt-btn-3d knt-btn-purple px-3 py-2 text-[10.5px] uppercase">
-          👑 ACCESO PRIORITARIO
-        </button>
-
-        <!-- Botón Menú Móvil -->
-        <button type="button" onclick="window.kineticPortal.toggleMobileMenu()" class="lg:hidden knt-chip-3d px-2.5 py-1.5 text-xs font-black" aria-label="Menu">
-          ☰
-        </button>
+        <span class="brand-text">KINETIC</span>
+        <span class="brand-sub">PILOTO OFICIAL</span>
       </div>
-    </div>
 
-    <!-- Drawer Móvil (0px desborde horizontal en 393px / 412px) -->
-    <div id="mobileNavDrawer" class="hidden lg:hidden border-t px-4 py-3 space-y-3" style="background:var(--knt-card);border-color:var(--knt-border-subtle)">
-      <div class="flex flex-wrap gap-2 text-xs font-extrabold">
-        <a href="#explorar-universos" onclick="window.kineticPortal.toggleMobileMenu()" data-i18n="navExplore" class="knt-chip-3d no-underline">231 Disciplinas</a>
-        <a href="#sala-3d" onclick="window.kineticPortal.toggleMobileMenu()" data-i18n="navStudio" class="knt-chip-3d no-underline">Lugar Exacto 3D</a>
-        <a href="#membresias" onclick="window.kineticPortal.toggleMobileMenu()" data-i18n="navMemberships" class="knt-chip-3d no-underline">Membresías VIP</a>
-        <a href="#kineticlub" onclick="window.kineticPortal.toggleMobileMenu()" data-i18n="navKinetiClub" class="knt-chip-3d no-underline">KinetiClub</a>
-        <a href="#ecosistema-b2b" onclick="window.kineticPortal.toggleMobileMenu()" data-i18n="navB2B" class="knt-chip-3d no-underline">Socios</a>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        <button type="button" onclick="window.kineticPortal.toggleMobileMenu();window.kineticPortal.openPreLaunchModal()" data-i18n="ctaPreviewApp" class="knt-btn-3d knt-btn-cyan py-2.5 px-3 text-[11px] uppercase">👁️ VISTA PREVIA DE LA APP</button>
-        <button type="button" onclick="window.kineticPortal.toggleMobileMenu();window.kineticPortal.handleApkDownload()" data-i18n="ctaApk" class="knt-btn-3d knt-btn-green py-2.5 px-3 text-[11px] uppercase">🤖 DESCARGAR .APK ANDROID</button>
-        <button type="button" onclick="window.kineticPortal.toggleMobileMenu();window.kineticPortal.openRegistrationModal('b2c')" data-i18n="ctaRegister" class="knt-btn-3d knt-btn-purple py-2.5 px-3 text-[11px] uppercase">👑 ACCESO PRIORITARIO</button>
+      <div class="nav-actions">
+        <a href="https://expo.dev/accounts/enrikeonly/projects/kinetic/builds/5cfaf77b-d893-4c09-a138-7bf928532638" target="_blank" rel="noopener noreferrer" class="btn-nav-ghost">
+          DESCARGAR .APK
+        </a>
+        <a href="https://enrikeonly-kinetic.expo.app" target="_blank" rel="noopener noreferrer" class="btn-nav-primary">
+          INGRESAR
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#050505" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
       </div>
     </div>
   </header>
 
-  <!-- ===================================================================== -->
-  <!-- BANNER DINÁMICO DE DEEPLINK (?sede= o ?event= / ?evento=)             -->
-  <!-- ===================================================================== -->
-  <div id="deepLinkTopBanner" class="hidden pt-20 border-b" style="background:var(--knt-surface);border-color:#00F0FF"></div>
-
-  <!-- ===================================================================== -->
-  <!-- SECCIÓN A: HERO INTERACTIVO + SIMULADOR EN VIVO                       -->
-  <!-- ===================================================================== -->
+  <!-- 2. HERO PRINCIPAL -->
   <main>
-    <section id="inicio-hero" class="relative pt-24 sm:pt-32 pb-16 lg:pb-24 overflow-hidden">
-      <div class="absolute inset-0 pointer-events-none opacity-60" style="background:radial-gradient(circle at 82% 14%, rgba(0,240,255,0.16), transparent 42%), radial-gradient(circle at 14% 85%, rgba(157,78,221,0.16), transparent 45%)"></div>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          <span class="hero-badge-text">RED OPERATIVA EN LOS CABOS • FASE PILOTO OFICIAL</span>
+        </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <!-- Columna Izquierda -->
-          <div class="lg:col-span-7">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full knt-bubble-glass border mb-5" style="border-color:rgba(0,240,255,0.45)">
-              <span data-i18n="heroBadgeLive" class="text-[10px] font-black uppercase tracking-wider" style="color:var(--knt-cyan-ink)">
-                ● PLATAFORMA OFICIAL • RED EN EXPANSIÓN
-              </span>
+        <h1 class="hero-title">
+          EL SISTEMA OPERATIVO DEL ENTRENAMIENTO Y BIENESTAR ÉLITE
+        </h1>
+
+        <p class="hero-subtitle">
+          La red unificada de clubes deportivos, estudios boutique y especialistas de alto rendimiento en Los Cabos, B.C.S.
+        </p>
+
+        <!-- 3 Botones de Acción Directos -->
+        <div class="hero-cta-grid">
+          <a href="https://expo.dev/accounts/enrikeonly/projects/kinetic/builds/5cfaf77b-d893-4c09-a138-7bf928532638" target="_blank" rel="noopener noreferrer" class="btn-cta btn-cta-apk">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            DESCARGAR APP ANDROID (.APK)
+          </a>
+
+          <a href="https://enrikeonly-kinetic.expo.app" target="_blank" rel="noopener noreferrer" class="btn-cta btn-cta-web">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+            ACCESO A LA PLATAFORMA
+          </a>
+
+          <a href="#waitlist" class="btn-cta btn-cta-waitlist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+            ACCESO PRIORITARIO FUNDADORES
+          </a>
+        </div>
+
+        <!-- Métricas Rápidas -->
+        <div class="metrics-bar">
+          <div class="metric-col">
+            <div class="metric-num">231</div>
+            <div class="metric-lbl">DISCIPLINAS</div>
+          </div>
+          <div class="metric-col">
+            <div class="metric-num">52</div>
+            <div class="metric-lbl">CLUBES ACTIVOS</div>
+          </div>
+          <div class="metric-col">
+            <div class="metric-num">40/60</div>
+            <div class="metric-lbl">ESCROW SEGURO</div>
+          </div>
+          <div class="metric-col">
+            <div class="metric-num">60s</div>
+            <div class="metric-lbl">LLAVE QR TOTP</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. LOS 4 PILARES DEL ECOSISTEMA -->
+    <section class="section">
+      <div class="container">
+        <div class="section-eyebrow">ARQUITECTURA DE ALTO RENDIMIENTO</div>
+        <h2 class="section-title">LOS 4 PILARES DEL ECOSISTEMA</h2>
+        <p class="section-desc">
+          Infraestructura de reservas descentralizada creada para eliminar intermediarios obsoletos y garantizar certidumbre operativa absoluta.
+        </p>
+
+        <div class="pillars-grid">
+          <!-- Pilar 1: Radar Deportivo -->
+          <div class="card-pillar">
+            <div class="card-pillar-header">
+              <div class="card-pillar-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+              </div>
+              <span class="card-pillar-metric">231 DISCIPLINAS</span>
             </div>
-
-            <h1 data-i18n="heroTitle" class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.08] mb-5">
-              La Red Élite de Entrenamiento, Deporte y Wellness
-            </h1>
-
-            <p data-i18n-html="heroSubtitle" class="text-sm sm:text-lg leading-relaxed mb-7" style="color:var(--knt-text-sec)">
-              Paridad oficial <strong>1 KC (KinetiCoin) = $1.00 MXN Neto (IVA Incluido)</strong>. Aparta tu lugar exacto congelando únicamente el <strong style="color:var(--knt-cyan-ink)">40% en Custodia Escrow</strong> y cubre el <strong style="color:var(--knt-green-ink)">60% en Recepción</strong> presentando tu <strong>Llave Óptica Dinámica QR de 60 segundos</strong>.
+            <h3 class="card-pillar-title">Radar Deportivo y Wellness</h3>
+            <p class="card-pillar-desc">
+              231 disciplinas de fitness y terapias wellness integradas en Los Cabos. Geolocalización en tiempo real para Crossfit, Pádel, Reformer Pilates, Surf, Boxeo, Recovery Cryo y Biohacking.
             </p>
+          </div>
 
-            <!-- 4 KPIs Oficiales -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-7">
-              <div class="knt-card-3d-cyan p-3.5">
-                <div data-i18n="kpi1Val" class="font-display text-2xl font-extrabold" style="color:var(--knt-cyan-ink)">231</div>
-                <div data-i18n="kpi1Lab" class="text-[11px] font-bold mt-0.5 leading-snug" style="color:var(--knt-text-sec)">Disciplinas Fitness &amp; Wellness</div>
+          <!-- Pilar 2: Red de Afiliados -->
+          <div class="card-pillar">
+            <div class="card-pillar-header">
+              <div class="card-pillar-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
               </div>
-              <div class="knt-card-3d-purple p-3.5">
-                <div data-i18n="kpi2Val" class="font-display text-2xl font-extrabold" style="color:var(--knt-purple-ink)">100+</div>
-                <div data-i18n="kpi2Lab" class="text-[11px] font-bold mt-0.5 leading-snug" style="color:var(--knt-text-sec)">Especialistas y Sedes en Expansión Continua</div>
-              </div>
-              <div class="knt-card-3d-amber p-3.5">
-                <div data-i18n="kpi3Val" class="font-display text-2xl font-extrabold" style="color:var(--knt-amber-ink)">99 Niveles</div>
-                <div data-i18n="kpi3Lab" class="text-[11px] font-bold mt-0.5 leading-snug" style="color:var(--knt-text-sec)">7 Grados Romanos de Prestigio (I–VII)</div>
-              </div>
-              <div class="knt-card-3d-green p-3.5">
-                <div data-i18n="kpi4Val" class="font-display text-2xl font-extrabold" style="color:var(--knt-green-ink)">250</div>
-                <div data-i18n="kpi4Lab" class="text-[11px] font-bold mt-0.5 leading-snug" style="color:var(--knt-text-sec)">Trofeos Desbloqueables y Cofres 3D</div>
-              </div>
+              <span class="card-pillar-metric">52 CLUBES</span>
             </div>
+            <h3 class="card-pillar-title">Red de Afiliados Conectada</h3>
+            <p class="card-pillar-desc">
+              52 clubes y consultorios interconectados bajo una sola llave digital. Acceso directo a centros premium sin suscripciones individuales forzadas ni membresías fragmentadas.
+            </p>
+          </div>
 
-            <!-- Botones CTA Volumétricos 3D (Único botón de Vista Previa + APK + Pre-Registro) -->
-            <div class="flex flex-wrap items-center gap-3">
-              <button type="button" onclick="window.kineticPortal.openPreLaunchModal()" data-i18n="heroBtnPreview" class="knt-btn-3d knt-btn-cyan px-6 py-3.5 text-xs sm:text-sm uppercase">
-                👁️ VISTA PREVIA DE LA APP
-              </button>
-              <button type="button" onclick="window.kineticPortal.handleApkDownload()" data-i18n="heroBtnApk" class="knt-btn-3d knt-btn-green px-5 py-3.5 text-xs sm:text-sm uppercase">
-                🤖 DESCARGAR .APK ANDROID
-              </button>
-              <button type="button" onclick="window.kineticPortal.openRegistrationModal('b2c')" data-i18n="heroBtnSignup" class="knt-btn-3d knt-btn-purple px-5 py-3.5 text-xs sm:text-sm uppercase">
-                👑 LISTA DE ACCESO PRIORITARIO
-              </button>
+          <!-- Pilar 3: Custodia Escrow 40/60 -->
+          <div class="card-pillar">
+            <div class="card-pillar-header">
+              <div class="card-pillar-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+              <span class="card-pillar-metric">CERO RIESGO</span>
+            </div>
+            <h3 class="card-pillar-title">Protocolo Escrow 40/60</h3>
+            <p class="card-pillar-desc">
+              Custodia de apartado 40% al reservar y liquidación del 60% restante exclusivamente al validar la Llave Óptica Dinámica QR TOTP de 60 segundos en la recepción del club.
+            </p>
+          </div>
+
+          <!-- Pilar 4: KinetiClub -->
+          <div class="card-pillar">
+            <div class="card-pillar-header">
+              <div class="card-pillar-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                  <path d="M4 22h16"></path>
+                  <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"></path>
+                  <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
+                </svg>
+              </div>
+              <span class="card-pillar-metric">99 NIVELES</span>
+            </div>
+            <h3 class="card-pillar-title">KinetiClub y Escuadrones</h3>
+            <p class="card-pillar-desc">
+              Escalafón de 99 niveles de prestigio, escuadrones competitivos de atletas y retos comunitarios con recompensas canjeables 1:1 en Bóveda Dual.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. EFECTO BORROSO TÁCTICO ANTI-ESPIONAJE (STEALTH BLUR SHIELD) -->
+    <section class="section">
+      <div class="container">
+        <div style="text-align: center;">
+          <div class="stealth-shield-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            ESCUDO DEFENSIVO // BLINDAJE ESTRATÉGICO
+          </div>
+        </div>
+
+        <div class="section-eyebrow">MODELO DE CAPITAL Y COMISIONES</div>
+        <h2 class="section-title">MEMBRESÍAS Y MODELO DE LIQUIDEZ</h2>
+        <p class="section-desc">
+          Parámetros financieros oficiales y cotizaciones de volumen protegidos bajo protocolo anti-espionaje competitivo previo a la apertura general.
+        </p>
+
+        <!-- Tarjetas de Membresía con Blur Táctico -->
+        <div class="memberships-grid">
+          <!-- Silver Tier -->
+          <div class="card-membership">
+            <div class="membership-tier-header">
+              <span class="tier-name">SILVER PASS</span>
+              <span class="tier-badge tier-silver">ATLETA REGULAR</span>
+            </div>
+            <div class="stealth-blur-zone">
+              <div class="blurred-content">
+                <div class="simulated-price">$2,450 MXN</div>
+                <ul class="simulated-list">
+                  <li>• Acceso ilimitado a 3 sedes simultáneas</li>
+                  <li>• Cuota Escrow 40/60 reducida</li>
+                  <li>• Pool de 2,450 Kineticoins mensuales</li>
+                  <li>• Cobertura Médica Deportiva Básica</li>
+                </ul>
+              </div>
+              <div class="classified-overlay-tag">
+                <div class="classified-overlay-text">
+                  🔒 VALOR CLASIFICADO<br />REVELACIÓN EN LANZAMIENTO OFICIAL
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Columna Derecha: Simulador en Vivo -->
-          <div class="lg:col-span-5">
-            <div id="heroSimulatorCard" class="knt-card-3d-cyan p-4 sm:p-5 scroll-mt-24">
-              <div class="flex items-center justify-between gap-2 pb-3 mb-3 border-b" style="border-color:var(--knt-border-subtle)">
-                <div class="flex items-center gap-2">
-                  <span data-i18n="simHeaderTag" class="text-[10.5px] font-black uppercase tracking-wider" style="color:var(--knt-cyan-ink)">● SIMULADOR EN VIVO</span>
-                </div>
-                <span data-i18n="simParityBadge" class="px-2.5 py-1 rounded-lg bg-[#9D4EDD] text-white text-[10px] font-black">1 KC = $1.00 MXN</span>
+          <!-- Gold Tier -->
+          <div class="card-membership">
+            <div class="membership-tier-header">
+              <span class="tier-name">GOLD PRO</span>
+              <span class="tier-badge tier-gold">ALTO RENDIMIENTO</span>
+            </div>
+            <div class="stealth-blur-zone">
+              <div class="blurred-content">
+                <div class="simulated-price">$4,890 MXN</div>
+                <ul class="simulated-list">
+                  <li>• Acceso a las 52 sedes de Los Cabos</li>
+                  <li>• Prioridad en reserva de canchas y camas</li>
+                  <li>• 4 Pases de Invitado al mes</li>
+                  <li>• Descuento en Bóveda Dual y Alianzas</li>
+                </ul>
               </div>
-
-              <!-- Viewport Dinámico -->
-              <div id="heroSimViewport" class="min-h-[248px]"></div>
-
-              <!-- Barra Flotante de 4 Pestañas del Simulador -->
-              <div class="mt-4 pt-3 border-t space-y-2.5" style="border-color:var(--knt-border-subtle)">
-                <div class="flex flex-wrap gap-1.5">
-                  <button type="button" id="heroSimBtn_explore" onclick="window.kineticPortal.setHeroTab('explore')" data-i18n="simTabExplore" class="knt-chip-3d active-cyan flex-1 justify-center text-[10px] py-2">EXPLORAR</button>
-                  <button type="button" id="heroSimBtn_studio" onclick="window.kineticPortal.setHeroTab('studio')" data-i18n="simTabStudio" class="knt-chip-3d flex-1 justify-center text-[10px] py-2">SALA 3D</button>
-                  <button type="button" id="heroSimBtn_club" onclick="window.kineticPortal.setHeroTab('club')" data-i18n="simTabClub" class="knt-chip-3d flex-1 justify-center text-[10px] py-2">KINETICLUB</button>
-                  <button type="button" id="heroSimBtn_vault" onclick="window.kineticPortal.setHeroTab('vault')" data-i18n="simTabVault" class="knt-chip-3d flex-1 justify-center text-[10px] py-2">BÓVEDA QR</button>
+              <div class="classified-overlay-tag">
+                <div class="classified-overlay-text">
+                  🔒 VALOR CLASIFICADO<br />REVELACIÓN EN LANZAMIENTO OFICIAL
                 </div>
-                <button type="button" onclick="window.kineticPortal.openPreLaunchModal()" data-i18n="simOpenFullBtn" class="knt-btn-3d knt-btn-ghost-cyan w-full py-2.5 text-[11px] uppercase">
-                  ABRIR APP REAL EN VIVO ›
-                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Platinum Tier -->
+          <div class="card-membership">
+            <div class="membership-tier-header">
+              <span class="tier-name">PLATINUM BLACK</span>
+              <span class="tier-badge tier-platinum">ÉLITE FOUNDER</span>
+            </div>
+            <div class="stealth-blur-zone">
+              <div class="blurred-content">
+                <div class="simulated-price">$8,900 MXN</div>
+                <ul class="simulated-list">
+                  <li>• Reserva prioritaria 72h de anticipación</li>
+                  <li>• Sesiones privadas de Biohacking & Crio</li>
+                  <li>• Asignación de Coach de Desempeño</li>
+                  <li>• Llave QR TOTP VIP Sin Esperas</li>
+                </ul>
+              </div>
+              <div class="classified-overlay-tag">
+                <div class="classified-overlay-text">
+                  🔒 VALOR CLASIFICADO<br />REVELACIÓN EN LANZAMIENTO OFICIAL
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloque B2B de Alianzas Clasificado -->
+        <div class="card-b2b-classified">
+          <div class="b2b-header-row">
+            <div class="b2b-title">CONVENIOS Y RETENCIÓN COMERCIAL B2B</div>
+            <div class="b2b-tag">PORTAL SOCIOS // PROTEGIDO</div>
+          </div>
+          <p class="b2b-desc">
+            Las tasas preferenciales de dispersión bancaria diaria vía Stripe Connect, el esquema de comisiones por validación de check-in y los subsidios de equipamiento para nuevos centros se mantienen clasificados hasta la sesión privada de firma.
+          </p>
+          <div class="stealth-blur-zone" style="margin-top: 8px;">
+            <div class="blurred-content" style="padding: 12px 0;">
+              <p style="font-size: 14px; font-weight: 700; color: #00F0FF;">
+                TASA RETENCIÓN: 3.8% + $3.00 MXN | LIQUIDACIÓN ESCROW: D+0 INMEDIATA | INYECCIÓN KINETICOINS 100% CUBIERTA
+              </p>
+              <p style="font-size: 13px; color: rgba(255, 255, 255, 0.7); margin-top: 6px;">
+                Condiciones exclusivas negociadas para fundadores de la red piloto en San José del Cabo y Cabo San Lucas.
+              </p>
+            </div>
+            <div class="classified-overlay-tag" style="max-width: 440px;">
+              <div class="classified-overlay-text">
+                🔒 MODELO B2B CLASIFICADO // AUDITORÍA PRIVADA EN FIRMA
               </div>
             </div>
           </div>
@@ -232,671 +1069,131 @@
       </div>
     </section>
 
-    <!-- ===================================================================== -->
-    <!-- SECCIÓN B: CATÁLOGO DE 231 DISCIPLINAS (SOLO LECTURA) + EJEMPLOS DEMO -->
-    <!-- ===================================================================== -->
-    <section id="explorar-universos" class="py-16 sm:py-20 border-t" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="max-w-3xl mb-8">
-          <span data-i18n="secBTag" class="text-[10.5px] font-black uppercase tracking-[0.18em]" style="color:var(--knt-cyan-ink)">
-            CATÁLOGO OFICIAL DE DISCIPLINAS
-          </span>
-          <h2 data-i18n="secBTitle" class="font-display text-2xl sm:text-4xl font-extrabold mt-2 mb-3">
-            231 Disciplinas Oficiales
-          </h2>
-          <p data-i18n="secBSub" class="text-sm sm:text-base leading-relaxed" style="color:var(--knt-text-sec)">
-            Explora el mundo del Fitness y Deporte, así como Wellness y Spa.
+    <!-- 5. WAITLIST DE ACCESO PRIORITARIO -->
+    <section class="section" id="waitlist">
+      <div class="container">
+        <div class="waitlist-card">
+          <div class="section-eyebrow">FASE PILOTO PRIVADA</div>
+          <h2 class="section-title" style="margin-bottom: 12px;">SOLICITAR ACCESO PRIORITARIO</h2>
+          <p style="font-size: 15px; color: rgba(255, 255, 255, 0.65); max-width: 540px; margin: 0 auto;">
+            Cupos limitados para atletas de alto rendimiento y centros deportivos seleccionados en Los Cabos.
           </p>
-        </div>
 
-        <!-- Barra de Búsqueda, Filtro y Orden -->
-        <div class="knt-card-3d p-4 sm:p-5 mb-5 space-y-3">
-          <div class="relative">
+          <form class="waitlist-form" id="waitlistForm" onsubmit="handleWaitlistSubmit(event)">
+            <div class="role-toggle-row">
+              <button type="button" class="role-btn active" id="btnRoleAthlete" onclick="selectRole('atleta')">
+                ATLETA // USUARIO
+              </button>
+              <button type="button" class="role-btn" id="btnRoleClub" onclick="selectRole('club')">
+                CLUB // CENTRO B2B
+              </button>
+            </div>
+
             <input
-              id="discSearchInput"
-              type="search"
-              oninput="window.kineticPortal.onSearchDiscipline(this.value)"
-              data-i18n-placeholder="searchDiscPlaceholder"
-              placeholder="Buscar entre las 231 disciplinas..."
-              class="knt-input-3d"
+              type="text"
+              id="contactInput"
+              class="input-field"
+              placeholder="Tu WhatsApp o correo electrónico"
+              required
+              autocomplete="off"
             />
-          </div>
 
-          <div class="grid grid-cols-2 gap-3">
-            <button type="button" onclick="window.kineticPortal.toggleFilterBar()" data-i18n="btnFilter50" class="knt-btn-3d knt-btn-ghost-cyan py-3 px-3 text-xs uppercase">
-              ⚡ FILTRAR UNIVERSO
+            <button type="submit" class="btn-submit" id="submitBtn">
+              SOLICITAR INVITACIÓN
             </button>
-            <button type="button" onclick="window.kineticPortal.toggleSortBar()" data-i18n="btnSort50" class="knt-btn-3d knt-btn-ghost-purple py-3 px-3 text-xs uppercase">
-              ⇅ ORDENAR CATÁLOGO
-            </button>
-          </div>
 
-          <!-- Chips de División -->
-          <div id="discFilterDrawer" class="flex flex-wrap items-center gap-2 pt-1">
-            <button type="button" id="discChip_all" onclick="window.kineticPortal.setDiscDiv('all')" data-i18n="divAll" class="knt-chip-3d active-cyan">Todas (231)</button>
-            <button type="button" id="discChip_fitness" onclick="window.kineticPortal.setDiscDiv('fitness')" data-i18n="divFitness" class="knt-chip-3d">🔵 Fitness &amp; Deporte (126)</button>
-            <button type="button" id="discChip_wellness" onclick="window.kineticPortal.setDiscDiv('wellness')" data-i18n="divWellness" class="knt-chip-3d">🟣 Wellness &amp; Spa (105)</button>
-            <span id="disciplinesCountBadge" class="ml-auto text-[11px] font-bold" style="color:var(--knt-muted)"></span>
-          </div>
-
-          <!-- Chips de Ordenamiento -->
-          <div id="discSortDrawer" class="hidden flex-wrap items-center gap-2 pt-1">
-            <button type="button" id="sortChip_featured" onclick="window.kineticPortal.setDiscSort('featured')" data-i18n="sortFeatured" class="knt-chip-3d active-purple">Destacadas Primero</button>
-            <button type="button" id="sortChip_az" onclick="window.kineticPortal.setDiscSort('az')" data-i18n="sortAZ" class="knt-chip-3d">Alfabético (A–Z)</button>
-            <button type="button" id="sortChip_za" onclick="window.kineticPortal.setDiscSort('za')" data-i18n="sortZA" class="knt-chip-3d">Alfabético (Z–A)</button>
-          </div>
-
-          <p data-i18n="discReadOnlyHint" class="text-[11px] font-bold pt-1" style="color:var(--knt-muted)">
-            Toca cualquier disciplina para desplegar su ficha informativa aquí mismo.
-          </p>
-        </div>
-
-        <!-- Ficha Informativa Desplegable de Solo Lectura (Cero redirecciones externas) -->
-        <div id="disciplineReadOnlyPanel" class="hidden mb-5"></div>
-
-        <!-- Grid de las 231 Disciplinas (Botones de solo lectura) -->
-        <div id="disciplinesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mb-5"></div>
-        <div class="text-center mb-14">
-          <button type="button" id="toggleAll231Btn" onclick="window.kineticPortal.toggleAll231()" class="knt-btn-3d knt-btn-ghost-cyan px-6 py-3 text-xs uppercase"></button>
-        </div>
-
-        <!-- Sedes y Especialistas Destacados (4 Ejemplos Demostrativos Neutrales, Cero Negocios Reales) -->
-        <div class="pt-6 border-t" style="border-color:var(--knt-border-subtle)">
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-            <div>
-              <span data-i18n="venuesSubTag" class="text-[10.5px] font-black uppercase tracking-[0.16em]" style="color:var(--knt-purple-ink)">
-                EJEMPLOS DEMOSTRATIVOS • FORMATOS VERIFICADOS
-              </span>
-              <h3 data-i18n="venuesTitle" class="font-display text-2xl sm:text-3xl font-extrabold mt-1">
-                Sedes y Especialistas Destacados
-              </h3>
+            <div class="waitlist-feedback" id="waitlistFeedback">
+              ✓ SOLICITUD REGISTRADA // RECIBIRÁS TU INVITACIÓN PRIVADA
             </div>
-            <div class="flex flex-wrap gap-2">
-              <button type="button" id="catChip_all" onclick="window.kineticPortal.setVenueCategory('all')" data-i18n="catAll" class="knt-chip-3d active-cyan">Todos</button>
-              <button type="button" id="catChip_clubes" onclick="window.kineticPortal.setVenueCategory('clubes')" data-i18n="catClubs" class="knt-chip-3d">Clubes Deportivos</button>
-              <button type="button" id="catChip_boutique" onclick="window.kineticPortal.setVenueCategory('boutique')" data-i18n="catBoutique" class="knt-chip-3d">Estudios Boutique</button>
-              <button type="button" id="catChip_wellness" onclick="window.kineticPortal.setVenueCategory('wellness')" data-i18n="catWellness" class="knt-chip-3d">Especialistas Wellness</button>
-            </div>
-          </div>
-
-          <div id="venuesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- SECCIÓN C: MAPA 3D DE SALA TIPO CINE (LENGUAJE AMIGABLE)              -->
-    <!-- ===================================================================== -->
-    <section id="sala-3d" class="py-16 sm:py-20 border-t" style="border-color:var(--knt-border-subtle)">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="max-w-3xl mb-10">
-          <span data-i18n="secCTag" class="text-[10.5px] font-black uppercase tracking-[0.18em]" style="color:var(--knt-cyan-ink)">
-            RESERVA TU LUGAR EXACTO
-          </span>
-          <h2 data-i18n="secCTitle" class="font-display text-2xl sm:text-4xl font-extrabold mt-2 mb-3">
-            Elige tu Lugar Exacto Antes de Llegar
-          </h2>
-          <p data-i18n-html="secCSub" class="text-sm sm:text-base leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <!-- Simulador Interactivo de Sala 3D (Hasta 50 Estaciones) -->
-          <div class="lg:col-span-7 knt-card-3d-cyan p-4 sm:p-6 space-y-4">
-            <div class="flex flex-wrap gap-2">
-              <button type="button" id="equipBtn_reformer" onclick="window.kineticPortal.setStudioEquip('reformer')" data-i18n="equipReformer" class="knt-chip-3d active-cyan">🛏️ Camas Reformer</button>
-              <button type="button" id="equipBtn_cycling" onclick="window.kineticPortal.setStudioEquip('cycling')" data-i18n="equipCycling" class="knt-chip-3d">🚴 Bicis Spinning</button>
-              <button type="button" id="equipBtn_barre" onclick="window.kineticPortal.setStudioEquip('barre')" data-i18n="equipBarre" class="knt-chip-3d">🩰 Barras de Barre</button>
-              <button type="button" id="equipBtn_boxing" onclick="window.kineticPortal.setStudioEquip('boxing')" data-i18n="equipBoxing" class="knt-chip-3d">🥊 Sacos de Boxeo</button>
-              <button type="button" id="equipBtn_mats" onclick="window.kineticPortal.setStudioEquip('mats')" data-i18n="equipMats" class="knt-chip-3d">🧘 Mats / Funcional</button>
-              <button type="button" id="equipBtn_courts" onclick="window.kineticPortal.setStudioEquip('courts')" data-i18n="equipCourts" class="knt-chip-3d">🎾 Canchas Pádel/Tenis</button>
-            </div>
-
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="flex flex-wrap items-center gap-2">
-                <span data-i18n="capLabel" class="text-xs font-extrabold" style="color:var(--knt-muted)">Capacidad de Sala:</span>
-                <button type="button" id="capBtn_16" onclick="window.kineticPortal.setStudioCap(16)" data-i18n="cap16" class="knt-chip-3d">16 Lugares</button>
-                <button type="button" id="capBtn_32" onclick="window.kineticPortal.setStudioCap(32)" data-i18n="cap32" class="knt-chip-3d active-purple">32 Lugares</button>
-                <button type="button" id="capBtn_50" onclick="window.kineticPortal.setStudioCap(50)" data-i18n="cap50" class="knt-chip-3d">50 Estaciones (Máx)</button>
-              </div>
-              <div class="flex flex-wrap items-center gap-3 text-[11px] font-bold">
-                <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-[#00FF66]"></span><span data-i18n="legendFree">Disponible</span></span>
-                <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-[#00F0FF]"></span><span data-i18n="legendSelected">Tu Lugar</span></span>
-                <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-slate-500"></span><span data-i18n="legendAnon">Ocupado (100% Anónimo 🔒)</span></span>
-              </div>
-            </div>
-
-            <!-- Barra Frontal Instructor (#FFFFFF garantizado sobre #0F172A) -->
-            <div class="knt-stage-bar py-3 px-4 text-center">
-              <div data-i18n="stageMirrorLabel" class="text-xs font-black tracking-[0.16em] text-white">ZONA DEL INSTRUCTOR Y ESPEJO PRINCIPAL</div>
-              <div id="studioStageSub" class="text-[10px] font-bold text-[#00F0FF] mt-0.5"></div>
-            </div>
-
-            <!-- Grid Táctil de Estaciones -->
-            <div id="studioSpotsGrid"></div>
-          </div>
-
-          <!-- Desglose en Vivo + 3 Pasos Amigables -->
-          <div class="lg:col-span-5 space-y-4">
-            <div class="knt-card-3d-purple p-5">
-              <div id="studioSelectionSummary"></div>
-              <button type="button" onclick="window.kineticPortal.scrollToSimulator('studio')" data-i18n="bookSelectedSpotBtn" class="knt-btn-3d knt-btn-cyan w-full py-3.5 mt-4 text-xs uppercase">
-                ⚡ APARTAR ESTA ESTACIÓN ›
-              </button>
-            </div>
-
-            <div class="knt-card-3d p-4">
-              <span data-i18n="step1Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-cyan-ink)">PASO 1 • APARTADO CON SOLO EL 40%</span>
-              <h3 data-i18n="step1Title" class="font-display text-base font-extrabold mt-1">Aseguras tu lugar al instante</h3>
-              <p data-i18n="step1Desc" class="text-xs leading-relaxed mt-1" style="color:var(--knt-text-sec)"></p>
-            </div>
-
-            <div class="knt-card-3d p-4">
-              <div class="flex items-center justify-between gap-2">
-                <span data-i18n="step2Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-green-ink)">PASO 2 • LLAVE DINÁMICA QR (60s)</span>
-                <span class="px-2 py-0.5 rounded bg-[#00FF66] text-[#050505] text-[10px] font-black">QR <span data-qr-timer>60s</span></span>
-              </div>
-              <h3 data-i18n="step2Title" class="font-display text-base font-extrabold mt-1">Llegas, muestras tu QR y entras sin filas</h3>
-              <p data-i18n="step2Desc" class="text-xs leading-relaxed mt-1" style="color:var(--knt-text-sec)"></p>
-            </div>
-
-            <div class="knt-card-3d p-4">
-              <span data-i18n="step3Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-amber-ink)">PASO 3 • CANCELACIÓN FLEXIBLE</span>
-              <h3 data-i18n="step3Title" class="font-display text-base font-extrabold mt-1">Reembolso anticipado y Perdones VIP</h3>
-              <p data-i18n="step3Desc" class="text-xs leading-relaxed mt-1" style="color:var(--knt-text-sec)"></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- SECCIÓN D: MEMBRESÍAS VIP + DOBLE BILLETERA VISUAL CON FOTOGRAFÍA     -->
-    <!-- ===================================================================== -->
-    <section id="membresias" class="py-16 sm:py-20 border-t" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="max-w-3xl mb-10">
-          <span data-i18n="secDTag" class="text-[10.5px] font-black uppercase tracking-[0.18em]" style="color:var(--knt-cyan-ink)">
-            DOBLE BILLETERA INTELIGENTE • 1 KC = $1.00 MXN NETO
-          </span>
-          <h2 data-i18n="secDTitle" class="font-display text-2xl sm:text-4xl font-extrabold mt-2 mb-3">
-            Membresías VIP y Billetera Dual con Rollover
-          </h2>
-          <p data-i18n-html="secDSub" class="text-sm sm:text-base leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-
-        <!-- 2 Tarjetas Visuales de Billetera Dual (Fotografía + Icono 3D + Barra de Progreso + Viñetas) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-          <!-- Billetera 1: Membresía VIP (30 Días) -->
-          <div class="knt-card-3d-cyan overflow-hidden flex flex-col">
-            <div class="relative h-36">
-              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80" alt="VIP Membership Wallet" loading="lazy" class="w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent"></div>
-              <span data-i18n="wallet1Badge" class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/80 border border-[#00F0FF] text-[10px] font-black text-[#00F0FF] uppercase">
-                PRIORIDAD #1 • CICLO 30 DÍAS
-              </span>
-              <span class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-[#050505]/90 border border-[#00F0FF] flex items-center justify-center text-lg shadow-lg">👑</span>
-              <div class="absolute bottom-3 left-4 right-4 text-white">
-                <h3 data-i18n="wallet1Title" class="font-display text-lg sm:text-xl font-extrabold">Billetera de Membresía VIP (30 Días)</h3>
-              </div>
-            </div>
-            <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
-              <div>
-                <div class="flex items-center justify-between text-[11px] font-extrabold mb-1.5">
-                  <span data-i18n="wallet1BarLabel" style="color:var(--knt-cyan-ink)">Descuentos Flash y Acceso hasta 5★</span>
-                  <span style="color:var(--knt-cyan-ink)">30d VIP</span>
-                </div>
-                <div class="knt-progress-track">
-                  <div class="knt-progress-fill" style="width:88%;background:linear-gradient(90deg,#00F0FF,#38BDF8)"></div>
-                </div>
-              </div>
-              <ul class="space-y-1.5 text-xs font-semibold pt-1" style="color:var(--knt-text-sec)">
-                <li data-i18n="wallet1Bullet1">⚡ Abono inmediato de tus KC mensuales al activar</li>
-                <li data-i18n="wallet1Bullet2">🔥 -5% hasta -20% automático en Ventas Flash (&lt;3h)</li>
-                <li data-i18n="wallet1Bullet3">🛡️ Perdones VIP mensuales para cambios de último día</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Billetera 2: Top-Up (Rollover) -->
-          <div class="knt-card-3d-purple overflow-hidden flex flex-col">
-            <div class="relative h-36">
-              <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=900&q=80" alt="Top-Up Rollover Wallet" loading="lazy" class="w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent"></div>
-              <span data-i18n="wallet2Badge" class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/80 border border-[#C77DFF] text-[10px] font-black text-[#E9D5FF] uppercase">
-                ROLLOVER PERPETUO • SIN CADUCIDAD
-              </span>
-              <span class="absolute top-3 right-3 w-10 h-10 rounded-xl bg-[#050505]/90 border border-[#C77DFF] flex items-center justify-center text-lg shadow-lg">💎</span>
-              <div class="absolute bottom-3 left-4 right-4 text-white">
-                <h3 data-i18n="wallet2Title" class="font-display text-lg sm:text-xl font-extrabold">Billetera Top-Up (Rollover)</h3>
-              </div>
-            </div>
-            <div class="p-5 space-y-3 flex-1 flex flex-col justify-between">
-              <div>
-                <div class="flex items-center justify-between text-[11px] font-extrabold mb-1.5">
-                  <span data-i18n="wallet2BarLabel" style="color:var(--knt-purple-ink)">Saldo Permanente 100% Acumulable</span>
-                  <span style="color:var(--knt-green-ink)">100% ∞</span>
-                </div>
-                <div class="knt-progress-track">
-                  <div class="knt-progress-fill" style="width:100%;background:linear-gradient(90deg,#9D4EDD,#00FF66)"></div>
-                </div>
-              </div>
-              <ul class="space-y-1.5 text-xs font-semibold pt-1" style="color:var(--knt-text-sec)">
-                <li data-i18n="wallet2Bullet1">♾️ Tus recargas (+50 a +1,000 KC) jamás expiran</li>
-                <li data-i18n="wallet2Bullet2">🎁 Suma premios reales de Cofres 3D y amigos invitados</li>
-                <li data-i18n="wallet2Bullet3">💎 Paridad 1:1 (0% cargo extra) con cualquier rango VIP</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5 Tarjetas Volumétricas Visuales (Free, Bronze, Silver, Gold, Platinum) -->
-        <div id="membershipsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 mb-7"></div>
-
-        <!-- Banner de Upgrades Inteligentes -->
-        <div class="knt-card-3d-amber p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div>
-            <h4 data-i18n="upgradeBannerTitle" class="font-display text-base font-extrabold" style="color:var(--knt-amber-ink)">💡 UPGRADES INTELIGENTES PAGANDO SOLO LA DIFERENCIA</h4>
-            <p data-i18n="upgradeBannerDesc" class="text-xs sm:text-sm mt-1 leading-relaxed" style="color:var(--knt-text-sec)"></p>
-          </div>
-          <button type="button" onclick="window.kineticPortal.scrollToSimulator('vault')" data-i18n="ctaSimVaultBtn" class="knt-btn-3d knt-btn-amber px-5 py-3 text-xs shrink-0 uppercase">
-            ⚡ VER BÓVEDA EN SIMULADOR ›
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- SECCIÓN E: KINETICLUB (99 NIVELES, COFRES 3D, HISTORIAS, ESCUADRONES) -->
-    <!-- ===================================================================== -->
-    <section id="kineticlub" class="py-16 sm:py-20 border-t" style="border-color:var(--knt-border-subtle)">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="max-w-3xl mb-10">
-          <span data-i18n="secETag" class="text-[10.5px] font-black uppercase tracking-[0.18em]" style="color:var(--knt-purple-ink)">
-            RED SOCIAL DEPORTIVA GAMIFICADA
-          </span>
-          <h2 data-i18n="secETitle" class="font-display text-2xl sm:text-4xl font-extrabold mt-2 mb-3">
-            99 Niveles de Prestigio, Cofres 3D, Historias 24h y Escuadrones
-          </h2>
-          <p data-i18n="secESub" class="text-sm sm:text-base leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <!-- 4 Bloques Funcionales KinetiClub -->
-          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="knt-card-3d-cyan p-5">
-              <span data-i18n="kcCard1Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-cyan-ink)">PROGRESIÓN ANUAL • GRADOS ROMANOS I A VII</span>
-              <h3 data-i18n="kcCard1Title" class="font-display text-lg font-extrabold mt-1.5 mb-2">99 Niveles de Prestigio y 4 Pilares (/99)</h3>
-              <p data-i18n="kcCard1Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-            </div>
-            <div class="knt-card-3d-amber p-5">
-              <span data-i18n="kcCard2Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-amber-ink)">250 TROFEOS DESBLOQUEABLES</span>
-              <h3 data-i18n="kcCard2Title" class="font-display text-lg font-extrabold mt-1.5 mb-2">Cofres 3D con Recompensas Reales en KC</h3>
-              <p data-i18n="kcCard2Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-            </div>
-            <div class="knt-card-3d-purple p-5">
-              <span data-i18n="kcCard3Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-purple-ink)">FORMATO 9:16 EN TIEMPO REAL</span>
-              <h3 data-i18n="kcCard3Title" class="font-display text-lg font-extrabold mt-1.5 mb-2">Historias Deportivas de 24 Horas</h3>
-              <p data-i18n="kcCard3Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-            </div>
-            <div class="knt-card-3d-green p-5">
-              <span data-i18n="kcCard4Tag" class="text-[10px] font-black uppercase" style="color:var(--knt-green-ink)">EQUIPOS HASTA 50 ATLETAS • MODO FANTASMA</span>
-              <h3 data-i18n="kcCard4Title" class="font-display text-lg font-extrabold mt-1.5 mb-2">Escuadrones, Chat Grupal y Referidos</h3>
-              <p data-i18n="kcCard4Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-            </div>
-          </div>
-
-          <!-- Escenario Interactivo del Cofre Volumétrico 3D -->
-          <div class="lg:col-span-5 knt-card-3d-purple p-6 text-center">
-            <span data-i18n="chestSimTag" class="text-[10px] font-black uppercase tracking-wider" style="color:var(--knt-amber-ink)">
-              INTERACTIVO • TOCA EL COFRE VOLUMÉTRICO 3D
-            </span>
-            <h3 data-i18n="chestSimTitle" class="font-display text-xl font-extrabold mt-1 mb-4">
-              Simulador de Cofre Volumétrico 3D (4 Rarezas)
-            </h3>
-
-            <div id="chestTierChips" class="flex flex-wrap justify-center gap-1.5 mb-5"></div>
-
-            <!-- Arte Vectorial Volumétrico 3D del Cofre -->
-            <div id="chest3DStage" onclick="window.kineticPortal.toggleChestOpen()" class="knt-chest-stage relative w-44 h-44 mx-auto cursor-pointer select-none flex items-center justify-center">
-              <div class="knt-chest-beam absolute inset-x-6 top-2 bottom-16 rounded-t-full pointer-events-none" style="background:radial-gradient(circle, rgba(255,184,0,0.55) 0%, rgba(0,240,255,0.22) 55%, transparent 75%)"></div>
-              <svg viewBox="0 0 180 160" class="w-40 h-36 overflow-visible" aria-hidden="true">
-                <path d="M24 74 L156 74 L146 138 L34 138 Z" fill="#0B101B" stroke="#00F0FF" stroke-width="3" />
-                <rect x="38" y="84" width="104" height="44" rx="8" fill="#131B2E" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" />
-                <g class="knt-chest-lid">
-                  <path id="chestSvgAccent" d="M20 72 L34 34 L146 34 L160 72 Z" fill="#111827" stroke="#FFB800" stroke-width="3.5" />
-                  <rect x="76" y="58" width="28" height="24" rx="6" fill="#050505" stroke="#00F0FF" stroke-width="2.5" />
-                  <circle cx="90" cy="70" r="5" fill="#00FF66" />
-                </g>
-              </svg>
-            </div>
-
-            <div id="chestRewardBanner" class="hidden my-3 p-3 rounded-xl bg-[#00FF66]/15 border border-[#00FF66] text-xs font-black" style="color:var(--knt-green-ink)"></div>
-
-            <button type="button" id="chestActionBtn" onclick="window.kineticPortal.toggleChestOpen()" class="knt-btn-3d knt-btn-amber w-full py-3.5 mt-2 text-xs uppercase">
-              🎁 TOCAR PARA ABRIR COFRE 3D
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================================================================== -->
-    <!-- SECCIÓN F: INVITACIÓN LIMPIA PARA PROPIETARIOS DE NEGOCIOS Y SOCIOS   -->
-    <!-- ===================================================================== -->
-    <section id="ecosistema-b2b" class="py-16 sm:py-20 border-t" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6">
-        <div class="knt-card-3d-purple p-6 sm:p-10 text-center space-y-5">
-          <span data-i18n="secFTag" class="inline-block text-[10.5px] font-black uppercase tracking-[0.18em]" style="color:var(--knt-green-ink)">
-            ALIANZAS COMERCIALES • CLUBES, ESTUDIOS Y ESPECIALISTAS
-          </span>
-          <h2 data-i18n="secFTitle" class="font-display text-2xl sm:text-4xl font-extrabold leading-tight">
-            ¿Tienes un Club Deportivo, Estudio o Consultorio Especialista?
-          </h2>
-          <p data-i18n="secFSub" class="text-sm sm:text-base max-w-2xl mx-auto leading-relaxed" style="color:var(--knt-text-sec)">
-            Integra tu sede o práctica profesional a la red KINETIC sin costos fijos mensuales, con control de acceso óptico QR, mapa interactivo de estaciones y liquidaciones bancarias automáticas.
-          </p>
-          <div class="pt-2">
-            <button type="button" onclick="window.kineticPortal.openPartnerModal()" data-i18n="secFPartnerBtn" class="knt-btn-3d knt-btn-cyan px-7 py-4 text-xs sm:text-sm">
-              🤝 ¿Quieres formar parte del equipo de socios?
-            </button>
-          </div>
+          </form>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- ===================================================================== -->
-  <!-- SECCIÓN G: FOOTER CORPORATIVO Y MARCO LEGAL OFICIAL (KineticApp S.A.S.) -->
-  <!-- ===================================================================== -->
-  <footer class="pt-12 border-t text-xs" style="padding-bottom:110px;background:var(--knt-bg);border-color:var(--knt-border-subtle);color:var(--knt-muted)">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
-      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-        <div class="space-y-1.5">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <span class="knt-wordmark text-lg">KINETIC</span>
-            <span data-i18n="footerCorpTitle" class="font-extrabold" style="color:var(--knt-text)">KineticApp S.A.S. — Sociedad por Acciones Simplificada (México)</span>
-          </div>
-          <p data-i18n="footerZones">Sede Operativa: Cabo San Lucas • Corredor Turístico • San José del Cabo, B.C.S., México.</p>
-        </div>
-
-        <div class="flex flex-wrap gap-2.5">
-          <button type="button" onclick="window.kineticPortal.openLegalModal('waiver')" data-i18n="footerLegalWaiver" class="knt-chip-3d">🛡️ Deslinde Deportivo</button>
-          <button type="button" onclick="window.kineticPortal.openLegalModal('terms')" data-i18n="footerLegalTerms" class="knt-chip-3d">📄 Términos y Condiciones</button>
-          <button type="button" onclick="window.kineticPortal.openLegalModal('privacy')" data-i18n="footerLegalPrivacy" class="knt-chip-3d">🔒 Aviso de Privacidad Integral</button>
-          <a href="mailto:soporte@kineticapp.com.mx" class="knt-chip-3d no-underline">✉️ soporte@kineticapp.com.mx</a>
-        </div>
+  <!-- 6. FOOTER INSTITUCIONAL Y LEGAL -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://enrikeonly-kinetic.expo.app/privacidad" class="footer-link">AVISO DE PRIVACIDAD</a>
+        <span class="footer-dot">•</span>
+        <a href="https://enrikeonly-kinetic.expo.app/terminos" class="footer-link">TÉRMINOS Y CONDICIONES (ESCROW 40/60)</a>
+        <span class="footer-dot">•</span>
+        <a href="mailto:soporte@kineticapp.com.mx" class="footer-link">soporte@kineticapp.com.mx</a>
       </div>
 
-      <div class="pt-4 border-t flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3" style="border-color:var(--knt-border-subtle)">
-        <span data-i18n="footerRights">© 2026 KineticApp S.A.S. Todos los derechos reservados • KINETIC OS v2.5.</span>
+      <p class="footer-legal-text">
+        © 2026 KineticApp S.A.S. • Todos los derechos reservados.
+      </p>
+      <p class="footer-legal-text" style="font-size: 11px;">
+        Cumplimiento normativo LFPDPPP • Llaves Dinámicas Criptográficas QR TOTP • Custodia Segura 40/60
+      </p>
+      <div class="footer-lock">
+        [ CANDADO PRE-LANZAMIENTO: 31 DICIEMBRE 2026 // LOS CABOS, B.C.S. ]
       </div>
     </div>
   </footer>
 
-  <!-- ===================================================================== -->
-  <!-- MODAL 1: CANDADO PRE-LANZAMIENTO (31 DE DICIEMBRE DE 2026)            -->
-  <!-- ===================================================================== -->
-  <div id="preLaunchModal" class="fixed inset-0 z-[125] bg-black/80 hidden items-center justify-center p-4">
-    <div class="w-full max-w-md knt-card-3d-cyan p-6 text-center space-y-4">
-      <div>
-        <button type="button" onclick="window.kineticPortal.closeModal('preLaunchModal')" class="knt-swipe-pill text-[10px] font-black uppercase">
-          <span>✕ CERRAR / CLOSE</span>
-        </button>
-      </div>
-      <span data-i18n="preLaunchTag" class="inline-block text-[10px] font-black uppercase tracking-widest" style="color:var(--knt-cyan-ink)">LANZAMIENTO OFICIAL KINETIC</span>
-      <h3 data-i18n="preLaunchTitle" class="font-display text-xl sm:text-2xl font-extrabold leading-tight">
-        🚀 DISPONIBLE EL 31 DE DICIEMBRE DE 2026
-      </h3>
-      <p data-i18n="preLaunchMsg" class="text-xs sm:text-sm leading-relaxed" style="color:var(--knt-text-sec)">
-        Espéralo. La aplicación oficial KINETIC abrirá su acceso público el 31 de diciembre de 2026. Regístrate hoy en la lista de acceso prioritario para asegurar tus beneficios de lanzamiento.
-      </p>
-      <div class="space-y-2.5 pt-2">
-        <button type="button" onclick="window.kineticPortal.closeModal('preLaunchModal');window.kineticPortal.openRegistrationModal('b2c')" data-i18n="preLaunchCtaReg" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs uppercase">
-          ⚡ REGISTRARME EN ACCESO PRIORITARIO ›
-        </button>
-        <button type="button" onclick="window.kineticPortal.closeModal('preLaunchModal');window.kineticPortal.scrollToSimulator('explore')" data-i18n="preLaunchCtaSim" class="knt-btn-3d knt-btn-ghost-purple w-full py-3 text-xs uppercase">
-          🧪 EXPLORAR SIMULADOR EN VIVO
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- Script interactivo ultra-ligero para Waitlist -->
+  <script>
+    var currentRole = 'atleta';
 
-  <!-- ===================================================================== -->
-  <!-- MODAL 2: ACCESO ANTICIPADO ANDROID (.APK)                             -->
-  <!-- ===================================================================== -->
-  <div id="apkEarlyAccessModal" class="fixed inset-0 z-[125] bg-black/80 hidden items-center justify-center p-4">
-    <div class="w-full max-w-md knt-card-3d-green p-6 text-center space-y-4">
-      <div>
-        <button type="button" onclick="window.kineticPortal.closeModal('apkEarlyAccessModal')" class="knt-swipe-pill text-[10px] font-black uppercase">
-          <span>✕ CERRAR / CLOSE</span>
-        </button>
-      </div>
-      <span data-i18n="apkModalTag" class="inline-block text-[10px] font-black uppercase tracking-widest" style="color:var(--knt-green-ink)">APLICACIÓN NATIVA ANDROID</span>
-      <h3 data-i18n="apkModalTitle" class="font-display text-xl sm:text-2xl font-extrabold leading-tight">
-        📱 ACCESO ANTICIPADO ANDROID (.APK)
-      </h3>
-      <p data-i18n="apkModalMsg" class="text-xs sm:text-sm leading-relaxed" style="color:var(--knt-text-sec)">
-        📱 ACCESO ANTICIPADO ANDROID (.APK) — Espéralo pronto para Atletas Fundadores y lanzamiento general el 31 de diciembre de 2026. Cuando esté activo, tu descarga iniciará directamente desde este botón sin salir de la página.
-      </p>
-      <div class="pt-2">
-        <button type="button" onclick="window.kineticPortal.closeModal('apkEarlyAccessModal');window.kineticPortal.openRegistrationModal('b2c')" data-i18n="apkModalCtaReg" class="knt-btn-3d knt-btn-green w-full py-3.5 text-xs uppercase">
-          ⚡ UNIRME A LA LISTA DE FUNDADORES ›
-        </button>
-      </div>
-    </div>
-  </div>
+    function selectRole(role) {
+      currentRole = role;
+      var btnAthlete = document.getElementById('btnRoleAthlete');
+      var btnClub = document.getElementById('btnRoleClub');
+      if (role === 'atleta') {
+        btnAthlete.classList.add('active');
+        btnClub.classList.remove('active');
+      } else {
+        btnClub.classList.add('active');
+        btnAthlete.classList.remove('active');
+      }
+    }
 
-  <!-- ===================================================================== -->
-  <!-- MODAL 3: APARTADO EXCLUSIVO PARA SOCIOS Y ESPECIALISTAS               -->
-  <!-- ===================================================================== -->
-  <div id="partnerB2BModal" class="fixed inset-0 z-[120] bg-black/85 hidden items-center justify-center p-3 sm:p-5">
-    <div class="w-full max-w-4xl knt-card-3d-purple p-5 sm:p-7 max-h-[92vh] overflow-y-auto knt-scroll">
-      <div class="text-center mb-4">
-        <button type="button" onclick="window.kineticPortal.closeModal('partnerB2BModal')" class="knt-swipe-pill text-[10px] font-black uppercase">
-          <span>✕ CERRAR / CLOSE</span>
-        </button>
-      </div>
+    function handleWaitlistSubmit(e) {
+      e.preventDefault();
+      var input = document.getElementById('contactInput');
+      var feedback = document.getElementById('waitlistFeedback');
+      var btn = document.getElementById('submitBtn');
+      var value = (input.value || '').trim();
 
-      <div class="mb-6">
-        <span data-i18n="partnerModalTag" class="text-[10px] font-black uppercase tracking-widest" style="color:var(--knt-green-ink)">
-          APARTADO EXCLUSIVO PARA SOCIOS Y ESPECIALISTAS
-        </span>
-        <h3 data-i18n="partnerModalTitle" class="font-display text-2xl sm:text-3xl font-extrabold mt-1">
-          Infraestructura Operativa para Clubes y Especialistas
-        </h3>
-        <p data-i18n="partnerModalSub" class="text-xs sm:text-sm mt-1" style="color:var(--knt-text-sec)"></p>
-      </div>
+      if (!value) return;
 
-      <!-- 4 Beneficios Operativos (Sin exponer porcentajes de comisión) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
-        <div class="knt-card-3d-green p-4">
-          <h4 data-i18n="b2bFeat1Title" class="font-display text-sm sm:text-base font-extrabold mb-1.5">💰 $0.00 MXN de renta mensual fija</h4>
-          <p data-i18n="b2bFeat1Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-        <div class="knt-card-3d-cyan p-4">
-          <h4 data-i18n="b2bFeat2Title" class="font-display text-sm sm:text-base font-extrabold mb-1.5">📲 Terminal Óptica QR y Mapa de Sala de hasta 50 estaciones</h4>
-          <p data-i18n="b2bFeat2Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-        <div class="knt-card-3d-purple p-4">
-          <h4 data-i18n="b2bFeat3Title" class="font-display text-sm sm:text-base font-extrabold mb-1.5">🏦 Liquidaciones semanales automáticas vía SPEI cada miércoles</h4>
-          <p data-i18n="b2bFeat3Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-        <div class="knt-card-3d-amber p-4">
-          <h4 data-i18n="b2bFeat4Title" class="font-display text-sm sm:text-base font-extrabold mb-1.5">📄 Reportes ejecutivos en .PDF y soporte CFDI 4.0</h4>
-          <p data-i18n="b2bFeat4Desc" class="text-xs leading-relaxed" style="color:var(--knt-text-sec)"></p>
-        </div>
-      </div>
+      try {
+        var payload = {
+          contacto: value,
+          rol: currentRole,
+          timestamp: new Date().toISOString(),
+          origen: 'landing_html5_v25'
+        };
+        var existing = [];
+        try {
+          var saved = localStorage.getItem('@kinetic_waitlist_registered_v1');
+          if (saved) existing = JSON.parse(saved);
+        } catch (_) {}
+        existing.push(payload);
+        localStorage.setItem('@kinetic_waitlist_registered_v1', JSON.stringify(existing));
+      } catch (_) {}
 
-      <!-- Formulario de Pre-Registro de Socio -->
-      <div class="knt-card-3d-cyan p-5 sm:p-6">
-        <span data-i18n="b2bFormTag" class="text-[10px] font-black uppercase tracking-wider" style="color:var(--knt-cyan-ink)">
-          SOLICITUD DE AFILIACIÓN COMERCIAL
-        </span>
-        <h4 data-i18n="b2bFormTitle" class="font-display text-xl font-extrabold mt-1 mb-1">
-          Pre-Registro de Socio o Especialista
-        </h4>
-        <p data-i18n="b2bFormSub" class="text-xs mb-4" style="color:var(--knt-text-sec)"></p>
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      feedback.style.display = 'block';
+      input.value = '';
+    }
 
-        <form id="partnerPreRegForm" onsubmit="window.kineticPortal.submitB2BSectionForm(event)" class="space-y-3.5">
-          <div>
-            <label for="b2bName" data-i18n="b2bFieldName" class="block text-[10px] font-black uppercase tracking-wider mb-1">Nombre del Club, Estudio o Consultorio *</label>
-            <input id="b2bName" type="text" required data-i18n-placeholder="regNamePlaceholderB2B" placeholder="Ej. Nombre de tu Club, Estudio o Consultorio" class="knt-input-3d" />
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label for="b2bType" data-i18n="b2bFieldType" class="block text-[10px] font-black uppercase tracking-wider mb-1">Categoría de Socio *</label>
-              <select id="b2bType" class="knt-input-3d">
-                <option value="Club Deportivo" data-i18n="b2bOptClub">Club Deportivo / Estudio Boutique</option>
-                <option value="Especialista" data-i18n="b2bOptSpec">Especialista (Fisioterapia / Recovery / Nutrición / Coach)</option>
-              </select>
-            </div>
-            <div>
-              <label for="b2bZone" data-i18n="b2bFieldZone" class="block text-[10px] font-black uppercase tracking-wider mb-1">CIUDAD O ZONA PRINCIPAL *</label>
-              <input id="b2bZone" type="text" required data-i18n-placeholder="b2bZonePlaceholder" placeholder="Escribe tu ciudad o zona" class="knt-input-3d" />
-            </div>
-          </div>
-
-          <div>
-            <label for="b2bDiscSelect" data-i18n="b2bFieldDisc" class="block text-[10px] font-black uppercase tracking-wider mb-1">Disciplina Principal (Catálogo 231) *</label>
-            <select id="b2bDiscSelect" class="knt-input-3d"></select>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label for="b2bPhone" data-i18n="b2bFieldPhone" class="block text-[10px] font-black uppercase tracking-wider mb-1">WhatsApp de Contacto (10 dígitos) *</label>
-              <input id="b2bPhone" type="tel" required placeholder="000 000 0000" class="knt-input-3d" />
-            </div>
-            <div>
-              <label for="b2bEmail" data-i18n="b2bFieldEmail" class="block text-[10px] font-black uppercase tracking-wider mb-1">Correo de Contacto *</label>
-              <input id="b2bEmail" type="email" required placeholder="contacto@kineticapp.com.mx" class="knt-input-3d" />
-            </div>
-          </div>
-
-          <button id="b2bSubmitBtn" type="submit" data-i18n="b2bSubmitBtnLabel" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs uppercase">
-            ⚡ ENVIAR PRE-REGISTRO DE SOCIO ›
-          </button>
-          <p id="b2bFeedbackMsg" class="hidden text-center text-xs font-extrabold pt-1" style="color:var(--knt-green-ink)"></p>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- MODAL 4: PRE-REGISTRO DE ACCESO PRIORITARIO (B2C / B2B)               -->
-  <!-- ===================================================================== -->
-  <div id="registrationModal" class="fixed inset-0 z-[120] bg-black/80 hidden items-center justify-center p-4">
-    <div class="w-full max-w-lg knt-card-3d-cyan p-5 sm:p-6 max-h-[92vh] overflow-y-auto knt-scroll">
-      <div class="text-center mb-3">
-        <button type="button" onclick="window.kineticPortal.closeModal('registrationModal')" class="knt-swipe-pill text-[10px] font-black uppercase">
-          <span>✕ CERRAR / CLOSE</span>
-        </button>
-      </div>
-      <span data-i18n="regModalTag" class="text-[10px] font-black uppercase tracking-wider" style="color:var(--knt-cyan-ink)">LISTA OFICIAL DE LANZAMIENTO • ACCESO PRIORITARIO</span>
-      <h3 data-i18n="regModalTitle" class="font-display text-xl sm:text-2xl font-extrabold mt-1">Pre-Registro de Acceso Prioritario KINETIC</h3>
-      <p data-i18n="regModalSub" class="text-xs mt-1 mb-4" style="color:var(--knt-text-sec)"></p>
-
-      <div class="flex gap-2 mb-4">
-        <button type="button" id="regTabBtn_b2c" onclick="window.kineticPortal.openRegistrationModal('b2c')" data-i18n="regTabB2C" class="knt-chip-3d active-cyan flex-1 justify-center">⚡ ATLETA / CLIENTE</button>
-        <button type="button" id="regTabBtn_b2b" onclick="window.kineticPortal.openRegistrationModal('b2b')" data-i18n="regTabB2B" class="knt-chip-3d flex-1 justify-center">🏛️ CLUB / ESPECIALISTA</button>
-      </div>
-
-      <form id="dualRegForm" onsubmit="window.kineticPortal.submitModalRegistration(event)" class="space-y-3">
-        <div>
-          <label id="regNameLabelEl" for="regName" class="block text-[10px] font-black uppercase mb-1">NOMBRE COMPLETO *</label>
-          <input id="regName" type="text" required value="" placeholder="Escribe tu nombre completo aquí" class="knt-input-3d" />
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label for="regEmail" data-i18n="regEmailLabel" class="block text-[10px] font-black uppercase mb-1">CORREO ELECTRÓNICO *</label>
-            <input id="regEmail" type="email" required placeholder="contacto@kineticapp.com.mx" class="knt-input-3d" />
-          </div>
-          <div>
-            <label for="regPhone" data-i18n="regPhoneLabel" class="block text-[10px] font-black uppercase mb-1">WHATSAPP (10 DÍGITOS) *</label>
-            <input id="regPhone" type="tel" required placeholder="000 000 0000" class="knt-input-3d" />
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label for="regZone" data-i18n="regZoneLabel" class="block text-[10px] font-black uppercase mb-1">CIUDAD O ZONA PRINCIPAL *</label>
-            <input id="regZone" type="text" required data-i18n-placeholder="regZonePlaceholder" placeholder="Escribe tu ciudad o zona" class="knt-input-3d" />
-          </div>
-          <div>
-            <label for="regInterest" data-i18n="regInterestLabel" class="block text-[10px] font-black uppercase mb-1">DISCIPLINA O MEMBRESÍA DE INTERÉS *</label>
-            <input id="regInterest" type="text" data-i18n-placeholder="regInterestPlaceholder" placeholder="Ej. Pilates Reformer, Pádel, Fisioterapia..." class="knt-input-3d" />
-          </div>
-        </div>
-        <button id="regSubmitBtn" type="submit" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs uppercase">
-          ⚡ REGISTRARME EN ACCESO PRIORITARIO ›
-        </button>
-      </form>
-      <p id="regFeedbackMsg" class="hidden mt-3 text-center text-xs font-extrabold" style="color:var(--knt-green-ink)"></p>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- MODAL 5: SPOTLIGHT 3D DE DEEPLINK (?sede= o ?event=)                  -->
-  <!-- ===================================================================== -->
-  <div id="deepLinkModal" class="fixed inset-0 z-[120] bg-black/80 hidden items-center justify-center p-4">
-    <div class="w-full max-w-md knt-card-3d-cyan p-6 text-center">
-      <div class="mb-3">
-        <button type="button" onclick="window.kineticPortal.closeModal('deepLinkModal')" class="knt-swipe-pill text-[10px] font-black uppercase">✕ CERRAR / CLOSE</button>
-      </div>
-      <div id="deepLinkModalContent"></div>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- MODAL 6: DOCUMENTOS LEGALES CORPORATIVOS (KineticApp S.A.S.)          -->
-  <!-- ===================================================================== -->
-  <div id="legalModal" class="fixed inset-0 z-[120] bg-black/80 hidden items-center justify-center p-4">
-    <div class="w-full max-w-xl knt-card-3d-purple p-6 max-h-[88vh] overflow-y-auto knt-scroll">
-      <div class="flex items-center justify-between gap-2 pb-3 mb-4 border-b" style="border-color:var(--knt-border-subtle)">
-        <h3 id="legalModalTitle" class="font-display text-lg font-extrabold"></h3>
-        <button type="button" onclick="window.kineticPortal.closeModal('legalModal')" class="knt-chip-3d text-xs">✕</button>
-      </div>
-      <div id="legalModalBody" class="text-xs sm:text-sm leading-relaxed" style="color:var(--knt-text-sec)"></div>
-    </div>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- WIDGET FLOTANTE CONCIERGE IA 24/7 (ELEVADO A 36PX • CERO SOLAPAMIENTO)-->
-  <!-- ===================================================================== -->
-  <div class="fixed right-4 z-[95] flex flex-col items-end gap-2.5 max-w-[calc(100vw-24px)]" style="bottom:36px">
-    <!-- Cajón de Chat IA -->
-    <div id="aiConciergeDrawer" class="hidden flex-col w-[356px] max-w-[calc(100vw-24px)] h-[460px] max-h-[75vh] knt-card-3d-cyan overflow-hidden">
-      <div class="p-3.5 flex items-center justify-between gap-2 border-b" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)">
-        <div class="min-w-0">
-          <div data-i18n="aiHeaderTitle" class="text-xs font-black truncate" style="color:var(--knt-cyan-ink)">KINETIC CONCIERGE IA 24/7</div>
-          <div data-i18n="aiHeaderSub" class="text-[10px] truncate" style="color:var(--knt-muted)">Asistente interactivo oficial</div>
-        </div>
-        <div class="flex items-center gap-1.5 shrink-0">
-          <a href="mailto:soporte@kineticapp.com.mx" data-i18n="aiSupportBtn" class="knt-btn-3d knt-btn-green px-2.5 py-1 text-[10px] no-underline">SOPORTE ✉️</a>
-          <button type="button" onclick="window.kineticPortal.toggleAiConcierge()" class="knt-chip-3d px-2 py-1 text-[10px]">✕</button>
-        </div>
-      </div>
-
-      <div id="aiChatMessages" class="flex-1 overflow-y-auto p-3 space-y-2.5 knt-scroll">
-        <div id="aiWelcomeBubble" class="rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed border" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)"></div>
-      </div>
-
-      <div id="aiQuickChips" class="px-3 py-2 flex flex-wrap gap-1.5 border-t" style="border-color:var(--knt-border-subtle)"></div>
-
-      <form onsubmit="window.kineticPortal.submitAiChat(event)" class="p-2.5 flex items-center gap-2 border-t" style="background:var(--knt-surface);border-color:var(--knt-border-subtle)">
-        <input id="aiChatInput" type="text" data-i18n-placeholder="aiInputPlaceholder" placeholder="Escribe tu duda..." class="knt-input-3d py-2 px-3" />
-        <button type="submit" data-i18n="aiSendBtn" class="knt-btn-3d knt-btn-cyan px-3.5 py-2.5 text-[11px] shrink-0">ENVIAR</button>
-      </form>
-    </div>
-
-    <!-- Botón Flotante 3D -->
-    <button type="button" onclick="window.kineticPortal.toggleAiConcierge()" class="knt-btn-3d knt-btn-cyan px-4 py-3 text-xs uppercase shadow-2xl">
-      <span data-i18n="aiLauncherLabel">💬 CONCIERGE IA 24/7</span>
-    </button>
-  </div>
-
-  <!-- Scripts Modulares KINETIC -->
-  <script src="./js/kinetic-catalog-v25.js" defer></script>
-  <script src="./js/kinetic-i18n-v25.js" defer></script>
-  <script src="./js/kinetic-portal-v25.js" defer></script>
+    // Comprobación si ya se había registrado
+    (function checkPrevious() {
+      try {
+        if (localStorage.getItem('@kinetic_waitlist_registered_v1')) {
+          var fb = document.getElementById('waitlistFeedback');
+          if (fb) {
+            fb.innerText = '✓ TIENES UNA SOLICITUD EN PROCESO // PRIORIDAD CONFIRMADA';
+            fb.style.display = 'block';
+          }
+        }
+      } catch (_) {}
+    })();
+  </script>
 </body>
 </html>
