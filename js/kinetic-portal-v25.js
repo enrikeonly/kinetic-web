@@ -559,7 +559,575 @@
       '    <span class="text-[10px] font-black uppercase" style="color:var(--knt-cyan-ink)">' + t('selectedSpotTitle') + '</span>' +
       '    <div class="font-display text-xl font-extrabold">' + escapeHtml(isEn ? preset.en : preset.es) + ' <span style="color:var(--knt-cyan-ink)">#' + selectedCode + '</span></div>' +
       '  </div>' +
-      '  <span class="px-3 py-1 rounded-xl bg-[#00F0FF] text-[#050505] font-black text-xs">' + totalKc + ' KC ($' + totalKc + ' MXN)</span>' +
+      '  <span class="px-3 py-1 rounded-xl bg-[#00F0FF] text-[#050505] font-black text-xs" style="filter:blur(8px);-webkit-filter:blur(8px);user-select:none;pointer-events:none;opacity:0.75;">' + totalKc + ' KC (
+      '</div>' +
+      '<div class="mt-3 space-y-2 text-xs">' +
+      '  <div class="flex items-center justify-between font-bold">' +
+      '    <span style="color:var(--knt-text-sec)">' + t('escrowHoldLabel') + '</span>' +
+      '    <span class="font-black" style="color:var(--knt-cyan-ink);filter:blur(8px);-webkit-filter:blur(8px);user-select:none;pointer-events:none;opacity:0.75;">' + escrow40 + ' KC (40%)</span> <span class="text-[8px] font-black text-[#FFB800]">[ 🔒 CLASIFICADO ]</span>' +
+      '  </div>' +
+      '  <div class="flex items-center justify-between font-bold">' +
+      '    <span style="color:var(--knt-text-sec)">' + t('doorQrLabel') + '</span>' +
+      '    <span class="font-black" style="color:var(--knt-green-ink)">' + door60 + ' KC (60%)</span>' +
+      '  </div>' +
+      '</div>';
+  }
+
+  // ==========================================================================
+  // 6. ESCALERA VISUAL DE 5 MEMBRESÍAS VIP (FOTOS + ICONOS 3D + BARRAS)
+  // ==========================================================================
+  function renderMemberships() {
+    const grid = document.getElementById('membershipsGrid');
+    if (!grid) return;
+    const isEn = state.lang === 'en';
+
+    grid.innerHTML = MEMBERSHIPS.map(function (m) {
+      const cardCls = m.tone === 'cyan' ? 'knt-card-3d-cyan' : m.tone === 'amber' ? 'knt-card-3d-amber' : 'knt-card-3d';
+      const btnCls = m.id === 'platinum' ? 'knt-btn-cyan' : m.id === 'gold' ? 'knt-btn-amber' : m.id === 'silver' ? 'knt-btn-ghost-cyan' : 'knt-btn-ghost-purple';
+      const ribbon = m.popular
+        ? '<span class="absolute top-2.5 right-2.5 z-10 px-2.5 py-0.5 rounded-full bg-[#FFB800] text-[#050505] font-black text-[9px] uppercase">' + t('popularRibbon') + '</span>'
+        : m.legend
+          ? '<span class="absolute top-2.5 right-2.5 z-10 px-2.5 py-0.5 rounded-full bg-[#00F0FF] text-[#050505] font-black text-[9px] uppercase">' + t('legendRibbon') + '</span>'
+          : '';
+      const perks = (isEn ? m.perksEn : m.perksEs).map(function (p) {
+        return '<li class="flex items-start gap-1.5"><span style="color:var(--knt-green-ink)">✓</span><span>' + escapeHtml(p) + '</span></li>';
+      }).join('');
+      const starsTxt = isEn ? m.starsEn : m.stars;
+      const benefitLabel = isEn ? 'VIP Power' : 'Nivel Beneficios';
+
+      return (
+        '<div class="' + cardCls + ' overflow-hidden flex flex-col justify-between relative">' +
+        ribbon +
+        '  <div>' +
+        '    <div class="relative h-28">' +
+        '      <img src="' + escapeHtml(m.photo) + '" alt="' + escapeHtml(m.titleEs) + '" loading="lazy" class="w-full h-full object-cover" />' +
+        '      <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>' +
+        '      <span class="absolute top-2.5 left-2.5 w-8 h-8 rounded-lg bg-black/80 border border-white/25 flex items-center justify-center text-base">' + (m.icon || '⚡') + '</span>' +
+        '      <div class="absolute bottom-2 left-3 right-3 flex items-end justify-between text-white">' +
+        '        <h3 class="font-display text-lg font-extrabold leading-none">' + escapeHtml(isEn ? m.titleEn : m.titleEs) + '</h3>' +
+        '        <span class="text-[9px] font-black text-[#FFB800]">' + escapeHtml(starsTxt) + '</span>' +
+        '      </div>' +
+        '    </div>' +
+        '    <div class="p-4">' +
+        '      <span class="inline-block text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border" style="border-color:var(--knt-border-subtle);color:var(--knt-cyan-ink)">' +
+        escapeHtml(isEn ? m.badgeEn : m.badgeEs) +
+        '      </span>' +
+        '      <div class="font-display text-2xl font-extrabold mt-2">' + m.price + ' <span class="text-[11px] font-bold" style="color:var(--knt-muted)">MXN/' + (isEn ? 'mo' : 'mes') + '</span></div>' +
+        '      <div class="text-xs font-black mt-0.5" style="color:var(--knt-cyan-ink)">' + escapeHtml(isEn ? m.kcEn : m.kcEs) + '</div>' +
+        '      <div class="mt-3">' +
+        '        <div class="flex items-center justify-between text-[9.5px] font-extrabold mb-1" style="color:var(--knt-muted)">' +
+        '          <span>' + benefitLabel + '</span>' +
+        '          <span>' + m.progressPct + '%</span>' +
+        '        </div>' +
+        '        <div class="knt-progress-track">' +
+        '          <div class="knt-progress-fill" style="width:' + m.progressPct + '%;background:' + m.barColor + '"></div>' +
+        '        </div>' +
+        '      </div>' +
+        '      <ul class="mt-3.5 pt-3 border-t space-y-1.5 text-[11.5px] font-semibold leading-snug" style="border-color:var(--knt-border-subtle);color:var(--knt-text-sec)">' +
+        perks +
+        '      </ul>' +
+        '    </div>' +
+        '  </div>' +
+        '  <div class="px-4 pb-4">' +
+        '    <button type="button" onclick="window.kineticPortal.scrollToSimulator(\'vault\')" class="knt-btn-3d ' + btnCls + ' w-full py-2.5 text-[11px] uppercase">' +
+        t('choosePlanBtn') +
+        '    </button>' +
+        '  </div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  // ==========================================================================
+  // 7. SIMULADOR DE COFRE VOLUMÉTRICO 3D (4 RAREZAS)
+  // ==========================================================================
+  function renderChestSimulator() {
+    const stage = document.getElementById('chest3DStage');
+    const chips = document.getElementById('chestTierChips');
+    const rewardBanner = document.getElementById('chestRewardBanner');
+    const actionBtn = document.getElementById('chestActionBtn');
+    if (!stage || !chips) return;
+
+    const isEn = state.lang === 'en';
+    const tier = CHEST_TIERS[state.chestTierIdx] || CHEST_TIERS[3];
+
+    chips.innerHTML = CHEST_TIERS.map(function (ct, idx) {
+      const active = idx === state.chestTierIdx;
+      return (
+        '<button type="button" onclick="window.kineticPortal.selectChestTier(' + idx + ')" class="knt-chip-3d text-[10.5px] ' + (active ? 'active-cyan' : '') + '">' +
+        escapeHtml(isEn ? ct.en : ct.es) +
+        '</button>'
+      );
+    }).join('');
+
+    if (state.chestOpen) {
+      stage.classList.add('knt-chest-open');
+    } else {
+      stage.classList.remove('knt-chest-open');
+    }
+
+    const accentEl = document.getElementById('chestSvgAccent');
+    if (accentEl) accentEl.setAttribute('stroke', tier.color);
+
+    if (rewardBanner) {
+      if (state.chestOpen) {
+        rewardBanner.classList.remove('hidden');
+        rewardBanner.textContent = isEn ? tier.rewardEn : tier.rewardEs;
+      } else {
+        rewardBanner.classList.add('hidden');
+      }
+    }
+
+    if (actionBtn) {
+      actionBtn.textContent = state.chestOpen ? t('chestBtnReset') : t('chestBtnOpen');
+    }
+  }
+
+  // ==========================================================================
+  // 8. SELECTOR DE LAS 231 DISCIPLINAS EN EL MODAL DE SOCIOS
+  // ==========================================================================
+  function renderB2BDisciplineOptions() {
+    const sel = document.getElementById('b2bDiscSelect');
+    if (!sel) return;
+    const isEn = state.lang === 'en';
+    const current = sel.value || 'Pilates Reformer';
+    sel.innerHTML = DISCIPLINES.slice()
+      .sort(function (a, b) {
+        return (isEn ? a.en : a.es).localeCompare(isEn ? b.en : b.es, state.lang);
+      })
+      .map(function (d) {
+        const label = (d.div === 'wellness' ? '🟣 ' : '🔵 ') + (isEn ? d.en : d.es);
+        const selected = d.es === current ? ' selected' : '';
+        return '<option value="' + escapeHtml(d.es) + '"' + selected + '>' + escapeHtml(label) + '</option>';
+      })
+      .join('');
+  }
+
+  // ==========================================================================
+  // 9. SOPORTE DE DEEPLINKS (?sede= y ?event= / ?evento=) CON CANDADO 31 DIC
+  // ==========================================================================
+  function detectAndLoadDeepLinks() {
+    const params = new URLSearchParams(window.location.search);
+    const rawSede = (params.get('sede') || params.get('club') || '').trim();
+    const rawEvent = (params.get('event') || params.get('evento') || '').trim();
+    if (!rawSede && !rawEvent) return;
+
+    if (rawSede) {
+      state.deepLinkData = {
+        type: 'sede',
+        title: rawSede,
+        subEs: 'Sede verificada en la red KINETIC • Acceso público el 31 de diciembre de 2026',
+        subEn: 'Verified venue on the KINETIC network • Public launch December 31, 2026',
+      };
+    } else if (rawEvent) {
+      state.deepLinkData = {
+        type: 'event',
+        title: rawEvent,
+        subEs: 'Sesión deportiva KINETIC • Reserva 40% Escrow + 60% Llave QR (Lanzamiento 31 Dic 2026)',
+        subEn: 'KINETIC session • 40% Escrow Hold + 60% QR Key (Launch Dec 31, 2026)',
+      };
+    }
+
+    renderDeepLinkUI();
+    openModal('deepLinkModal');
+  }
+
+  function renderDeepLinkUI() {
+    const banner = document.getElementById('deepLinkTopBanner');
+    const modalBody = document.getElementById('deepLinkModalContent');
+    if (!state.deepLinkData) {
+      if (banner) banner.classList.add('hidden');
+      return;
+    }
+    const isEn = state.lang === 'en';
+    const d = state.deepLinkData;
+    const tag = d.type === 'sede' ? t('dlTagSede') : t('dlTagEvent');
+    const sub = isEn ? d.subEn : d.subEs;
+
+    if (banner) {
+      banner.classList.remove('hidden');
+      banner.innerHTML =
+        '<div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">' +
+        '  <div>' +
+        '    <div class="text-[10px] font-black uppercase tracking-wider" style="color:var(--knt-cyan-ink)">' + escapeHtml(tag) + '</div>' +
+        '    <div class="font-display text-sm sm:text-base font-extrabold">' + escapeHtml(d.title) + ' — <span class="font-semibold text-xs" style="color:var(--knt-text-sec)">' + escapeHtml(sub) + '</span></div>' +
+        '  </div>' +
+        '  <div class="flex flex-wrap items-center gap-2">' +
+        '    <button type="button" onclick="window.kineticPortal.openPreLaunchModal()" class="knt-btn-3d knt-btn-cyan px-3.5 py-2 text-[10.5px]">' + t('dlOpenWeb') + '</button>' +
+        '    <button type="button" onclick="window.kineticPortal.openPreLaunchModal()" class="knt-btn-3d knt-btn-cyan px-3.5 py-2 text-[10.5px]">' + t('ctaPreviewApp') + '</button>' +
+        '    <button type="button" onclick="window.kineticPortal.dismissDeepLink()" class="knt-chip-3d text-[10px]">' + t('dlDismiss') + '</button>' +
+        '  </div>' +
+        '</div>';
+    }
+
+    if (modalBody) {
+      modalBody.innerHTML =
+        '<div class="text-[10px] font-black uppercase tracking-widest mb-1" style="color:var(--knt-cyan-ink)">' + escapeHtml(tag) + '</div>' +
+        '<h3 class="font-display text-2xl font-extrabold mb-2">' + escapeHtml(d.title) + '</h3>' +
+        '<p class="text-xs sm:text-sm mb-5" style="color:var(--knt-text-sec)">' + escapeHtml(sub) + '</p>' +
+        '<div class="space-y-2.5">' +
+        '  <button type="button" onclick="window.kineticPortal.closeModal(\'deepLinkModal\');window.kineticPortal.openPreLaunchModal()" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs">' + t('dlOpenWeb') + '</button>' +
+        '  <button type="button" onclick="window.kineticPortal.closeModal(\'deepLinkModal\');window.kineticPortal.openPreLaunchModal()" class="knt-btn-3d knt-btn-cyan w-full py-3.5 text-xs">' + t('ctaPreviewApp') + '</button>' +
+        '</div>';
+    }
+  }
+
+  // ==========================================================================
+  // 10. CONEXIÓN EN VIVO DE PRE-REGISTRO B2C / B2B CON ADMIN HUB
+  // ==========================================================================
+  async function insertWaitlistRecord(payload) {
+    const endpoint = CFG.supabaseUrl + '/rest/v1/fundadores_waitlist';
+    const headers = {
+      'Content-Type': 'application/json',
+      apikey: CFG.supabaseAnonKey,
+      Authorization: 'Bearer ' + CFG.supabaseAnonKey,
+      Prefer: 'return=minimal',
+    };
+
+    // Esquema primario activo en producción (sincronizado con Admin Hub)
+    const primaryBody = {
+      nombre: payload.nombre,
+      email: payload.email,
+      whatsapp: payload.telefono,
+      perfil_interes: payload.tipo_perfil,
+      zona: payload.ciudad_zona,
+      disciplina_favorita: payload.disciplina_interes,
+      origen: 'kineticapp.com.mx',
+    };
+
+    const resp = await fetch(endpoint, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(primaryBody),
+    });
+
+    if (resp.ok || resp.status === 201 || resp.status === 409) {
+      return true;
+    }
+
+    // Respaldo automático de compatibilidad extendida de columnas
+    if (resp.status === 400) {
+      const altResp = await fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+          nombre: payload.nombre,
+          email: payload.email,
+          telefono: payload.telefono,
+          tipo_perfil: payload.tipo_perfil,
+          ciudad_zona: payload.ciudad_zona,
+          disciplina_interes: payload.disciplina_interes,
+          origen: 'kineticapp.com.mx',
+        }),
+      });
+      return altResp.ok || altResp.status === 201 || altResp.status === 409;
+    }
+
+    return false;
+  }
+
+  async function submitModalRegistration(e) {
+    e.preventDefault();
+    const isEn = state.lang === 'en';
+    const isB2B = state.regMode === 'b2b';
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim().toLowerCase();
+    const phone = document.getElementById('regPhone').value.trim();
+    const zone = document.getElementById('regZone').value.trim();
+    const interest = document.getElementById('regInterest').value.trim();
+    const btn = document.getElementById('regSubmitBtn');
+    const msg = document.getElementById('regFeedbackMsg');
+    if (!name || !email || !phone || !zone) return;
+
+    btn.disabled = true;
+    btn.textContent = isEn ? 'SENDING PRE-REGISTRATION...' : 'ENVIANDO PRE-REGISTRO...';
+
+    let ok = false;
+    try {
+      ok = await insertWaitlistRecord({
+        nombre: name,
+        email: email,
+        telefono: phone,
+        tipo_perfil: isB2B ? 'Socio B2B (Club / Especialista)' : 'Atleta B2C (Acceso Prioritario)',
+        ciudad_zona: zone,
+        disciplina_interes: interest || (isB2B ? 'Afiliación Comercial' : 'Acceso Prioritario'),
+      });
+    } catch (_) {}
+
+    btn.disabled = false;
+    btn.textContent = ok
+      ? (isEn ? '✓ PRE-REGISTRATION CONFIRMED' : '✓ PRE-REGISTRO RECIBIDO')
+      : (isB2B ? t('regSubmitBtnB2B') : t('regSubmitBtnB2C'));
+
+    if (msg) {
+      msg.classList.remove('hidden');
+      msg.textContent = isEn
+        ? 'Thank you, ' + name + '! Your priority access pre-registration has been received by our team.'
+        : '¡Gracias, ' + name + '! Tu pre-registro quedó registrado en nuestra lista oficial de atención prioritaria.';
+    }
+    document.getElementById('dualRegForm').reset();
+  }
+
+  async function submitB2BSectionForm(e) {
+    e.preventDefault();
+    const isEn = state.lang === 'en';
+    const name = document.getElementById('b2bName').value.trim();
+    const type = document.getElementById('b2bType').value;
+    const zone = document.getElementById('b2bZone').value.trim();
+    const disc = document.getElementById('b2bDiscSelect').value;
+    const phone = document.getElementById('b2bPhone').value.trim();
+    const email = document.getElementById('b2bEmail').value.trim().toLowerCase();
+    const btn = document.getElementById('b2bSubmitBtn');
+    const feedback = document.getElementById('b2bFeedbackMsg');
+    if (!name || !phone || !email || !zone) return;
+
+    btn.disabled = true;
+    btn.textContent = isEn ? 'SENDING PARTNER APPLICATION...' : 'ENVIANDO SOLICITUD DE SOCIO...';
+
+    let ok = false;
+    try {
+      ok = await insertWaitlistRecord({
+        nombre: name,
+        email: email,
+        telefono: phone,
+        tipo_perfil: 'Socio B2B • ' + type,
+        ciudad_zona: zone,
+        disciplina_interes: disc,
+      });
+    } catch (_) {}
+
+    btn.disabled = false;
+    btn.textContent = ok
+      ? (isEn ? '✓ PARTNER PRE-REGISTRATION SENT' : '✓ PRE-REGISTRO DE SOCIO ENVIADO')
+      : t('b2bSubmitBtnLabel');
+
+    if (feedback) {
+      feedback.classList.remove('hidden');
+      feedback.textContent = isEn
+        ? 'Application received! Our partnerships team will review ' + name + ' and reach out shortly.'
+        : '¡Solicitud recibida! Nuestro equipo de alianzas revisará el perfil de ' + name + ' y se pondrá en contacto contigo.';
+    }
+    const form = document.getElementById('partnerPreRegForm');
+    if (form) form.reset();
+    renderB2BDisciplineOptions();
+  }
+
+  // ==========================================================================
+  // 11. WIDGET FLOTANTE CONCIERGE IA 24/7
+  // ==========================================================================
+  function renderConciergeQuickChips() {
+    const wrap = document.getElementById('aiQuickChips');
+    const welcome = document.getElementById('aiWelcomeBubble');
+    if (welcome) welcome.innerHTML = formatBoldMarkdown(t('aiWelcome'));
+    if (!wrap) return;
+    const prompts = state.lang === 'en'
+      ? ['Launch Dec 31, 2026', '40/60 Hold & 60s QR Key', '50-Spot 3D Studio Map', 'VIP Tiers & Rollover', 'Partner Network & SPEI']
+      : ['Lanzamiento 31 Dic 2026', 'Reserva 40/60 y Llave QR', 'Mapa 3D de 50 Estaciones', 'Membresías VIP y Rollover', 'Equipo de Socios y SPEI'];
+
+    wrap.innerHTML = prompts.map(function (p) {
+      return '<button type="button" onclick="window.kineticPortal.askAiPreset(\'' + p.replace(/'/g, "\\'") + '\')" class="knt-chip-3d text-[10.5px] py-1.5 px-2.5">' + escapeHtml(p) + '</button>';
+    }).join('');
+  }
+
+  function appendAiMessage(role, text) {
+    const log = document.getElementById('aiChatMessages');
+    if (!log) return;
+    const div = document.createElement('div');
+    if (role === 'user') {
+      div.className = 'ml-auto max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs font-bold bg-[#00F0FF] text-[#050505]';
+      div.textContent = text;
+    } else {
+      div.className = 'mr-auto max-w-[92%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed border';
+      div.style.background = 'var(--knt-surface)';
+      div.style.borderColor = 'var(--knt-border-subtle)';
+      div.innerHTML = formatBoldMarkdown(text);
+    }
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  // ==========================================================================
+  // 12. MODALES Y CONTROLES PÚBLICOS
+  // ==========================================================================
+  function openModal(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('hidden');
+    el.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('hidden');
+    el.classList.remove('flex');
+    const anyOpen = Array.from(document.querySelectorAll('.fixed.inset-0')).some(function (m) {
+      return !m.classList.contains('hidden');
+    });
+    if (!anyOpen) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  window.kineticPortal = {
+    setLang: applyLanguage,
+    toggleTheme: function () {
+      applyTheme(state.theme === 'dark' ? 'light' : 'dark');
+    },
+    toggleMobileMenu: function () {
+      const m = document.getElementById('mobileNavDrawer');
+      if (m) m.classList.toggle('hidden');
+    },
+    setHeroTab: function (tab) {
+      state.heroSimTab = tab;
+      renderHeroSimulator();
+    },
+    scrollToSimulator: scrollToSimulator,
+    openPreLaunchModal: function () {
+      openModal('preLaunchModal');
+    },
+    handleApkDownload: handleApkDownload,
+    openPartnerModal: function () {
+      const feedback = document.getElementById('b2bFeedbackMsg');
+      if (feedback) feedback.classList.add('hidden');
+      renderB2BDisciplineOptions();
+      openModal('partnerB2BModal');
+    },
+    onSearchDiscipline: function (val) {
+      state.discQuery = val || '';
+      renderDisciplinesExplorer();
+    },
+    toggleFilterBar: function () {
+      state.showFilterDrawer = !state.showFilterDrawer;
+      renderDisciplinesExplorer();
+    },
+    toggleSortBar: function () {
+      state.showSortDrawer = !state.showSortDrawer;
+      renderDisciplinesExplorer();
+    },
+    setDiscDiv: function (div) {
+      state.discDiv = div;
+      renderDisciplinesExplorer();
+    },
+    setDiscSort: function (srt) {
+      state.discSort = srt;
+      renderDisciplinesExplorer();
+    },
+    toggleAll231: function () {
+      state.discExpandedAll = !state.discExpandedAll;
+      renderDisciplinesExplorer();
+    },
+    selectDisciplineCard: function (discId) {
+      state.selectedDiscId = Number(state.selectedDiscId) === Number(discId) ? null : Number(discId);
+      renderDisciplinesExplorer();
+      if (state.selectedDiscId) {
+        const panel = document.getElementById('disciplineReadOnlyPanel');
+        if (panel && typeof panel.scrollIntoView === 'function') {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    },
+    closeDisciplinePanel: function () {
+      state.selectedDiscId = null;
+      renderDisciplinesExplorer();
+    },
+    setVenueCategory: function (cat) {
+      state.venueCat = cat;
+      renderVenuesExplorer();
+    },
+    setStudioEquip: function (eq) {
+      state.studioEquip = eq;
+      renderStudio3DSimulator();
+    },
+    setStudioCap: function (cap) {
+      state.studioCap = cap;
+      renderStudio3DSimulator();
+    },
+    selectStudioSpot: function (num) {
+      state.selectedSpot = num;
+      renderStudio3DSimulator();
+    },
+    selectChestTier: function (idx) {
+      state.chestTierIdx = idx;
+      state.chestOpen = false;
+      renderChestSimulator();
+    },
+    toggleChestOpen: function () {
+      state.chestOpen = !state.chestOpen;
+      renderChestSimulator();
+    },
+    openRegistrationModal: function (mode) {
+      state.regMode = mode === 'b2b' ? 'b2b' : 'b2c';
+      const msg = document.getElementById('regFeedbackMsg');
+      const btn = document.getElementById('regSubmitBtn');
+      if (msg) msg.classList.add('hidden');
+      if (btn) btn.disabled = false;
+      syncRegistrationModalCopy();
+      openModal('registrationModal');
+    },
+    openLegalModal: function (docKey) {
+      const doc = LEGAL_DOCS[docKey] || LEGAL_DOCS.waiver;
+      const isEn = state.lang === 'en';
+      const titleEl = document.getElementById('legalModalTitle');
+      const bodyEl = document.getElementById('legalModalBody');
+      if (titleEl) titleEl.textContent = isEn ? doc.titleEn : doc.titleEs;
+      if (bodyEl) bodyEl.innerHTML = isEn ? doc.bodyEn : doc.bodyEs;
+      openModal('legalModal');
+    },
+    closeModal: closeModal,
+    dismissDeepLink: function () {
+      state.deepLinkData = null;
+      renderDeepLinkUI();
+      closeModal('deepLinkModal');
+    },
+    submitModalRegistration: submitModalRegistration,
+    submitB2BSectionForm: submitB2BSectionForm,
+    toggleAiConcierge: function () {
+      state.aiOpen = !state.aiOpen;
+      const panel = document.getElementById('aiConciergeDrawer');
+      if (!panel) return;
+      if (state.aiOpen) {
+        panel.classList.remove('hidden');
+        panel.classList.add('flex');
+      } else {
+        panel.classList.add('hidden');
+        panel.classList.remove('flex');
+      }
+    },
+    askAiPreset: function (promptText) {
+      appendAiMessage('user', promptText);
+      const reply = window.buildKineticPortalAiReply(promptText, state.lang);
+      setTimeout(function () { appendAiMessage('ai', reply); }, 140);
+    },
+    submitAiChat: function (e) {
+      e.preventDefault();
+      const input = document.getElementById('aiChatInput');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      appendAiMessage('user', val);
+      const reply = window.buildKineticPortalAiReply(val, state.lang);
+      setTimeout(function () { appendAiMessage('ai', reply); }, 140);
+    },
+  };
+
+  // Reloj dinámico de Llave Óptica QR de 60 segundos
+  setInterval(function () {
+    state.qrSeconds = state.qrSeconds <= 1 ? 60 : state.qrSeconds - 1;
+    document.querySelectorAll('[data-qr-timer]').forEach(function (el) {
+      el.textContent = state.qrSeconds + 's';
+    });
+  }, 1000);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    applyTheme(state.theme);
+    applyLanguage(state.lang);
+    detectAndLoadDeepLinks();
+  });
+})();
+ + totalKc + ' MXN)</span> <span class="text-[8.5px] font-black text-[#FFB800]">[ 🔒 CLASIFICADO ]</span>' +
       '</div>' +
       '<div class="mt-3 space-y-2 text-xs">' +
       '  <div class="flex items-center justify-between font-bold">' +
