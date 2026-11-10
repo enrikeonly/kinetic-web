@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>KINETIC — Red Élite de Entrenamiento, Deporte y Wellness</title>
+  <meta name="description" content="KINETIC OS v2.5 — Ecosistema unificado de Entrenamiento, Deporte y Wellness. Protocolo Escrow 40/60, Llaves Ópticas TOTP de 60s, Mapa 3D de Sala y KinetiClub 99 Niveles." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="KINETIC — Red Élite de Entrenamiento, Deporte y Wellness" />
+  <meta property="og:description" content="Aparta tu estación exacta en custodia Escrow 40% y liquida el 60% en recepción con tu Llave Óptica QR dinámica de 60 segundos." />
+  <meta property="og:url" content="https://kineticapp.com.mx/" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300F0FF'/%3E%3Cstop offset='100%25' stop-color='%23A855F7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23050505' stroke='%2300F0FF' stroke-width='3'/%3E%3Cpath d='M36 8L14 36h16l-4 20 24-28H34l2-20z' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #050505;
+      --surface: #080C12;
+      --card: rgba(12, 16, 24, 0.78);
+      --card-solid: #0C1018;
+      --modal-glass: #090C12;
+      --cyan: #00F0FF;
+      --purple: #A855F7;
+      --green: #00FF66;
+      --amber: #FFB800;
+      --red: #FF3B30;
+      --text: #FFFFFF;
+      --text-sec: #CBD5E1;
+      --muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.12);
+      --border-cyan: rgba(0, 240, 255, 0.28);
+      --border-purple: rgba(168, 85, 247, 0.32);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 84px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+
+    /* Candado iOS Anti-Zoom: inputs siempre >= 16px */
+    input, select, textarea {
+      font-size: 16px !important;
+      font-family: inherit;
+    }
+
+    .font-display {
+      font-family: 'Space Grotesk', 'Inter', sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    
+    /* Insignia Pulsante Oficial Confidencial */
+    .badge-pulsing-official {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.6);
+      font-size: 10.5px;
+      font-weight: 900;
+      letter-spacing: 1.8px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      animation: officialPulse 2.8s infinite ease-in-out;
+    }
+    @keyframes officialPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.4);
+        border-color: rgba(0, 240, 255, 0.6);
+        color: #00F0FF;
+      }
+      50% {
+        box-shadow: 0 0 16px 2px rgba(168, 85, 247, 0.5);
+        border-color: rgba(168, 85, 247, 0.8);
+        color: #D8B4FE;
+      }
+    }
+
+    /* Píldora Nítida Sobre Stealth Blur */
+    .classified-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(168, 85, 247, 0.16);
+      border: 1px solid rgba(168, 85, 247, 0.48);
+      color: #D8B4FE;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.22);
+    }
+
+    /* Bóveda Drops */
+    .drops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .drop-card {
+      position: relative;
+      padding: 24px;
+      border-radius: 14px;
+      background: rgba(14, 18, 30, 0.82);
+      border: 1px solid var(--border);
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .drop-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+    }
+    .drop-card.unlocked {
+      border-color: rgba(0, 240, 255, 0.35);
+    }
+    .drop-card.classified {
+      border-color: rgba(168, 85, 247, 0.25);
+      background: rgba(10, 14, 24, 0.85);
+    }
+    .drop-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      align-self: flex-start;
+      margin-bottom: 14px;
+    }
+    .drop-card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .drop-card-desc {
+      font-size: 13.5px;
+      color: var(--text-sec);
+      line-height: 1.6;
+      margin-bottom: 16px;
+      flex-grow: 1;
+    }
+    .drop-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* Stealth Blur Candado Inquebrantable */
+    .stealth-blur {
+      filter: blur(7px);
+      -webkit-filter: blur(7px);
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+      display: inline-block;
+      opacity: 0.78;
+    }
+
+    .stealth-wrap {
+      position: relative;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(5, 5, 5, 0.65);
+      border: 1px dashed rgba(255, 184, 0, 0.35);
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .classified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9.5px;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(5, 5, 5, 0.92);
+      border: 1px solid rgba(255, 184, 0, 0.55);
+      padding: 4px 8px;
+      border-radius: 6px;
+      line-height: 1.25;
+    }
+
+    /* Header Fijo */
+    .knt-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 90;
+      height: 72px;
+      background: rgba(5, 5, 5, 0.84);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .knt-header-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .knt-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .knt-logo-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #050505;
+      border: 1.5px solid var(--cyan);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .knt-wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #FFFFFF 0%, #CFFAFE 55%, #00F0FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: block;
+      line-height: 1;
+    }
+
+    .knt-brand-sub {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      color: var(--cyan);
+      display: block;
+      margin-top: 3px;
+    }
+
+    .knt-desktop-nav {
+      display: none;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .knt-nav-link {
+      color: var(--text-sec);
+      text-decoration: none;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .knt-nav-link:hover {
+      color: var(--cyan);
+    }
+
+    @media (min-width: 1024px) {
+      .knt-desktop-nav {
+        display: flex;
+      }
+      .knt-hamburger {
+        display: none !important;
+      }
+    }
+
+    /* Botones Volumétricos 3D */
+    .btn-3d {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 13px 22px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(2px);
+    }
+
+    .btn-3d:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-cyan {
+      background: linear-gradient(180deg, #22F4FF 0%, #00D2E4 100%);
+      color: #04070B;
+      border-top-color: #B8FFFF;
+      border-bottom: 4px solid #007A87;
+      box-shadow: 0 8px 24px rgba(0, 240, 255, 0.26);
+    }
+
+    .btn-cyan:hover:not(:disabled) {
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.42);
+    }
+
+    .btn-purple {
+      background: rgba(168, 85, 247, 0.16);
+      color: #F3E8FF;
+      border: 1px solid rgba(168, 85, 247, 0.55);
+      border-top-color: rgba(233, 213, 255, 0.45);
+      border-bottom: 4px solid #581C87;
+      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2);
+    }
+
+    .btn-ghost {
+      background: rgba(12, 16, 24, 0.85);
+      color: var(--text);
+      border: 1px solid var(--border-cyan);
+      border-bottom: 3.5px solid #0B2730;
+    }
+
+    .knt-hamburger {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: rgba(12, 16, 24, 0.9);
+      border: 1px solid var(--border-cyan);
+      border-bottom: 3px solid #083344;
+      color: var(--cyan);
+      font-size: 19px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Drawer Móvil Lateral con Transición CSS Fluida */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.28s ease, visibility 0.28s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 86vw);
+      z-index: 120;
+      background: #080C12;
+      border-left: 1px solid var(--border-cyan);
+      box-shadow: -16px 0 40px rgba(0, 0, 0, 0.85);
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transform: translateX(104%);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .drawer-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .drawer-link:hover {
+      border-color: var(--cyan);
+      background: rgba(0, 240, 255, 0.08);
+    }
+
+    /* Tarjetas 3D Cristal Oscuro */
+    .card-3d {
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-top-color: rgba(255, 255, 255, 0.22);
+      border-bottom: 4px solid #020408;
+      border-radius: 18px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.58);
+    }
+
+    .card-cyan {
+      border-color: var(--border-cyan);
+      border-top-color: rgba(0, 240, 255, 0.45);
+      border-bottom: 4px solid #062830;
+    }
+
+    .card-purple {
+      border-color: var(--border-purple);
+      border-top-color: rgba(192, 132, 252, 0.45);
+      border-bottom: 4px solid #291042;
+    }
+
+    .card-amber {
+      border-color: rgba(255, 184, 0, 0.32);
+      border-top-color: rgba(255, 214, 102, 0.45);
+      border-bottom: 4px solid #3B2600;
+    }
+
+    .section-block {
+      padding: 84px 0;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.12;
+      margin-bottom: 14px;
+    }
+
+    .section-sub {
+      color: var(--text-sec);
+      font-size: 15px;
+      max-width: 720px;
+    }
+
+    /* Grids Responsivos */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 26px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .memberships-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .memberships-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 7fr 5fr;
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .memberships-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .hide-mobile-cta {
+        display: inline-flex !important;
+      }
+    }
+
+    /* Conmutador Dinámico B2C / B2B */
+    .switch-bar {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 16px;
+      background: #080C12;
+      border: 1px solid var(--border);
+      margin: 26px 0 24px;
+    }
+
+    .switch-btn {
+      padding: 12px 20px;
+      border-radius: 11px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.24s ease;
+    }
+
+    .switch-btn.active-b2c {
+      background: rgba(0, 240, 255, 0.14);
+      color: var(--cyan);
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+    }
+
+    .switch-btn.active-b2b {
+      background: rgba(168, 85, 247, 0.18);
+      color: #E9D5FF;
+      border-color: var(--purple);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.24);
+    }
+
+    .audience-panel {
+      display: none;
+      animation: kntFadeIn 0.3s ease forwards;
+    }
+
+    .audience-panel.active {
+      display: block;
+    }
+
+    @keyframes kntFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Calculadora Escrow 40/60 */
+    .preset-chip {
+      padding: 9px 15px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: #080C12;
+      color: var(--text-sec);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .preset-chip.active {
+      background: rgba(0, 240, 255, 0.16);
+      color: var(--cyan);
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.22);
+    }
+
+    .knt-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--purple) 100%);
+      outline: none;
+      margin: 16px 0;
+    }
+
+    .knt-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.7);
+      cursor: pointer;
+    }
+
+    .knt-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid var(--cyan);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.7);
+      cursor: pointer;
+    }
+
+    /* Simulador Mapa 3D de Estaciones */
+    .spots-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .spot-cell {
+      padding: 10px 6px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all 0.18s ease;
+      background: #080C12;
+      color: var(--text);
+    }
+
+    .spot-cell.free {
+      border-color: rgba(0, 255, 102, 0.4);
+      color: var(--green);
+    }
+
+    .spot-cell.selected {
+      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--cyan);
+      color: #FFFFFF;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+    }
+
+    .spot-cell.occupied {
+      opacity: 0.45;
+      cursor: not-allowed;
+      color: var(--muted);
+    }
+
+    /* Acordeón FAQ */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 860px;
+      margin-top: 28px;
+    }
+
+    .faq-item {
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: border-color 0.25s ease;
+    }
+
+    .faq-item.open {
+      border-color: var(--cyan);
+    }
+
+    .faq-trigger {
+      width: 100%;
+      padding: 18px 20px;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border-cyan);
+      color: var(--cyan);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      flex-shrink: 0;
+      transition: transform 0.26s ease, background 0.26s ease;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: rgba(0, 240, 255, 0.15);
+    }
+
+    .faq-body-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .faq-item.open .faq-body-wrap {
+      grid-template-rows: 1fr;
+    }
+
+    .faq-body-inner {
+      overflow: hidden;
+    }
+
+    .faq-body-content {
+      padding: 0 20px 18px;
+      color: var(--text-sec);
+      font-size: 14px;
+      line-height: 1.65;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 14px;
+    }
+
+    /* Inputs y Formulario Waitlist */
+    .knt-input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #080C12;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .knt-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.15);
+    }
+
+    .knt-input.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.18);
+    }
+
+    /* Modales Legales Flotantes en Cristal Oscuro (#090C12 + blur 14px) */
+    .legal-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    .legal-modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .legal-modal-window {
+      width: 100%;
+      max-width: 680px;
+      max-height: 86vh;
+      overflow-y: auto;
+      background: #090C12;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-cyan);
+      border-top-color: rgba(0, 240, 255, 0.5);
+      border-bottom: 4px solid #041F26;
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+      transform: scale(0.96) translateY(8px);
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .legal-modal-overlay.open .legal-modal-window {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+  </style>
+</head>
+<body>
+  <div id="root" hidden aria-hidden="true"></div>
+
+  <!-- ===================================================================== -->
+  <!-- HEADER FIJO Y NAVEGACIÓN PRINCIPAL                                    -->
+  <!-- ===================================================================== -->
+  <header class="knt-header">
+    <div class="container knt-header-inner">
+      <a href="#hero" class="knt-brand">
+        <div class="knt-logo-box" style="background:transparent;border:none;padding:0;width:32px;height:32px;">
+          <img src="/assets/logo.png" alt="KINETIC Logo" width="32" height="32" style="object-fit:contain;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+          <svg width="28" height="28" viewBox="0 0 64 64" fill="none" aria-hidden="true" style="display:none;">
+            <path d="M36 8L14 36h16l-4 20 24-28H34l2-20z" fill="#00F0FF" />
+          </svg>
+        </div>
+        <div>
+          <span class="knt-wordmark">KINETIC</span>
+          <span class="knt-brand-sub">FITNESS • DEPORTE • WELLNESS</span>
+        </div>
+      </a>
+
+      <nav class="knt-desktop-nav" aria-label="Navegación Principal">
+        <a href="#ecosistema" class="knt-nav-link">El Ecosistema</a>
+        <a href="#ecosistema" class="knt-nav-link" onclick="window.switchEcosistema && window.switchEcosistema('atletas')">🔹 Atletas</a>
+        <a href="#ecosistema" class="knt-nav-link" style="color:#D8B4FE;" onclick="window.switchEcosistema && window.switchEcosistema('clubes')">🟣 ¿Tienes un Club o Consultorio?</a>
+        <a href="#ecosistema" class="knt-nav-link">🏢 Corporativo</a>
+        <a href="#membresias" class="knt-nav-link">🎁 Gift Cards</a>
+        <a href="#revelaciones" class="knt-nav-link" style="color:var(--cyan);">🔓 Revelaciones (@kinetic.mex)</a>
+      </nav>
+
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="#waitlist" class="btn-3d btn-cyan hide-mobile-cta" style="display:inline-flex;padding:10px 16px;font-size:11px;">
+          UNIRME A LA LISTA VIP ⚡
+        </a>
+        <button type="button" id="mobileHamburgerBtn" class="knt-hamburger" aria-label="Abrir menú de navegación" aria-expanded="false">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- DRAWER MÓVIL CON TRANSICIÓN CSS FLUIDA                                -->
+  <!-- ===================================================================== -->
+  <div id="mobileDrawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+  <aside id="mobileNavDrawer" class="mobile-drawer" aria-label="Menú Móvil">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--border);">
+      <span class="knt-wordmark" style="font-size:17px;">KINETIC OS v2.5</span>
+      <button type="button" id="mobileDrawerCloseBtn" class="modal-close-btn" aria-label="Cerrar menú">✕</button>
+    </div>
+
+    <nav class="drawer-nav-list">
+      <a href="#ecosistema" class="drawer-link" data-drawer-link><span>El Ecosistema</span><span style="color:var(--cyan)">›</span></a>
+      <a href="#ecosistema" class="drawer-link" data-drawer-link onclick="window.switchEcosistema && window.switchEcosistema('atletas')"><span>🔹 Atletas</span><span style="color:var(--cyan)">›</span></a>
+      <a href="#ecosistema" class="drawer-link" data-drawer-link onclick="window.switchEcosistema && window.switchEcosistema('clubes')"><span style="color:#D8B4FE;">🟣 ¿Tienes un Club o Consultorio?</span><span style="color:var(--purple)">›</span></a>
+      <a href="#ecosistema" class="drawer-link" data-drawer-link><span>🏢 Corporativo</span><span style="color:var(--cyan)">›</span></a>
+      <a href="#membresias" class="drawer-link" data-drawer-link><span>🎁 Gift Cards</span><span style="color:var(--cyan)">›</span></a>
+      <a href="#revelaciones" class="drawer-link" data-drawer-link><span style="color:var(--cyan)">🔓 Revelaciones (@kinetic.mex)</span><span style="color:var(--cyan)">›</span></a>
+      <a href="#faq" class="drawer-link" data-drawer-link><span>Preguntas Frecuentes</span><span style="color:var(--cyan)">›</span></a>
+    </nav>
+
+    <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border);">
+      <a href="#waitlist" data-drawer-link class="btn-3d btn-cyan" style="width:100%;">
+        UNIRME A LA LISTA VIP ⚡
+      </a>
+    </div>
+  </aside>
+
+  <main>
+    <!-- ===================================================================== -->
+    <!-- SECCIÓN 1: HERO (#hero)                                               -->
+    <!-- ===================================================================== -->
+    <section id="hero" style="padding:128px 0 84px;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 82% 16%, rgba(0,240,255,0.14), transparent 42%), radial-gradient(circle at 14% 84%, rgba(168,85,247,0.14), transparent 45%);"></div>
+
+      <div class="container" style="position:relative;z-index:2;">
+        <div class="hero-grid">
+          <div>
+            <div class="badge-pulsing-official" style="margin-bottom:20px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);"></span>
+              <span>⚡ FASE CONFIDENCIAL • PRÓXIMAMENTE</span>
+            </div>
+
+            <h1 class="font-display" style="font-size:clamp(32px, 5vw, 54px);font-weight:800;line-height:1.06;letter-spacing:-0.5px;margin-bottom:18px;">
+              UNA SOLA LLAVE DIGITAL. TODOS LOS CLUBES Y ESPECIALISTAS.
+            </h1>
+
+            <p style="color:var(--text-sec);font-size:16px;margin-bottom:18px;max-width:640px;">
+              Entrena sin contratos forzosos, sin el absurdo límite de 4 visitas por sede y con una billetera inteligente donde tus recargas y recompensas nunca caducan. Donde el Atleta evoluciona y cada Club o Especialista llena su agenda.
+            </p>
+
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:24px;">
+              <span style="font-size:12px;color:var(--muted);font-weight:700;">Paridad Oficial KinetiCoin:</span>
+              <span class="stealth-blur" style="font-weight:900;color:var(--cyan);">$ •,••• MXN = •,••• KC</span>
+              <span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="card-3d card-cyan" style="padding:15px;">
+                <div class="font-display" style="font-size:24px;font-weight:800;color:var(--cyan);">+200</div>
+                <div style="font-size:11px;font-weight:700;color:var(--text-sec);margin-top:2px;">Especialidades Fitness &amp; Wellness</div>
+              </div>
+              <div class="card-3d card-purple" style="padding:15px;">
+                <div class="font-display" style="font-size:24px;font-weight:800;color:#D8B4FE;">100+</div>
+                <div style="font-size:11px;font-weight:700;color:var(--text-sec);margin-top:2px;">Clubes, Estudios y Especialistas</div>
+              </div>
+              <div class="card-3d card-amber" style="padding:15px;">
+                <div class="font-display" style="font-size:24px;font-weight:800;color:var(--amber);">99 Niveles</div>
+                <div style="font-size:11px;font-weight:700;color:var(--text-sec);margin-top:2px;">7 Grados Romanos en KinetiClub</div>
+              </div>
+              <div class="card-3d" style="padding:15px;border-color:rgba(0,255,102,0.3);">
+                <div class="font-display" style="font-size:24px;font-weight:800;color:var(--green);">60s QR</div>
+                <div style="font-size:11px;font-weight:700;color:var(--text-sec);margin-top:2px;">Llave Óptica Dinámica TOTP</div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:12px;">
+              <a href="#waitlist" class="btn-3d btn-cyan" onclick="window.selectWaitlistRole && window.selectWaitlistRole('atleta')">🔹 QUIERO ACCESO ATLETA</a>
+              <a href="#waitlist" class="btn-3d btn-purple" onclick="window.selectWaitlistRole && window.selectWaitlistRole('club')">🟣 APLICAR COMO SEDE FUNDADORA</a>
+            </div>
+          </div>
+
+          <!-- Tarjeta Derecha: Telemetría TOTP & Vista Táctica -->
+          <div class="card-3d card-cyan" style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--border);">
+              <span style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--cyan);">● PASE ÓPTICO DINÁMICO EN VIVO</span>
+              <span style="padding:4px 10px;border-radius:8px;background:rgba(0,255,102,0.14);border:1px solid var(--green);color:var(--green);font-size:11px;font-weight:900;">
+                TOTP <span id="heroQrTimer">60s</span>
+              </span>
+            </div>
+
+            <div style="padding:16px;border-radius:14px;background:#080C12;border:1px solid var(--border);margin-bottom:14px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1px;">ESTACIÓN RESERVADA</span>
+                <span style="font-size:11px;font-weight:900;color:var(--cyan);">#RF-03 • ANÓNIMA 🔒</span>
+              </div>
+              <div class="font-display" style="font-size:18px;font-weight:800;margin-bottom:4px;">Sede Alto Rendimiento • Sala 3D</div>
+              <div style="font-size:12px;color:var(--text-sec);">Custodia 40% Congelada • Liquidación 60% en Puerta QR</div>
+            </div>
+
+            <div class="stealth-wrap" style="text-align:center;">
+              <div class="stealth-blur" style="font-size:18px;font-weight:900;color:var(--cyan);display:block;margin-bottom:6px;">
+                Saldo Bóveda Dual: •,••• KC VIP + ••• KC Rollover ($ •,••• MXN)
+              </div>
+              <span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span>
+            </div>
+
+            <a href="#waitlist" class="btn-3d btn-cyan" style="width:100%;margin-top:14px;">
+              👑 UNIRME A LA LISTA OFICIAL ›
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    
+    <!-- ===================================================================== -->
+    <!-- SECCIÓN 3: BÓVEDA DE REVELACIONES PROGRESIVAS (#revelaciones)         -->
+    <!-- Sincronizada con Instagram @kinetic.mex                               -->
+    <!-- ===================================================================== -->
+    <section id="revelaciones" class="section-block" style="background:var(--surface);position:relative;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="container">
+        <div style="text-align:center;max-width:760px;margin:0 auto 36px;">
+          <div class="badge-pulsing-official" style="margin-bottom:14px;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#A855F7;box-shadow:0 0 8px #A855F7;"></span>
+            <span>⚡ SINCRONIZADO CON INSTAGRAM @KINETIC.MEX</span>
+          </div>
+          <h2 class="font-display" style="font-size:clamp(26px, 3.5vw, 38px);font-weight:800;letter-spacing:-0.5px;margin-bottom:12px;">
+            BÓVEDA DE REVELACIONES PROGRESIVAS
+          </h2>
+          <p style="color:var(--text-sec);font-size:15px;line-height:1.6;">
+            Desbloqueamos las capas de la tecnología de Kinetic conforme avanzan las transmisiones oficiales en <strong style="color:var(--cyan);">@kinetic.mex</strong>.
+          </p>
+        </div>
+
+        <div class="drops-grid">
+          <!-- DROP 01 -->
+          <div class="drop-card unlocked">
+            <div class="drop-card-badge" style="background:rgba(0,240,255,0.12);border:1px solid rgba(0,240,255,0.4);color:#00F0FF;">
+              ● DROP #01 • REVELADO
+            </div>
+            <div class="drop-card-title">La Tribu que Mueve la Ciudad</div>
+            <div class="drop-card-desc">
+              Un solo radar inteligente que une más de 230 disciplinas deportivas y terapias de recuperación física.
+            </div>
+            <div class="drop-card-footer">
+              <span style="color:#00F0FF;">ACCESO ATLETA &amp; SEDES</span>
+              <span style="color:var(--green);">DISPONIBLE ✓</span>
+            </div>
+          </div>
+
+          <!-- DROP 02 -->
+          <div class="drop-card unlocked">
+            <div class="drop-card-badge" style="background:rgba(168,85,247,0.14);border:1px solid rgba(168,85,247,0.45);color:#D8B4FE;">
+              ● DROP #02 • REVELADO
+            </div>
+            <div class="drop-card-title">Alianza Ganar-Ganar (Atletas + Clubes + Especialistas)</div>
+            <div class="drop-card-desc">
+              Cero límite de visitas mensuales a tu lugar favorito para el atleta; $0 de mensualidad fija y reservas garantizadas para el socio.
+            </div>
+            <div class="drop-card-footer">
+              <span style="color:#D8B4FE;">CERO FITPASS LIMITS</span>
+              <span style="color:var(--green);">DISPONIBLE ✓</span>
+            </div>
+          </div>
+
+          <!-- DROP 03 -->
+          <div class="drop-card unlocked">
+            <div class="drop-card-badge" style="background:rgba(255,0,85,0.14);border:1px solid rgba(255,0,85,0.45);color:#FF0055;">
+              ⚡ DROP #03 • EN TRANSMISIÓN
+            </div>
+            <div class="drop-card-title">Tu Cuerpo es el Personaje (Motor RPG)</div>
+            <div class="drop-card-desc">
+              Cada sesión real en cancha o consultorio eleva tus 4 atributos (Fuerza, Zen, Resistencia y Agilidad), enciende tu Aura y desbloquea recompensas perpetuas.
+            </div>
+            <div class="drop-card-footer">
+              <span style="color:#FF0055;">4 ATRIBUTOS &bull; RANGOS ROMANOS</span>
+              <span style="color:var(--amber);">EN VIVO ›</span>
+            </div>
+          </div>
+
+          <!-- DROP 04 -->
+          <div class="drop-card classified">
+            <div class="drop-card-badge" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#8E9BB0;">
+              🔒 DROP #04 • CLASIFICADO
+            </div>
+            <div class="drop-card-title">Llave Óptica Dinámica &amp; Mapa 3D de Estaciones</div>
+            <div class="drop-card-desc">
+              Selección exacta de tu estación, cama o cancha en 3D y acceso sin efectivo en recepción. Síguenos en @kinetic.mex para su revelación.
+            </div>
+            <div class="drop-card-footer">
+              <span class="classified-pill">🔒 REVELACIÓN EN @KINETIC.MEX</span>
+              <span style="color:#8E9BB0;">PRÓXIMAMENTE</span>
+            </div>
+          </div>
+
+          <!-- DROP 05 -->
+          <div class="drop-card classified">
+            <div class="drop-card-badge" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#8E9BB0;">
+              🔒 DROP #05 • CLASIFICADO
+            </div>
+            <div class="drop-card-title">Radar de Oportunidades de Último Minuto</div>
+            <div class="drop-card-desc">
+              Beneficios exclusivos automáticos cuando se liberan espacios cerca de ti horas antes de iniciar.
+            </div>
+            <div class="drop-card-footer">
+              <span class="classified-pill">🔒 REVELACIÓN EN @KINETIC.MEX</span>
+              <span style="color:#8E9BB0;">PRÓXIMAMENTE</span>
+            </div>
+          </div>
+
+          <!-- DROP 06 -->
+          <div class="drop-card classified">
+            <div class="drop-card-badge" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#8E9BB0;">
+              🔒 DROP #06 • CLASIFICADO
+            </div>
+            <div class="drop-card-title">Apertura de Membresías VIP y Sedes Oficiales</div>
+            <div class="drop-card-desc">
+              Revelación oficial de tarifas, niveles VIP y apertura de puertas para la lista prioritaria.
+            </div>
+            <div class="drop-card-footer">
+              <span class="classified-pill">🔒 REVELACIÓN EN @KINETIC.MEX</span>
+              <span style="color:#8E9BB0;">PRÓXIMAMENTE</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:36px;">
+          <a href="https://www.instagram.com/kinetic.mex" target="_blank" rel="noopener noreferrer" class="btn-3d btn-purple" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;">
+            <span>SEGUIR @KINETIC.MEX EN INSTAGRAM ›</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: ECOSISTEMA + SWITCH DINÁMICO B2C VS B2B (#ecosistema)      -->
+    <!-- ===================================================================== -->
+    <section id="ecosistema" class="section-block" style="background:var(--surface);">
+      <div class="container">
+        <span class="eyebrow">ARQUITECTURA DUAL SIN FRICCIÓN</span>
+        <h2 class="section-title">Un Ecosistema Diseñado para Atletas y Socios</h2>
+        <p class="section-sub">
+          Alterna la vista operativa para explorar las herramientas tácticas de entrenamiento para atletas o la infraestructura tecnológica y financiera para clubes y especialistas.
+        </p>
+
+        <!-- Conmutador Interactivo B2C vs B2B -->
+        <div class="switch-bar" role="tablist" aria-label="Selector de Ecosistema">
+          <button type="button" id="btnSwitchAtletas" class="switch-btn active-b2c" role="tab" aria-selected="true">
+            [ 🏃 ATLETAS ]
+          </button>
+          <button type="button" id="btnSwitchClubes" class="switch-btn" role="tab" aria-selected="false">
+            [ 🏢 CLUBES Y ESPECIALISTAS ]
+          </button>
+        </div>
+
+        <!-- Panel Atletas (B2C) -->
+        <div id="panelAtletas" class="audience-panel active" role="tabpanel">
+          <div class="grid-4">
+            <div class="card-3d card-cyan" style="padding:22px;">
+              <div style="font-size:24px;margin-bottom:10px;">📡</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--cyan);text-transform:uppercase;">GEOLOCALIZACIÓN EN VIVO</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">Radar GPS</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Descubre sedes deportivas, estudios boutique y consultorios especialistas cercanos en tiempo real con disponibilidad exacta por horario.
+              </p>
+            </div>
+
+            <div class="card-3d card-purple" style="padding:22px;">
+              <div style="font-size:24px;margin-bottom:10px;">🛡️</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:#D8B4FE;text-transform:uppercase;">RESERVA INTELIGENTE</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">Bóveda Escrow 40/60</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Congela únicamente el 40% al apartar tu estación exacta en el mapa 3D y liquida el 60% restante directamente al llegar a tu sesión.
+              </p>
+            </div>
+
+            <div class="card-3d card-amber" style="padding:22px;">
+              <div style="font-size:24px;margin-bottom:10px;">🏆</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--amber);text-transform:uppercase;">PRESTIGIO GAMIFICADO</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">KinetiClub (99 Niveles)</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Escala a través de 99 niveles y 7 Grados Romanos (I–VII), desbloquea 250 trofeos deportivos, escuadrones y Cofres Volumétricos 3D.
+              </p>
+            </div>
+
+            <div class="card-3d" style="padding:22px;border-color:rgba(0,255,102,0.32);">
+              <div style="font-size:24px;margin-bottom:10px;">🔑</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--green);text-transform:uppercase;">ACCESO CRIPTOGRÁFICO</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">Llaves TOTP</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Pases ópticos QR con rotación dinámica cada 60 segundos imposibles de clonar o capturar en pantalla, garantizando acceso inmediato sin filas.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Socios B2B (Clubes y Especialistas) -->
+        <div id="panelClubes" class="audience-panel" role="tabpanel">
+          <div class="grid-4">
+            <div class="card-3d card-cyan" style="padding:22px;">
+              <div style="font-size:24px;margin-bottom:10px;">📲</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--cyan);text-transform:uppercase;">CONTROL EN RECEPCIÓN</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">Terminal Óptica QR</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Valida pases dinámicos TOTP en milisegundos desde cualquier dispositivo autorizado y administra mapas de sala de hasta 50 estaciones.
+              </p>
+            </div>
+
+            <div class="card-3d" style="padding:22px;border-color:rgba(0,255,102,0.35);">
+              <div style="font-size:24px;margin-bottom:10px;">⚡</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--green);text-transform:uppercase;">FLUJO INSTANTÁNEO</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">Liquidación 60% en puerta</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Al escanear el código QR del atleta en recepción, el sistema libera la custodia y acredita el 60% complementario de forma atómica.
+              </p>
+            </div>
+
+            <div class="card-3d card-purple" style="padding:22px;">
+              <div style="font-size:24px;margin-bottom:10px;">🏦</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:#D8B4FE;text-transform:uppercase;">TESORERÍA AUTOMATIZADA</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">
+                Dispersión SPEI <span class="stealth-blur">80%</span>
+              </h3>
+              <div style="margin-bottom:8px;">
+                <span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span>
+              </div>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Liquidaciones interbancarias semanales automáticas con estados de cuenta ejecutivos en PDF y soporte fiscal CFDI 4.0.
+              </p>
+            </div>
+
+            <div class="card-3d card-amber" style="padding:22px;">
+              <div style="font-size:24px;margin-bottom:10px;">🔒</div>
+              <div style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--amber);text-transform:uppercase;">OCUPACIÓN PROTEGIDA</div>
+              <h3 class="font-display" style="font-size:19px;font-weight:800;margin:6px 0 8px;">Protección Anti No-Show</h3>
+              <p style="font-size:13px;color:var(--text-sec);">
+                Tu aforo y tiempo profesional quedan respaldados por el apartado en custodia ante ausencias o cancelaciones fuera de ventana.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resumen General del Ecosistema (Cero listado masivo de 231 disciplinas) -->
+        <div class="card-3d" style="padding:26px;margin-top:28px;">
+          <div class="grid-3" style="text-align:center;">
+            <div style="padding:14px;border-radius:14px;background:#080C12;border:1px solid rgba(0,240,255,0.2);">
+              <div class="font-display" style="font-size:30px;font-weight:800;color:var(--cyan);">+120</div>
+              <div style="font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;margin-top:4px;">Fitness &amp; Deporte</div>
+              <p style="font-size:12.5px;color:var(--text-sec);margin-top:6px;">Entrenamiento funcional, fuerza, pádel, tenis, reformer pilates, ciclismo indoor, boxeo y artes marciales.</p>
+            </div>
+            <div style="padding:14px;border-radius:14px;background:#080C12;border:1px solid rgba(168,85,247,0.24);">
+              <div class="font-display" style="font-size:30px;font-weight:800;color:#D8B4FE;">+100</div>
+              <div style="font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;margin-top:4px;">Wellness &amp; Recuperación</div>
+              <p style="font-size:12.5px;color:var(--text-sec);margin-top:6px;">Fisioterapia deportiva, crioterapia, cámara hiperbárica, sauna infrarrojo, masoterapia, yoga y nutrición.</p>
+            </div>
+            <div style="padding:14px;border-radius:14px;background:#080C12;border:1px solid rgba(255,184,0,0.24);">
+              <div class="font-display" style="font-size:30px;font-weight:800;color:var(--amber);">100%</div>
+              <div style="font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;margin-top:4px;">Llave Digital Unificada</div>
+              <p style="font-size:12.5px;color:var(--text-sec);margin-top:6px;">Una sola bóveda inteligente para entrenar y recuperarte en toda la red sin contratos forzosos fragmentados.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECCIÓN 3: PROTOCOLO Y CALCULADORA ESCROW 40/60 (#protocolo)          -->
+    <!-- ===================================================================== -->
+    <section id="protocolo" class="section-block">
+      <div class="container">
+        <span class="eyebrow">SIMULADOR FINANCIERO Y ESPACIAL EN TIEMPO REAL</span>
+        <h2 class="section-title">Calculadora Interactiva Escrow 40/60 y Sala 3D</h2>
+        <p class="section-sub">
+          Desliza o selecciona el valor en KinetiCoins (KC) de una sesión para visualizar cómo opera la partición exacta entre custodia de apartado y liquidación óptica en recepción.
+        </p>
+
+        <div class="grid-2" style="margin-top:32px;align-items:stretch;">
+          <!-- Calculadora Interactiva Escrow 40/60 -->
+          <div class="card-3d card-cyan" style="padding:26px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+                <span style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:var(--cyan);text-transform:uppercase;">
+                  ⚡ CALCULADORA EN VIVO ESCROW 40/60
+                </span>
+                <span class="font-display" id="escrowTotalBadge" style="font-size:20px;font-weight:800;color:#FFFFFF;">
+                  Sesión: 250 KC
+                </span>
+              </div>
+
+              <!-- Botones rápidos de sesión -->
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                <button type="button" class="preset-chip" data-escrow-preset="150">150 KC</button>
+                <button type="button" class="preset-chip active" data-escrow-preset="250">250 KC</button>
+                <button type="button" class="preset-chip" data-escrow-preset="400">400 KC</button>
+                <button type="button" class="preset-chip" data-escrow-preset="650">650 KC</button>
+              </div>
+
+              <label for="escrowRangeInput" style="font-size:11px;font-weight:700;color:var(--muted);display:block;">
+                Ajusta el valor de la sesión (100 KC – 1,000 KC):
+              </label>
+              <input id="escrowRangeInput" type="range" min="100" max="1000" step="10" value="250" class="knt-slider" />
+
+              <!-- Resultados en Tiempo Real -->
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:10px;">
+                <div style="padding:15px 16px;border-radius:14px;background:#080C12;border:1px solid rgba(0,240,255,0.35);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                  <span id="escrowHoldText" style="font-size:14px;font-weight:800;color:var(--cyan);">
+                    Custodia de Apartado (40%): 100 KC
+                  </span>
+                  <span style="font-size:10px;font-weight:900;padding:4px 8px;border-radius:6px;background:rgba(0,240,255,0.12);color:var(--cyan);">AL RESERVAR</span>
+                </div>
+
+                <div style="padding:15px 16px;border-radius:14px;background:#080C12;border:1px solid rgba(0,255,102,0.35);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                  <span id="escrowDoorText" style="font-size:14px;font-weight:800;color:var(--green);">
+                    Liquidación en Recepción QR (60%): 150 KC
+                  </span>
+                  <span style="font-size:10px;font-weight:900;padding:4px 8px;border-radius:6px;background:rgba(0,255,102,0.12);color:var(--green);">EN PUERTA 60s</span>
+                </div>
+              </div>
+
+              <div class="stealth-wrap" style="margin-top:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                <span class="stealth-blur" id="escrowFiatBlur" style="font-size:13px;font-weight:800;color:var(--text-sec);">
+                  Equivalencia Comercial: $ •,••• MXN IVA Incluido
+                </span>
+                <span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span>
+              </div>
+            </div>
+
+            <a href="#waitlist" class="btn-3d btn-cyan" style="width:100%;margin-top:18px;">
+              ⚡ ASEGURAR MI ACCESO DE LANZAMIENTO ›
+            </a>
+          </div>
+
+          <!-- Selector Táctil de Estación 3D -->
+          <div class="card-3d card-purple" style="padding:26px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;">
+                <span style="font-size:11px;font-weight:900;letter-spacing:1.5px;color:#D8B4FE;text-transform:uppercase;">
+                  🎯 MAPA INTERACTIVO DE ESTACIONES (100% ANÓNIMO)
+                </span>
+                <span id="selectedSpotLabel" style="font-size:12px;font-weight:900;color:var(--cyan);">Estación #RF-03</span>
+              </div>
+
+              <div style="padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(0,240,255,0.14), rgba(168,85,247,0.18));border:1px solid var(--border);text-align:center;font-size:10.5px;font-weight:900;letter-spacing:1.8px;">
+                ZONA DEL INSTRUCTOR Y ESPEJO PRINCIPAL
+              </div>
+
+              <div id="interactiveSpotsGrid" class="spots-grid" aria-label="Selector de Estaciones"></div>
+
+              <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:11.5px;color:var(--text-sec);font-weight:700;">
+                <span><strong style="color:var(--green)">●</strong> Libre (Toca para elegir)</span>
+                <span><strong style="color:var(--cyan)">●</strong> Tu Estación</span>
+                <span><strong style="color:var(--muted)">🔒</strong> Ocupado Anónimo</span>
+              </div>
+            </div>
+
+            <div style="margin-top:18px;padding:14px;border-radius:12px;background:#080C12;border:1px solid var(--border);font-size:12.5px;color:var(--text-sec);">
+              Cancelación con reembolso íntegro del apartado con +72h de anticipación o mediante Perdones VIP mensuales según tu nivel de membresía.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECCIÓN 4: MEMBRESÍAS VIP Y BILLETERA DUAL (#membresias)              -->
+    <!-- ===================================================================== -->
+    <section id="membresias" class="section-block" style="background:var(--surface);">
+      <div class="container">
+        <span class="eyebrow">BILLETERA DUAL CON ROLLOVER PERPETUO</span>
+        <h2 class="section-title">Rangos de Membresía VIP y Bóveda KinetiCoin</h2>
+        <p class="section-sub">
+          Combina el poder mensual de tu Membresía VIP (30 días) con tu Billetera Top-Up sin caducidad. Las tarifas comerciales permanecerán clasificadas hasta la apertura oficial.
+        </p>
+
+        <div class="memberships-grid" style="margin-top:32px;">
+          <!-- Free -->
+          <div class="card-3d" style="padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <span style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--muted);">NIVEL BASE</span>
+              <h3 class="font-display" style="font-size:21px;font-weight:800;margin-top:4px;">Acceso Base</h3>
+              <div class="stealth-wrap">
+                <div class="stealth-blur" style="font-size:20px;font-weight:900;display:block;">$ •,••• MXN / mes • Pay-As-You-Go</div>
+                <div style="margin-top:6px;"><span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span></div>
+              </div>
+              <ul style="list-style:none;font-size:12.5px;color:var(--text-sec);display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+                <li>✓ Exploración de Radar GPS</li>
+                <li>✓ Reservas vía Billetera Top-Up</li>
+                <li>✓ Llave Óptica QR de 60s</li>
+              </ul>
+            </div>
+            <a href="#waitlist" class="btn-3d btn-ghost" style="width:100%;margin-top:18px;font-size:11px;padding:11px;">RESERVAR LUGAR ›</a>
+          </div>
+
+          <!-- Bronze -->
+          <div class="card-3d" style="padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <span style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:#F59E0B;">RANGO I • BRONZE</span>
+              <h3 class="font-display" style="font-size:21px;font-weight:800;margin-top:4px;">Bronze VIP</h3>
+              <div class="stealth-wrap">
+                <div class="stealth-blur" style="font-size:20px;font-weight:900;display:block;">$ •,••• MXN / mes • •,••• KC</div>
+                <div style="margin-top:6px;"><span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span></div>
+              </div>
+              <ul style="list-style:none;font-size:12.5px;color:var(--text-sec);display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+                <li>✓ Acceso a sedes hasta 3★</li>
+                <li>✓ Beneficio en Ventas Flash</li>
+                <li>✓ Progresión KinetiClub activa</li>
+              </ul>
+            </div>
+            <a href="#waitlist" class="btn-3d btn-ghost" style="width:100%;margin-top:18px;font-size:11px;padding:11px;">RESERVAR LUGAR ›</a>
+          </div>
+
+          <!-- Silver -->
+          <div class="card-3d card-cyan" style="padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <span style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--cyan);">RANGO II • SILVER</span>
+              <h3 class="font-display" style="font-size:21px;font-weight:800;margin-top:4px;">Silver VIP</h3>
+              <div class="stealth-wrap">
+                <div class="stealth-blur" style="font-size:20px;font-weight:900;display:block;">$ •,••• MXN / mes • •,••• KC</div>
+                <div style="margin-top:6px;"><span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span></div>
+              </div>
+              <ul style="list-style:none;font-size:12.5px;color:var(--text-sec);display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+                <li>✓ Acceso a sedes hasta 4★</li>
+                <li>✓ 1 Perdón VIP mensual</li>
+                <li>✓ Prioridad en estaciones 3D</li>
+              </ul>
+            </div>
+            <a href="#waitlist" class="btn-3d btn-purple" style="width:100%;margin-top:18px;font-size:11px;padding:11px;">RESERVAR LUGAR ›</a>
+          </div>
+
+          <!-- Gold -->
+          <div class="card-3d card-amber" style="padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <span style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--amber);">RANGO III • POPULAR</span>
+              <h3 class="font-display" style="font-size:21px;font-weight:800;margin-top:4px;">Gold VIP</h3>
+              <div class="stealth-wrap">
+                <div class="stealth-blur" style="font-size:20px;font-weight:900;display:block;">$ •,••• MXN / mes • •,••• KC</div>
+                <div style="margin-top:6px;"><span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span></div>
+              </div>
+              <ul style="list-style:none;font-size:12.5px;color:var(--text-sec);display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+                <li>✓ Acceso total a sedes 5★</li>
+                <li>✓ 2 Perdones VIP mensuales</li>
+                <li>✓ Cofres 3D de rango superior</li>
+              </ul>
+            </div>
+            <a href="#waitlist" class="btn-3d btn-cyan" style="width:100%;margin-top:18px;font-size:11px;padding:11px;">RESERVAR LUGAR ›</a>
+          </div>
+
+          <!-- Platinum -->
+          <div class="card-3d card-cyan" style="padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <span style="font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--cyan);">RANGO IV • ÉLITE</span>
+              <h3 class="font-display" style="font-size:21px;font-weight:800;margin-top:4px;">Platinum VIP</h3>
+              <div class="stealth-wrap">
+                <div class="stealth-blur" style="font-size:20px;font-weight:900;display:block;">$ •,••• MXN / mes • •,••• KC</div>
+                <div style="margin-top:6px;"><span class="classified-pill">🔒 REVELACIÓN PRÓXIMAMENTE</span></div>
+              </div>
+              <ul style="list-style:none;font-size:12.5px;color:var(--text-sec);display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+                <li>✓ Máxima prioridad en toda la red 5★</li>
+                <li>✓ 3 Perdones VIP mensuales</li>
+                <li>✓ Paridad íntegra y Concierge VIP</li>
+              </ul>
+            </div>
+            <a href="#waitlist" class="btn-3d btn-cyan" style="width:100%;margin-top:18px;font-size:11px;padding:11px;">RESERVAR LUGAR ›</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECCIÓN 5: LISTA DE ACCESO PRIORITARIO (#waitlist)                    -->
+    <!-- ===================================================================== -->
+    <section id="waitlist" class="section-block">
+      <div class="container">
+        <div class="card-3d card-cyan" style="max-width:740px;margin:0 auto;padding:32px 24px;">
+          <div style="text-align:center;margin-bottom:24px;">
+            <div class="badge-pulsing-official" style="margin-bottom:12px;"><span>⚡ ACCESO OFICIAL • PRÓXIMAMENTE</span></div>
+            <h2 class="section-title" style="margin-bottom:10px;">Reserva tu Acceso Prioritario</h2>
+            <p style="color:var(--text-sec);font-size:14.5px;">
+              Registra tu correo electrónico o número telefónico de 10 dígitos para asegurar tu lugar como Atleta Fundador o Socio Afiliado antes de la apertura pública.
+            </p>
+          </div>
+
+          <form id="waitlistForm" novalidate style="display:flex;flex-direction:column;gap:14px;">
+            <div class="grid-2" style="gap:14px;">
+              <div>
+                <label for="waitlistName" style="display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-sec);margin-bottom:6px;text-transform:uppercase;">
+                  Nombre o Nombre del Club (Opcional)
+                </label>
+                <input id="waitlistName" type="text" placeholder="Ej. Atleta / Club Deportivo" class="knt-input" />
+              </div>
+              <div>
+                <label for="waitlistRole" style="display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--text-sec);margin-bottom:6px;text-transform:uppercase;">
+                  Perfil en el Ecosistema
+                </label>
+                <select id="waitlistRole" class="knt-input">
+                  <option value="atleta">🏃 Atleta / Usuario</option>
+                  <option value="socio_b2b">🏢 Club Deportivo / Estudio / Especialista</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="waitlistContact" style="display:block;font-size:11px;font-weight:800;letter-spacing:1.2px;color:var(--cyan);margin-bottom:6px;text-transform:uppercase;">
+                Correo Electrónico o WhatsApp (10 dígitos) *
+              </label>
+              <input id="waitlistContact" type="text" required placeholder="tu@correo.com o 624 123 4567" class="knt-input" />
+              <p id="waitlistErrorMsg" style="display:none;margin-top:6px;font-size:12px;font-weight:700;color:var(--red);"></p>
+            </div>
+
+            <button id="waitlistSubmitBtn" type="submit" class="btn-3d btn-cyan" style="width:100%;padding:16px;font-size:13px;margin-top:4px;">
+              SOLICITAR ACCESO PRIORITARIO
+            </button>
+
+            <div id="waitlistSuccessBanner" style="display:none;padding:16px;border-radius:12px;background:rgba(0,255,102,0.12);border:1px solid var(--green);color:var(--green);text-align:center;font-size:13px;font-weight:900;letter-spacing:0.8px;">
+              ⚡ LUGAR ASEGURADO // ACCESO PRIORITARIO REGISTRADO EN LA LISTA OFICIAL
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- SECCIÓN 6: PREGUNTAS FRECUENTES CON ACORDEÓN INTERACTIVO (#faq)       -->
+    <!-- ===================================================================== -->
+    <section id="faq" class="section-block" style="background:var(--surface);">
+      <div class="container">
+        <span class="eyebrow">CENTRO DE CLARIDAD OPERATIVA</span>
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <p class="section-sub">
+          Todo lo que necesitas saber sobre la arquitectura de reservas, pases criptográficos y privacidad de KINETIC OS v2.5.
+        </p>
+
+        <div class="faq-list" id="faqAccordion">
+          <!-- Pregunta 1 -->
+          <div class="faq-item open">
+            <button type="button" class="faq-trigger" aria-expanded="true">
+              <span>1. ¿Cómo funciona la reserva con Custodia Escrow 40/60 y la Llave QR de 60s?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-body-wrap">
+              <div class="faq-body-inner">
+                <div class="faq-body-content">
+                  Al elegir una sesión o estación exacta en el mapa 3D, el sistema congela únicamente el 40% en Custodia Escrow para garantizar tu lugar. Cuando llegas al club o consultorio, presentas tu Llave Óptica Dinámica TOTP (que cambia criptográficamente cada 60 segundos); al escanearse en recepción, se liquida automáticamente el 60% restante sin filas ni fricciones.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pregunta 2 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>2. ¿Cuál es la diferencia entre la Billetera de Membresía VIP y la Billetera Top-Up?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-body-wrap">
+              <div class="faq-body-inner">
+                <div class="faq-body-content">
+                  Tu Billetera de Membresía VIP opera en ciclos de 30 días otorgándote acceso a sedes de hasta 5 estrellas, beneficios en Ventas Flash y Perdones VIP mensuales. Por su parte, tu Billetera Top-Up cuenta con Rollover Perpetuo: los KinetiCoins recargados o ganados en Cofres 3D jamás caducan mientras tu cuenta permanezca activa.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pregunta 3 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>3. ¿Cómo se protegen mis datos personales y cómo ejerzo mis Derechos ARCO?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-body-wrap">
+              <div class="faq-body-inner">
+                <div class="faq-body-content">
+                  KineticApp S.A.S. opera bajo estricto cumplimiento de la LFPDPPP y estándares internacionales de privacidad. Los mapas de sala son 100% anónimos ante terceros y dentro de la plataforma dispones de control directo de privacidad y eliminación definitiva de cuenta e identidad en cualquier momento.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pregunta 4 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span>4. ¿Cómo afilio mi Club Deportivo, Estudio Boutique o Consultorio Especialista?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-body-wrap">
+              <div class="faq-body-inner">
+                <div class="faq-body-content">
+                  Selecciona el perfil "Club Deportivo / Estudio / Especialista" en el formulario de Acceso Prioritario arriba. Nuestro equipo de alianzas verificará tu sede para activar tu Terminal Óptica QR, configuración de sala 3D, protección Anti No-Show y dispersiones semanales vía SPEI con soporte CFDI 4.0.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER CORPORATIVO Y DISPARADORES DE MODALES LEGALES IN-SITU          -->
+  <!-- ===================================================================== -->
+  <footer style="padding:48px 0 64px;border-top:1px solid var(--border);background:#050505;font-size:12.5px;color:var(--muted);">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--border);">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="knt-wordmark" style="font-size:18px;">KINETIC</span>
+            <strong style="color:var(--text);">KineticApp S.A.S. — Sociedad por Acciones Simplificada (México)</strong>
+          </div>
+          <p style="margin-top:6px;">Sede Operativa: Cabo San Lucas • Corredor Turístico • San José del Cabo, B.C.S., México.</p>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <button type="button" class="preset-chip" data-open-legal="terms">📄 Términos y Condiciones</button>
+          <button type="button" class="preset-chip" data-open-legal="privacy">🔒 Aviso de Privacidad</button>
+          <button type="button" class="preset-chip" data-open-legal="waiver">🛡️ Deslinde Deportivo</button>
+          <a href="mailto:soporte@kineticapp.com.mx" class="preset-chip" style="text-decoration:none;display:inline-flex;align-items:center;">✉️ soporte@kineticapp.com.mx</a>
+        </div>
+      </div>
+
+      <div style="padding-top:18px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;">
+        <span>© 2026 KineticApp S.A.S. Todos los derechos reservados • KINETIC OS v2.5.</span>
+        <div class="badge-pulsing-official" style="font-size:9.5px;padding:4px 10px;"><span>⚡ ACCESO OFICIAL • PRÓXIMAMENTE</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL LEGAL FLOTANTE IN-SITU (#090C12 + backdrop-filter: blur(14px))  -->
+  <!-- ===================================================================== -->
+  <div id="legalModalOverlay" class="legal-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
+    <div class="legal-modal-window">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--border);">
+        <h3 id="legalModalTitle" class="font-display" style="font-size:20px;font-weight:800;color:var(--cyan);"></h3>
+        <button type="button" id="legalModalCloseBtn" class="modal-close-btn" aria-label="Cerrar ventana legal">✕</button>
+      </div>
+      <div id="legalModalContent" style="font-size:13.5px;color:var(--text-sec);line-height:1.7;display:flex;flex-direction:column;gap:12px;"></div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MOTOR INTERACTIVO PURO (ZERO DEPENDENCIAS EXTERNAS)                   -->
+  <!-- ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // 1. NAVEGACIÓN Y MENÚ MÓVIL (DRAWER)
+      var hamburgerBtn = document.getElementById('mobileHamburgerBtn');
+      var drawer = document.getElementById('mobileNavDrawer');
+      var drawerBackdrop = document.getElementById('mobileDrawerBackdrop');
+      var drawerCloseBtn = document.getElementById('mobileDrawerCloseBtn');
+
+      function setDrawerOpen(isOpen) {
+        if (!drawer || !drawerBackdrop) return;
+        if (isOpen) {
+          drawer.classList.add('open');
+          drawerBackdrop.classList.add('open');
+          if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'true');
+          document.body.style.overflow = 'hidden';
+        } else {
+          drawer.classList.remove('open');
+          drawerBackdrop.classList.remove('open');
+          if (hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      }
+
+      if (hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', function () {
+          var isOpen = drawer && drawer.classList.contains('open');
+          setDrawerOpen(!isOpen);
+        });
+      }
+      if (drawerCloseBtn) {
+        drawerCloseBtn.addEventListener('click', function () { setDrawerOpen(false); });
+      }
+      if (drawerBackdrop) {
+        drawerBackdrop.addEventListener('click', function () { setDrawerOpen(false); });
+      }
+      document.querySelectorAll('[data-drawer-link]').forEach(function (link) {
+        link.addEventListener('click', function () {
+          setDrawerOpen(false);
+        });
+      });
+
+      // 2. CONMUTADOR DINÁMICO ATLETAS (B2C) VS CLUBES Y ESPECIALISTAS (B2B)
+      var btnAtletas = document.getElementById('btnSwitchAtletas');
+      var btnClubes = document.getElementById('btnSwitchClubes');
+      var panelAtletas = document.getElementById('panelAtletas');
+      var panelClubes = document.getElementById('panelClubes');
+
+      function setAudienceMode(mode) {
+        var isB2B = mode === 'b2b';
+        if (btnAtletas && btnClubes && panelAtletas && panelClubes) {
+          btnAtletas.className = isB2B ? 'switch-btn' : 'switch-btn active-b2c';
+          btnClubes.className = isB2B ? 'switch-btn active-b2b' : 'switch-btn';
+          btnAtletas.setAttribute('aria-selected', isB2B ? 'false' : 'true');
+          btnClubes.setAttribute('aria-selected', isB2B ? 'true' : 'false');
+          panelAtletas.className = isB2B ? 'audience-panel' : 'audience-panel active';
+          panelClubes.className = isB2B ? 'audience-panel active' : 'audience-panel';
+        }
+      }
+
+      if (btnAtletas) btnAtletas.addEventListener('click', function () { setAudienceMode('b2c'); });
+      if (btnClubes) btnClubes.addEventListener('click', function () { setAudienceMode('b2b'); });
+
+      // 3. CALCULADORA INTERACTIVA ESCROW 40/60
+      var rangeInput = document.getElementById('escrowRangeInput');
+      var totalBadge = document.getElementById('escrowTotalBadge');
+      var holdText = document.getElementById('escrowHoldText');
+      var doorText = document.getElementById('escrowDoorText');
+      var fiatBlur = document.getElementById('escrowFiatBlur');
+      var presetChips = document.querySelectorAll('[data-escrow-preset]');
+
+      function updateEscrowCalculator(rawVal) {
+        var total = Math.max(100, Math.min(1000, Number(rawVal) || 250));
+        var hold40 = Math.round(total * 0.4);
+        var door60 = total - hold40;
+
+        if (rangeInput && Number(rangeInput.value) !== total) {
+          rangeInput.value = String(total);
+        }
+        if (totalBadge) totalBadge.textContent = 'Sesión: ' + total + ' KC';
+        if (holdText) holdText.textContent = 'Custodia de Apartado (40%): ' + hold40 + ' KC';
+        if (doorText) doorText.textContent = 'Liquidación en Recepción QR (60%): ' + door60 + ' KC';
+        if (fiatBlur) fiatBlur.textContent = 'Equivalencia Comercial: $ •,••• MXN IVA Incluido';
+
+        presetChips.forEach(function (chip) {
+          var presetVal = Number(chip.getAttribute('data-escrow-preset'));
+          if (presetVal === total) chip.classList.add('active');
+          else chip.classList.remove('active');
+        });
+      }
+
+      if (rangeInput) {
+        rangeInput.addEventListener('input', function (e) {
+          updateEscrowCalculator(e.target.value);
+        });
+      }
+      presetChips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          updateEscrowCalculator(chip.getAttribute('data-escrow-preset'));
+        });
+      });
+
+      // Mapa interactivo 3D de 12 estaciones demostrativas
+      var spotsGrid = document.getElementById('interactiveSpotsGrid');
+      var selectedSpotLabel = document.getElementById('selectedSpotLabel');
+      var activeSpot = 3;
+      var occupiedSet = { 2: true, 6: true, 9: true, 11: true };
+
+      function renderInteractiveSpots() {
+        if (!spotsGrid) return;
+        var html = '';
+        for (var i = 1; i <= 12; i++) {
+          var code = 'RF-' + (i < 10 ? '0' + i : i);
+          var isOcc = Boolean(occupiedSet[i]);
+          var isSel = i === activeSpot;
+          var cls = isSel ? 'spot-cell selected' : isOcc ? 'spot-cell occupied' : 'spot-cell free';
+          var sub = isSel ? '★ TU LUGAR' : isOcc ? '🔒 ANÓNIMO' : 'LIBRE';
+          html += '<button type="button" class="' + cls + '" data-spot-num="' + i + '" ' + (isOcc ? 'disabled' : '') + '>' +
+            '<div>' + code + '</div><div style="font-size:9px;margin-top:2px;">' + sub + '</div></button>';
+        }
+        spotsGrid.innerHTML = html;
+        if (selectedSpotLabel) {
+          selectedSpotLabel.textContent = 'Estación #RF-' + (activeSpot < 10 ? '0' + activeSpot : activeSpot);
+        }
+        spotsGrid.querySelectorAll('[data-spot-num]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var n = Number(btn.getAttribute('data-spot-num'));
+            if (!occupiedSet[n]) {
+              activeSpot = n;
+              renderInteractiveSpots();
+            }
+          });
+        });
+      }
+      renderInteractiveSpots();
+
+      // Reloj TOTP 60 segundos en vivo
+      var qrSec = 60;
+      var qrTimerEl = document.getElementById('heroQrTimer');
+      setInterval(function () {
+        qrSec = qrSec <= 1 ? 60 : qrSec - 1;
+        if (qrTimerEl) qrTimerEl.textContent = qrSec + 's';
+      }, 1000);
+
+      // 4. ACORDEÓN INTERACTIVO FAQ
+      var faqItems = document.querySelectorAll('#faqAccordion .faq-item');
+      faqItems.forEach(function (item) {
+        var trigger = item.querySelector('.faq-trigger');
+        if (!trigger) return;
+        trigger.addEventListener('click', function () {
+          var wasOpen = item.classList.contains('open');
+          faqItems.forEach(function (other) {
+            other.classList.remove('open');
+            var t = other.querySelector('.faq-trigger');
+            if (t) t.setAttribute('aria-expanded', 'false');
+          });
+          if (!wasOpen) {
+            item.classList.add('open');
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
+      // 5. MODALES LEGALES FLOTANTES (IN-SITU)
+      var LEGAL_DOCS = {
+        terms: {
+          title: 'Términos y Condiciones de Uso — KineticApp S.A.S.',
+          html:
+            '<p><strong>1. Titularidad Corporativa:</strong> La plataforma tecnológica KINETIC OS v2.5 y el dominio kineticapp.com.mx son operados exclusivamente por <strong>KineticApp S.A.S.</strong> (Sociedad por Acciones Simplificada constituida conforme a las leyes de los Estados Unidos Mexicanos), con sede operativa en Los Cabos, Baja California Sur, México.</p>' +
+            '<p><strong>2. Protocolo de Reserva Escrow 40/60 y Llave TOTP:</strong> Al reservar una estación o sesión dentro del ecosistema, se retiene el 40% en Custodia Escrow y el 60% complementario se liquida automáticamente en recepción al validar la Llave Óptica Dinámica QR de 60 segundos (TOTP).</p>' +
+            '<p><strong>3. Cancelaciones y Billetera Dual:</strong> Las cancelaciones realizadas con más de 72 horas de anticipación (o dentro de los primeros 5 minutos posteriores a la reserva) reintegran el 100% de la custodia. La Billetera de Membresía VIP opera en ciclos de 30 días naturales y la Billetera Top-Up mantiene vigencia perpetua (Rollover) mientras la cuenta permanezca activa.</p>' +
+            '<p><strong>4. Operación Mercantil B2B:</strong> Los clubes deportivos, estudios boutique y especialistas independientes operan como prestadores autónomos verificados con liquidaciones interbancarias vía SPEI y facturación CFDI 4.0.</p>'
+        },
+        privacy: {
+          title: 'Aviso de Privacidad Integral y Derechos ARCO — KineticApp S.A.S.',
+          html:
+            '<p><strong>1. Responsable del Tratamiento de Datos:</strong> <strong>KineticApp S.A.S.</strong>, con domicilio en Los Cabos, B.C.S., México, y correo oficial <strong>soporte@kineticapp.com.mx</strong>, es responsable de la protección y tratamiento confidencial de sus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) y normativas internacionales aplicables.</p>' +
+            '<p><strong>2. Finalidades Primarias:</strong> Autenticación segura de cuenta, emisión criptográfica de pases dinámicos TOTP de 60 segundos, custodia transaccional Escrow 40/60, reservación anónima de estaciones en sala 3D y facturación electrónica cuando sea solicitada.</p>' +
+            '<p><strong>3. Anonimato y Minimización:</strong> La ocupación de lugares en los mapas 3D es 100% anónima frente a otros usuarios. Jamás comercializamos ni cedemos bases de datos personales a terceros.</p>' +
+            '<p><strong>4. Ejercicio de Derechos ARCO y Eliminación Definitiva:</strong> Usted puede ejercer sus derechos de Acceso, Rectificación, Cancelación y Oposición (ARCO) escribiendo a soporte@kineticapp.com.mx, o bien ejecutar la purga y desvinculación inmediata y definitiva de su cuenta directamente desde el panel de Ajustes de la plataforma.</p>'
+        },
+        waiver: {
+          title: 'Deslinde de Responsabilidad Deportiva — KineticApp S.A.S.',
+          html:
+            '<p><strong>1. Naturaleza de Intermediación Tecnológica:</strong> <strong>KineticApp S.A.S.</strong> provee la infraestructura digital de reservación, custodia Escrow y validación óptica QR, sin sustituir la supervisión médica o técnica de cada club deportivo, estudio o especialista afiliado.</p>' +
+            '<p><strong>2. Aptitud Física:</strong> Al participar en sesiones de entrenamiento físico, deporte o protocolos de recuperación y bienestar, el usuario declara encontrarse en condiciones óptimas de salud y seguir las indicaciones de seguridad del personal certificado de cada sede.</p>'
+        }
+      };
+
+      var legalOverlay = document.getElementById('legalModalOverlay');
+      var legalTitle = document.getElementById('legalModalTitle');
+      var legalContent = document.getElementById('legalModalContent');
+      var legalCloseBtn = document.getElementById('legalModalCloseBtn');
+
+      function openLegalModal(key) {
+        var doc = LEGAL_DOCS[key] || LEGAL_DOCS.terms;
+        if (legalTitle) legalTitle.textContent = doc.title;
+        if (legalContent) legalContent.innerHTML = doc.html;
+        if (legalOverlay) {
+          legalOverlay.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeLegalModal() {
+        if (legalOverlay) {
+          legalOverlay.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      }
+
+      document.querySelectorAll('[data-open-legal]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          openLegalModal(btn.getAttribute('data-open-legal'));
+        });
+      });
+      if (legalCloseBtn) legalCloseBtn.addEventListener('click', closeLegalModal);
+      if (legalOverlay) {
+        legalOverlay.addEventListener('click', function (e) {
+          if (e.target === legalOverlay) closeLegalModal();
+        });
+      }
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeLegalModal();
+          setDrawerOpen(false);
+        }
+      });
+
+      // 6. FORMULARIO WAITLIST Y FEEDBACK CON VALIDACIÓN DE CORREO O TELÉFONO
+      var waitlistForm = document.getElementById('waitlistForm');
+      var contactInput = document.getElementById('waitlistContact');
+      var nameInput = document.getElementById('waitlistName');
+      var roleInput = document.getElementById('waitlistRole');
+      var errorMsg = document.getElementById('waitlistErrorMsg');
+      var submitBtn = document.getElementById('waitlistSubmitBtn');
+      var successBanner = document.getElementById('waitlistSuccessBanner');
+
+      function isValidEmailOrPhone(raw) {
+        var val = String(raw || '').trim();
+        if (!val) return false;
+        var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+        if (emailRe.test(val)) return true;
+        var digits = val.replace(/\D/g, '');
+        return digits.length >= 10 && digits.length <= 15;
+      }
+
+      if (waitlistForm) {
+        waitlistForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var contactVal = contactInput ? contactInput.value.trim() : '';
+
+          if (!isValidEmailOrPhone(contactVal)) {
+            if (contactInput) contactInput.classList.add('error');
+            if (errorMsg) {
+              errorMsg.textContent = 'Ingresa un correo electrónico válido o un número telefónico de al menos 10 dígitos.';
+              errorMsg.style.display = 'block';
+            }
+            return;
+          }
+
+          if (contactInput) contactInput.classList.remove('error');
+          if (errorMsg) errorMsg.style.display = 'none';
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'REGISTRANDO...';
+          }
+
+          // Persistencia defensiva local + intento asíncrono silencioso
+          try {
+            var saved = JSON.parse(localStorage.getItem('@kinetic_waitlist_v25') || '[]');
+            saved.push({
+              contacto: contactVal,
+              nombre: nameInput ? nameInput.value.trim() : '',
+              perfil: roleInput ? roleInput.value : 'atleta',
+              ts: new Date().toISOString()
+            });
+            localStorage.setItem('@kinetic_waitlist_v25', JSON.stringify(saved));
+          } catch (_err) {}
+
+          setTimeout(function () {
+            if (submitBtn) {
+              submitBtn.textContent = 'ACCESO PRIORITARIO SOLICITADO ✓';
+            }
+            if (successBanner) {
+              successBanner.style.display = 'block';
+            }
+          }, 600);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
