@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Términos de Uso — KINETIC | KineticApp S.A.S.</title>
   <meta name="theme-color" content="#050505" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300F0FF'/%3E%3Cstop offset='100%25' stop-color='%23A855F7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='28' fill='%23050505' stroke='url(%23g)' stroke-width='2.6'/%3E%3Cellipse cx='32' cy='32' rx='22' ry='9' fill='none' stroke='%2300F0FF' stroke-width='1.8' transform='rotate(-28 32 32)'/%3E%3Cellipse cx='32' cy='32' rx='22' ry='9' fill='none' stroke='%23A855F7' stroke-width='1.8' transform='rotate(28 32 32)'/%3E%3Cpolygon points='32,20 42,32 32,44 22,32' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" href="/kinetic-mark.png" />
+  <link rel="apple-touch-icon" href="/kinetic-mark.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
@@ -15,6 +16,7 @@
     body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
     .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(5,5,5,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
     .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;font-size:15px}
+    .brand-mark{width:30px;height:30px;border-radius:8px;background:#050505;border:1px solid rgba(0,240,255,.28);overflow:hidden;display:inline-flex;flex-shrink:0}
     .actions{display:flex;align-items:center;gap:10px}
     .pill{border:1px solid var(--border);background:rgba(15,20,30,.75);color:var(--text);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none}
     .pill-cyan{border-color:rgba(0,240,255,.4);color:var(--cyan)}
@@ -33,13 +35,7 @@
 <body>
   <header class="topbar">
     <a class="brand" href="/">
-      <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
-        <defs><linearGradient id="kntOrbTop" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00F0FF"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
-        <circle cx="32" cy="32" r="28" fill="#050505" stroke="url(#kntOrbTop)" stroke-width="2.6"/>
-        <ellipse cx="32" cy="32" rx="22" ry="9" fill="none" stroke="#00F0FF" stroke-width="1.8" transform="rotate(-28 32 32)"/>
-        <ellipse cx="32" cy="32" rx="22" ry="9" fill="none" stroke="#A855F7" stroke-width="1.8" transform="rotate(28 32 32)"/>
-        <polygon points="32,20 42,32 32,44 22,32" fill="url(#kntOrbTop)"/>
-      </svg>
+      <span class="brand-mark"><img src="/kinetic-mark.png" alt="Kinetic" width="30" height="30" style="width:100%;height:100%;object-fit:cover;display:block" /></span>
       <span>KINETIC</span>
     </a>
     <div class="actions">
@@ -71,7 +67,7 @@
       <p id="p4">Estos términos se interpretan conforme a las leyes aplicables de los Estados Unidos Mexicanos. Para dudas legales o de soporte escribe a <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a>.</p>
 
       <div class="foot">
-        <span>© 2026 KineticApp S.A.S. • Los Cabos, B.C.S., México.</span>
+        <span>© 2026 KineticApp S.A.S. • México.</span>
         <a id="privacyLink" href="/privacidad/">Aviso de Privacidad</a>
       </div>
     </article>
