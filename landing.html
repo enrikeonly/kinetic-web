@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>KINETIC — Fitness, Deporte &amp; Wellness</title>
+  <meta name="description" content="Tu ciudad entera, un solo pase. Más de 230 disciplinas, canchas y especialistas en tu ciudad." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="KINETIC — Fitness, Deporte &amp; Wellness" />
+  <meta property="og:description" content="Tu ciudad entera, un solo pase. Acceso prioritario por invitación." />
+  <meta property="og:url" content="https://kineticapp.com.mx/" />
+  <meta property="og:image" content="https://kineticapp.com.mx/kinetic-mark.png" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="icon" type="image/png" href="/kinetic-mark.png" />
+  <link rel="apple-touch-icon" href="/kinetic-mark.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050505;
+      --surface: #090C12;
+      --glass: rgba(9, 12, 18, 0.72);
+      --border: rgba(255, 255, 255, 0.11);
+      --border-hi: rgba(255, 255, 255, 0.22);
+      --cyan: #00F0FF;
+      --purple: #A855F7;
+      --violet: #9D4EDD;
+      --rose: #FF0055;
+      --green: #00FF66;
+      --white: #FFFFFF;
+      --titanium: #8E9BB0;
+      --text-sec: #CBD5E1;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 76px;
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body { background: var(--bg); color: var(--white); overflow-x: hidden; line-height: 1.5; }
+    input, select, textarea { font-size: 16px !important; font-family: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .font-display { font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif; }
+    .container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+    /* Liquid Glass Topbar */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 90; height: 64px;
+      background: rgba(5, 5, 5, 0.68);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex; align-items: center;
+    }
+    .topbar-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 18px; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .menu-btn {
+      width: 38px; height: 38px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); font-size: 16px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .menu-btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; }
+    .brand-mark {
+      width: 32px; height: 32px; border-radius: 9px; background: #050505;
+      border: 1px solid rgba(0, 240, 255, 0.28); overflow: hidden;
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.22);
+    }
+    .brand-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .brand-word { font-size: 15px; font-weight: 800; letter-spacing: 3.2px; color: var(--white); }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .lang-pill {
+      padding: 7px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.8px;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--text-sec);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .lang-pill:hover { border-color: var(--cyan); color: var(--white); }
+    .cta-mag {
+      padding: 9px 16px; border-radius: 999px; font-size: 12px; font-weight: 800;
+      background: var(--cyan); color: #050505;
+      box-shadow: 0 0 22px rgba(0, 240, 255, 0.28);
+      transition: transform 0.18s ease, box-shadow 0.2s ease;
+    }
+    .cta-mag:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(0, 240, 255, 0.45); }
+
+    /* Drawer Lateral estilo about.google */
+    .drawer-backdrop {
+      position: fixed; inset: 0; z-index: 110; background: rgba(5, 5, 5, 0.72);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+    }
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; left: 0; bottom: 0; width: min(320px, 86vw); z-index: 120;
+      background: rgba(9, 12, 18, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid var(--border); padding: 22px;
+      transform: translate3d(-104%, 0, 0); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .drawer.open { transform: translate3d(0, 0, 0); }
+    .drawer-links { display: flex; flex-direction: column; gap: 6px; margin-top: 24px; }
+    .drawer-link {
+      padding: 13px 14px; border-radius: 14px; font-size: 15px; font-weight: 600; color: var(--text-sec);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+    .drawer-link:hover { background: rgba(255, 255, 255, 0.06); color: var(--white); }
+
+    /* Hero Full-Bleed (Google + Xbox) */
+    .hero {
+      position: relative; min-height: min(92vh, 840px); padding: 108px 0 46px;
+      display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06); touch-action: pan-y; user-select: none;
+    }
+    .hero-bg-layer {
+      position: absolute; inset: 0; z-index: 0;
+      background-size: cover; background-position: center; opacity: 0.24;
+      transition: opacity 0.7s ease, background-image 0.7s ease;
+    }
+    .hero-vignette {
+      position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(circle at 72% 24%, rgba(0, 240, 255, 0.16), transparent 46%),
+                  radial-gradient(circle at 20% 72%, rgba(168, 85, 247, 0.16), transparent 48%),
+                  linear-gradient(180deg, rgba(5, 5, 5, 0.45) 0%, rgba(5, 5, 5, 0.72) 55%, #050505 100%);
+    }
+    #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+    .hero-content {
+      position: relative; z-index: 3; width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px;
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease;
+    }
+    .tone-bright { color: var(--white); font-weight: 800; }
+    .tone-titanium { color: var(--titanium); font-weight: 700; }
+    .hero-title {
+      font-size: clamp(38px, 6.8vw, 76px); line-height: 1.03; letter-spacing: -1.4px;
+      max-width: 820px; margin-bottom: 16px;
+    }
+    .hero-sub { font-size: clamp(16px, 2vw, 20px); color: var(--text-sec); max-width: 560px; margin-bottom: 28px; }
+    .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 42px; }
+    .btn-pill {
+      padding: 14px 24px; border-radius: 999px; font-size: 13.5px; font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      transition: transform 0.18s ease, box-shadow 0.2s ease;
+    }
+    .btn-pill:hover { transform: translateY(-2px); }
+    .btn-cyan { background: var(--cyan); color: #050505; box-shadow: 0 8px 26px rgba(0, 240, 255, 0.26); }
+    .btn-purple {
+      background: rgba(168, 85, 247, 0.16); color: var(--white);
+      border: 1px solid rgba(168, 85, 247, 0.6); box-shadow: 0 8px 24px rgba(168, 85, 247, 0.18);
+    }
+    .hero-controls { display: flex; align-items: center; justify-content: space-between; max-width: 1140px; }
+    .scene-dots { display: flex; align-items: center; gap: 8px; }
+    .scene-dot {
+      width: 9px; height: 9px; border-radius: 999px; background: rgba(255, 255, 255, 0.24);
+      transition: width 0.28s ease, background 0.28s ease;
+    }
+    .scene-dot.active { width: 28px; background: var(--cyan); }
+    .media-toggle {
+      width: 36px; height: 36px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(9, 12, 18, 0.78); border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 12px; color: var(--white); backdrop-filter: blur(12px);
+    }
+
+    /* Franja Rápida de Íconos (Estilo Xbox) */
+    .quick-strip { padding: 28px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    .quick-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+    .quick-item {
+      padding: 16px 10px; border-radius: 20px; background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .quick-item:hover { transform: translateY(-3px); border-color: rgba(0, 240, 255, 0.45); }
+    .quick-label { font-size: 12px; font-weight: 700; color: var(--text-sec); text-align: center; }
+
+    /* Tarjetas Esculturales Ascenso en Scroll (about.google) */
+    .scroll-section { padding: 72px 0; }
+    .section-head { margin-bottom: 36px; max-width: 680px; }
+    .section-title { font-size: clamp(28px, 4.4vw, 46px); line-height: 1.08; letter-spacing: -0.9px; margin-bottom: 10px; }
+    .section-sub { font-size: 16px; color: var(--titanium); }
+    .sculpture-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .sculpture-card {
+      position: relative; border-radius: 28px; background: var(--surface);
+      border: 1px solid var(--border); border-top-color: var(--border-hi);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 22px 54px rgba(0, 0, 0, 0.5);
+      overflow: hidden; min-height: 410px; display: flex; flex-direction: column; justify-content: space-between;
+      transform: translate3d(0, 36px, 0) scale(0.94); opacity: 0.45;
+      will-change: transform, opacity;
+    }
+    .sculpture-stage {
+      position: relative; height: 290px; width: 100%;
+      background: radial-gradient(circle at 50% 45%, rgba(0, 240, 255, 0.12), rgba(168, 85, 247, 0.05) 45%, #050505 78%);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .sculpture-footer {
+      padding: 20px 24px 22px; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .sculpture-title { font-size: clamp(20px, 2.3vw, 25px); line-height: 1.15; letter-spacing: -0.4px; }
+    .plus-circle {
+      width: 40px; height: 40px; min-width: 40px; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.09); border: 1px solid rgba(255, 255, 255, 0.22);
+      display: inline-flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 500;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+    .plus-circle:hover { background: var(--cyan); color: #050505; border-color: var(--cyan); transform: scale(1.06); }
+
+    /* Visuales interactivos internos de las 4 tarjetas (60fps continuos) */
+    .radar-wrap { position: relative; width: 224px; height: 224px; display: flex; align-items: center; justify-content: center; }
+    .radar-sweep {
+      position: absolute; inset: 14px; border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(0, 240, 255, 0.34) 0deg, rgba(0, 240, 255, 0.05) 48deg, transparent 85deg);
+      animation: spinSlow 4.2s linear infinite; will-change: transform; pointer-events: none;
+    }
+    .radar-svg { position: relative; z-index: 2; width: 224px; height: 224px; }
+    .radar-ring { transform-origin: 110px 110px; animation: radarWave 3.2s linear infinite; will-change: transform, opacity; }
+    .radar-ring.r2 { animation-delay: 1.05s; }
+    .radar-ring.r3 { animation-delay: 2.1s; }
+    .radar-blip { animation: blipGlow 2.4s ease-in-out infinite; }
+    @keyframes radarWave {
+      0% { transform: scale(0.28); opacity: 0.92; }
+      100% { transform: scale(1.12); opacity: 0; }
+    }
+    @keyframes blipGlow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .matrix-3d {
+      display: grid; grid-template-columns: repeat(4, 48px); gap: 10px;
+      transform: perspective(620px) rotateX(34deg) rotateZ(-14deg);
+    }
+    .m-cell {
+      width: 48px; height: 48px; border-radius: 12px; background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.14); transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .m-cell.lit {
+      background: rgba(168, 85, 247, 0.26); border-color: var(--purple);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.45); transform: translateZ(12px);
+    }
+    .m-cell.wave-lit {
+      background: rgba(0, 240, 255, 0.2); border-color: rgba(0, 240, 255, 0.72);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.4); transform: translateZ(14px);
+    }
+    .m-cell.active-pick {
+      background: rgba(0, 240, 255, 0.34); border-color: var(--cyan);
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.65); transform: translateZ(20px);
+    }
+    .aura-wrap { position: relative; width: 224px; height: 224px; display: flex; align-items: center; justify-content: center; }
+    .pillar-orbit {
+      position: absolute; border-radius: 50%; will-change: transform;
+      border: 2px solid transparent; box-shadow: 0 0 14px rgba(0, 240, 255, 0.16);
+    }
+    .orbit-1 { inset: 8px; border-top-color: var(--rose); border-right-color: rgba(255, 0, 85, 0.35); animation: orbitSpinA 6.4s linear infinite; }
+    .orbit-2 { inset: 22px; border-bottom-color: var(--violet); border-left-color: rgba(157, 78, 221, 0.4); animation: orbitSpinB 8.2s linear infinite; }
+    .orbit-3 { inset: 36px; border-top-color: var(--cyan); border-left-color: rgba(0, 240, 255, 0.45); animation: spinSlow 5.4s linear infinite; }
+    .orbit-4 { inset: 50px; border-bottom-color: var(--green); border-right-color: rgba(0, 255, 102, 0.45); animation: orbitSpinRev 4.6s linear infinite; }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
+    @keyframes orbitSpinRev { to { transform: rotate(-360deg); } }
+    @keyframes orbitSpinA { to { transform: rotate(360deg) scaleX(0.92); } }
+    @keyframes orbitSpinB { to { transform: rotate(-360deg) scaleY(0.9); } }
+    .chest-iso {
+      position: relative; z-index: 3; width: 78px; height: 78px;
+      filter: drop-shadow(0 0 18px rgba(0, 240, 255, 0.38));
+      animation: floatGeo 3s ease-in-out infinite; will-change: transform;
+    }
+    @keyframes floatGeo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    .pulse-bars { display: flex; align-items: flex-end; gap: 10px; height: 150px; }
+    .p-bar {
+      width: 18px; height: 100%; border-radius: 10px 10px 4px 4px; transform-origin: bottom center;
+      background: linear-gradient(180deg, var(--green), rgba(0, 255, 102, 0.14));
+      box-shadow: 0 -4px 14px rgba(0, 255, 102, 0.28);
+      animation: barScale 2.4s ease-in-out infinite; will-change: transform;
+    }
+    .p-bar:nth-child(2) { animation-delay: 0.25s; background: linear-gradient(180deg, var(--cyan), rgba(0, 240, 255, 0.14)); box-shadow: 0 -4px 14px rgba(0, 240, 255, 0.28); }
+    .p-bar:nth-child(3) { animation-delay: 0.5s; background: linear-gradient(180deg, var(--purple), rgba(168, 85, 247, 0.14)); box-shadow: 0 -4px 14px rgba(168, 85, 247, 0.28); }
+    .p-bar:nth-child(4) { animation-delay: 0.75s; }
+    .p-bar:nth-child(5) { animation-delay: 1s; background: linear-gradient(180deg, var(--cyan), rgba(0, 240, 255, 0.14)); }
+    .p-bar:nth-child(6) { animation-delay: 1.25s; background: linear-gradient(180deg, var(--rose), rgba(255, 0, 85, 0.16)); }
+    .p-bar:nth-child(7) { animation-delay: 1.5s; background: linear-gradient(180deg, var(--purple), rgba(168, 85, 247, 0.14)); }
+    @keyframes barScale { 0%, 100% { transform: scaleY(0.38); } 50% { transform: scaleY(0.98); } }
+
+    /* Carrusel Horizontal Snap (Estilo Apple Store) */
+    .snap-section { padding: 44px 0 72px; }
+    .snap-track {
+      display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
+      padding: 6px 20px 18px; scrollbar-width: none;
+    }
+    .snap-track::-webkit-scrollbar { display: none; }
+    .snap-card {
+      flex: 0 0 min(320px, 82vw); scroll-snap-align: start;
+      border-radius: 26px; background: var(--surface); border: 1px solid var(--border);
+      overflow: hidden; display: flex; flex-direction: column;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .snap-card:hover { transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.26); }
+    .snap-media {
+      height: 220px; position: relative; background-color: #090C12; background-size: cover; background-position: center;
+    }
+    .snap-media::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(5, 5, 5, 0.1) 0%, rgba(9, 12, 18, 0.92) 100%);
+    }
+    .snap-foot { padding: 18px 20px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .snap-nav { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+    .snap-arrow {
+      width: 42px; height: 42px; border-radius: 999px; background: var(--surface);
+      border: 1px solid var(--border); font-size: 20px; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .snap-arrow:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* Tarjeta Única de Acceso Anticipado */
+    .waitlist-section { padding: 40px 0 76px; }
+    .waitlist-card {
+      max-width: 720px; margin: 0 auto; border-radius: 28px; background: var(--surface);
+      border: 1px solid rgba(0, 240, 255, 0.22); border-top-color: rgba(255, 255, 255, 0.2);
+      padding: clamp(24px, 4vw, 42px);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+    }
+    .ref-pill {
+      display: none; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
+      background: rgba(168, 85, 247, 0.14); border: 1px solid rgba(168, 85, 247, 0.4);
+      font-size: 11.5px; font-weight: 700; color: #E9D5FF; margin-bottom: 14px;
+    }
+    .seg-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 18px 0 16px; }
+    .seg-btn {
+      padding: 11px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 700; color: var(--titanium);
+      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s ease;
+    }
+    .seg-btn.active { background: rgba(0, 240, 255, 0.14); border-color: var(--cyan); color: var(--white); }
+    .field-stack { display: flex; flex-direction: column; gap: 12px; }
+    .field-input {
+      width: 100%; padding: 14px 16px; border-radius: 14px; background: #050505;
+      border: 1px solid rgba(255, 255, 255, 0.14); color: var(--white); outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .field-input:focus { border-color: var(--cyan); }
+    .form-err { color: #FF453A; font-size: 13px; font-weight: 600; display: none; margin-top: 4px; }
+    .form-ok {
+      display: none; padding: 20px; border-radius: 18px; margin-top: 14px; text-align: center;
+      background: rgba(0, 255, 102, 0.09); border: 1px solid rgba(0, 255, 102, 0.35);
+    }
+
+    /* Footer de Acordeones Desplegables (Apple + Google) */
+    .footer { border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 40px 0 56px; background: #050505; }
+    .acc-item { border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .acc-btn {
+      width: 100%; padding: 16px 0; display: flex; align-items: center; justify-content: space-between;
+      font-size: 14px; font-weight: 700; color: var(--white); text-align: left;
+    }
+    .acc-chev { color: var(--titanium); transition: transform 0.24s ease; font-size: 16px; }
+    .acc-item.open .acc-chev { transform: rotate(180deg); color: var(--cyan); }
+    .acc-panel { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
+    .acc-item.open .acc-panel { max-height: 360px; }
+    .acc-body { padding: 0 0 18px; font-size: 13.5px; color: var(--titanium); line-height: 1.65; }
+    .footer-base {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
+      margin-top: 26px; font-size: 12px; color: #64748B;
+    }
+
+    /* Hoja de Detalle Glass (Modal / Bottom Sheet) & Concierge */
+    .sheet-overlay {
+      position: fixed; inset: 0; z-index: 150; background: rgba(5, 5, 5, 0.78);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      display: none; align-items: flex-end; justify-content: center; padding: 16px;
+    }
+    .sheet-overlay.open { display: flex; }
+    @media (min-width: 720px) { .sheet-overlay { align-items: center; } }
+    .sheet-box {
+      width: min(540px, 100%); border-radius: 28px; background: rgba(9, 12, 18, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.16); padding: 28px;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.8);
+      animation: sheetUp 0.24s ease;
+    }
+    @keyframes sheetUp { from { transform: translateY(18px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .sheet-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .sheet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 16px 0 22px; }
+    .sheet-list li { font-size: 14.5px; color: var(--text-sec); display: flex; align-items: flex-start; gap: 10px; }
+    .concierge-fab {
+      position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 80;
+      height: 44px; padding: 0 16px; border-radius: 999px;
+      background: rgba(9, 12, 18, 0.9); border: 1px solid rgba(0, 240, 255, 0.42);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--white);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 12px 30px rgba(0, 0, 0, 0.6);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+    .concierge-fab.fab-hidden { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    .concierge-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 12px; }
+    .concierge-chip {
+      padding: 7px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-sec);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .concierge-chip:hover { border-color: var(--cyan); color: var(--white); }
+    .concierge-stream {
+      max-height: min(42vh, 310px); overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+      padding: 4px 2px 6px; margin-bottom: 12px;
+    }
+    .c-msg { max-width: 90%; padding: 12px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.55; }
+    .c-msg.ai {
+      align-self: flex-start; background: rgba(0, 240, 255, 0.07);
+      border: 1px solid rgba(0, 240, 255, 0.24); color: var(--text-sec);
+    }
+    .c-msg.user {
+      align-self: flex-end; background: rgba(168, 85, 247, 0.18);
+      border: 1px solid rgba(168, 85, 247, 0.42); color: var(--white);
+    }
+    .c-typing { display: inline-flex; gap: 5px; align-items: center; padding: 4px 2px; }
+    .c-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: dotBounce 1s infinite ease-in-out; }
+    .c-typing span:nth-child(2) { animation-delay: 0.16s; }
+    .c-typing span:nth-child(3) { animation-delay: 0.32s; }
+    @keyframes dotBounce { 0%, 80%, 100% { opacity: 0.3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-4px); } }
+    .concierge-form { display: flex; align-items: center; gap: 8px; }
+    .concierge-input {
+      flex: 1; min-width: 0; padding: 12px 14px; border-radius: 14px; background: #050505;
+      border: 1px solid rgba(255, 255, 255, 0.16); color: var(--white); outline: none; font-size: 16px !important;
+    }
+    .concierge-input:focus { border-color: var(--cyan); }
+    .concierge-send {
+      width: 44px; height: 44px; min-width: 44px; border-radius: 999px; background: var(--cyan); color: #050505;
+      font-size: 17px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    @media (max-width: 840px) {
+      .sculpture-stack { grid-template-columns: 1fr; }
+      .quick-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+      .quick-label { font-size: 10.5px; }
+      .cta-mag { padding: 8px 12px; font-size: 11px; }
+    }
+    @media (max-width: 480px) {
+      .seg-row { grid-template-columns: 1fr; }
+      .quick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <!-- BARRA SUPERIOR LIQUID GLASS -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <button type="button" id="menuOpenBtn" class="menu-btn" aria-label="Menu">☰</button>
+        <a href="#hero" class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="/kinetic-mark.png" alt="Kinetic" width="32" height="32" />
+          </span>
+          <span class="brand-word font-display">KINETIC</span>
+        </a>
+      </div>
+      <div class="topbar-right">
+        <button type="button" id="langBtn" class="lang-pill" aria-label="Language">ES | EN</button>
+        <a href="/login" target="_top" id="navLoginBtn" class="lang-pill" style="border-color:rgba(0,240,255,0.45);color:var(--cyan);white-space:nowrap;" data-i18n="navLogin">Iniciar Sesión</a>
+        <a href="#waitlist" id="navCtaBtn" class="cta-mag" style="white-space:nowrap;" data-i18n="navCta">Acceso Anticipado</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- DRAWER LATERAL ESTILO ABOUT.GOOGLE -->
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+  <aside id="navDrawer" class="drawer" aria-label="Navigation">
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="/kinetic-mark.png" alt="Kinetic" width="32" height="32" />
+          </span>
+          <span class="brand-word font-display">KINETIC</span>
+        </span>
+        <button type="button" id="menuCloseBtn" class="menu-btn" aria-label="Close">✕</button>
+      </div>
+      <nav class="drawer-links">
+        <a href="/login" target="_top" class="drawer-link" style="color:var(--cyan);font-weight:800;"><span data-i18n="dLogin">Iniciar Sesión</span><span>→</span></a>
+        <a href="#hero" class="drawer-link" data-close-drawer><span data-i18n="dHome">Inicio</span><span>›</span></a>
+        <a href="#discover" class="drawer-link" data-close-drawer><span data-i18n="dExp">Experiencia</span><span>›</span></a>
+        <a href="#disciplines" class="drawer-link" data-close-drawer><span data-i18n="dDisc">Disciplinas</span><span>›</span></a>
+        <a href="#waitlist" class="drawer-link" data-close-drawer><span data-i18n="dInvite">Acceso Anticipado</span><span>›</span></a>
+        <button type="button" id="drawerConciergeBtn" class="drawer-link"><span data-i18n="dConcierge">Concierge 24/7</span><span>✦</span></button>
+      </nav>
+    </div>
+    <div style="font-size:12px;color:var(--titanium);">@kinetic.mex • KINETIC</div>
+  </aside>
+
+  <main>
+    <!-- HERO CINEMATOGRÁFICO FULL-BLEED -->
+    <section id="hero" class="hero">
+      <div id="heroBgLayer" class="hero-bg-layer"></div>
+      <div class="hero-vignette"></div>
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <div id="heroContent" class="hero-content">
+        <h1 id="heroHeadline" class="hero-title font-display">
+          <span class="tone-bright">Tu ciudad entera,</span> <span class="tone-titanium">un solo pase.</span>
+        </h1>
+        <p id="heroSub" class="hero-sub">Más de 230 disciplinas, canchas y especialistas en tu ciudad.</p>
+        <div class="hero-ctas">
+          <button type="button" id="heroBtnAthlete" class="btn-pill btn-cyan" data-i18n="ctaAthlete">Soy Atleta</button>
+          <button type="button" id="heroBtnClub" class="btn-pill btn-purple" data-i18n="ctaClub">Tengo un Club o Consultorio</button>
+        </div>
+        <div class="hero-controls">
+          <div id="sceneDots" class="scene-dots">
+            <button type="button" class="scene-dot active" data-scene="0" aria-label="Scene 1"></button>
+            <button type="button" class="scene-dot" data-scene="1" aria-label="Scene 2"></button>
+            <button type="button" class="scene-dot" data-scene="2" aria-label="Scene 3"></button>
+          </div>
+          <button type="button" id="heroPauseBtn" class="media-toggle" aria-label="Pause or play animations">⏸</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FRANJA RÁPIDA DE ÍCONOS (ESTILO XBOX) -->
+    <section class="quick-strip">
+      <div class="container">
+        <div class="quick-grid">
+          <button type="button" class="quick-item" data-detail="radar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l5-5"/></svg>
+            <span class="quick-label" data-i18n="qRadar">Radar</span>
+          </button>
+          <button type="button" class="quick-item" data-detail="space3d">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+            <span class="quick-label" data-i18n="qSpace">Espacio 3D</span>
+          </button>
+          <button type="button" class="quick-item" data-detail="evolution">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0055" stroke-width="1.8"><path d="M12 2l3 6.5L22 9.5l-5 4.8 1.2 6.7-6.2-3.3-6.2 3.3L7 14.3 2 9.5l7-1z"/></svg>
+            <span class="quick-label" data-i18n="qEvo">Evolución</span>
+          </button>
+          <button type="button" class="quick-item" data-detail="community">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M15.5 15c2.4.4 4.5 2.1 4.5 5"/></svg>
+            <span class="quick-label" data-i18n="qComm">Comunidad</span>
+          </button>
+          <button type="button" class="quick-item" data-detail="venues">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9D4EDD" stroke-width="1.8"><path d="M12 21s-6-5.7-6-11a6 6 0 1112 0c0 5.3-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>
+            <span class="quick-label" data-i18n="qVenues">Sedes</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN ASCENSO EN SCROLL (ESTILO ABOUT.GOOGLE) -->
+    <section id="discover" class="scroll-section">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title font-display" data-i18n-html="scrollHead">
+            <span class="tone-bright">Diseñado para moverte</span> <span class="tone-titanium">sin límites.</span>
+          </h2>
+          <p class="section-sub" data-i18n="scrollSub">Toca + en cualquier tarjeta para descubrir más detalles.</p>
+        </div>
+
+        <div class="sculpture-stack">
+          <!-- Tarjeta 1: Radar en vivo -->
+          <article class="sculpture-card" data-reveal-card>
+            <div class="sculpture-stage" id="stageRadar">
+              <div class="radar-wrap">
+                <div class="radar-sweep"></div>
+                <svg class="radar-svg" viewBox="0 0 220 220" fill="none">
+                  <circle cx="110" cy="110" r="95" stroke="rgba(255,255,255,0.09)" stroke-width="1" />
+                  <circle cx="110" cy="110" r="62" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="4 5" />
+                  <line x1="110" y1="15" x2="110" y2="205" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                  <line x1="15" y1="110" x2="205" y2="110" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+                  <circle class="radar-ring" cx="110" cy="110" r="90" stroke="#00F0FF" stroke-width="1.8" />
+                  <circle class="radar-ring r2" cx="110" cy="110" r="90" stroke="#A855F7" stroke-width="1.5" />
+                  <circle class="radar-ring r3" cx="110" cy="110" r="90" stroke="#00FF66" stroke-width="1.3" />
+                  <circle cx="110" cy="110" r="7.5" fill="#00F0FF" />
+                  <circle class="radar-blip" cx="68" cy="72" r="5" fill="#A855F7" />
+                  <circle class="radar-blip" cx="156" cy="84" r="5" fill="#00FF66" />
+                  <circle class="radar-blip" cx="136" cy="154" r="5" fill="#FF0055" />
+                  <circle class="radar-blip" cx="76" cy="144" r="4" fill="#00F0FF" />
+                </svg>
+              </div>
+            </div>
+            <div class="sculpture-footer">
+              <h3 class="sculpture-title font-display" data-i18n-html="card1Title">
+                <span class="tone-bright">Radar</span> <span class="tone-titanium">en vivo.</span>
+              </h3>
+              <button type="button" class="plus-circle" data-detail="radar" aria-label="Details">+</button>
+            </div>
+          </article>
+
+          <!-- Tarjeta 2: Matriz 3D Interactiva -->
+          <article class="sculpture-card" data-reveal-card>
+            <div class="sculpture-stage" id="stageMatrix">
+              <div class="matrix-3d" id="matrixGrid"></div>
+            </div>
+            <div class="sculpture-footer">
+              <h3 class="sculpture-title font-display" data-i18n-html="card2Title">
+                <span class="tone-bright">Mapa espacial</span> <span class="tone-titanium">sin filas.</span>
+              </h3>
+              <button type="button" class="plus-circle" data-detail="space3d" aria-label="Details">+</button>
+            </div>
+          </article>
+
+          <!-- Tarjeta 3: Progreso 4 Pilares + Cofre 3D -->
+          <article class="sculpture-card" data-reveal-card>
+            <div class="sculpture-stage" id="stageAura">
+              <div class="aura-wrap">
+                <div class="pillar-orbit orbit-1"></div>
+                <div class="pillar-orbit orbit-2"></div>
+                <div class="pillar-orbit orbit-3"></div>
+                <div class="pillar-orbit orbit-4"></div>
+                <svg class="chest-iso" viewBox="0 0 80 80" fill="none">
+                  <polygon points="40,10 68,26 40,42 12,26" fill="#0C1424" stroke="#00F0FF" stroke-width="2" />
+                  <polygon points="12,26 40,42 40,70 12,54" fill="#090C12" stroke="#A855F7" stroke-width="2" />
+                  <polygon points="68,26 40,42 40,70 68,54" fill="#070A10" stroke="#00FF66" stroke-width="2" />
+                  <circle cx="40" cy="42" r="5" fill="#FF0055" />
+                </svg>
+              </div>
+            </div>
+            <div class="sculpture-footer">
+              <h3 class="sculpture-title font-display" data-i18n-html="card3Title">
+                <span class="tone-bright">Progreso y</span> <span class="tone-titanium">cofres con premios.</span>
+              </h3>
+              <button type="button" class="plus-circle" data-detail="evolution" aria-label="Details">+</button>
+            </div>
+          </article>
+
+          <!-- Tarjeta 4: Pulso Óptico Sedes -->
+          <article class="sculpture-card" data-reveal-card>
+            <div class="sculpture-stage" id="stageVenues">
+              <div class="pulse-bars">
+                <div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div>
+              </div>
+            </div>
+            <div class="sculpture-footer">
+              <h3 class="sculpture-title font-display" data-i18n-html="card4Title">
+                <span class="tone-bright">Alianza para</span> <span class="tone-titanium">clubes líderes.</span>
+              </h3>
+              <button type="button" class="plus-circle" data-detail="venues" aria-label="Details">+</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARRUSEL HORIZONTAL SNAP (ESTILO APPLE STORE) -->
+    <section id="disciplines" class="snap-section">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title font-display" data-i18n-html="snapHead">
+            <span class="tone-bright">Más de 230</span> <span class="tone-titanium">disciplinas vivas.</span>
+          </h2>
+        </div>
+      </div>
+      <div id="snapTrack" class="snap-track">
+        <article class="snap-card">
+          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-foot">
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c1Title"><span class="tone-bright">Fuerza &amp;</span> <span class="tone-titanium">Alto Rendimiento</span></h3>
+            <button type="button" class="plus-circle" data-detail="disc-fuerza">+</button>
+          </div>
+        </article>
+        <article class="snap-card">
+          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-foot">
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c2Title"><span class="tone-bright">Pádel &amp;</span> <span class="tone-titanium">Canchas</span></h3>
+            <button type="button" class="plus-circle" data-detail="disc-padel">+</button>
+          </div>
+        </article>
+        <article class="snap-card">
+          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-foot">
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c3Title"><span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Movimiento</span></h3>
+            <button type="button" class="plus-circle" data-detail="disc-pilates">+</button>
+          </div>
+        </article>
+        <article class="snap-card">
+          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-foot">
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c4Title"><span class="tone-bright">Boxeo &amp;</span> <span class="tone-titanium">Metabólico</span></h3>
+            <button type="button" class="plus-circle" data-detail="disc-boxeo">+</button>
+          </div>
+        </article>
+        <article class="snap-card">
+          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-foot">
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c5Title"><span class="tone-bright">Fisioterapia &amp;</span> <span class="tone-titanium">Recovery</span></h3>
+            <button type="button" class="plus-circle" data-detail="disc-recovery">+</button>
+          </div>
+        </article>
+      </div>
+      <div class="container">
+        <div class="snap-nav">
+          <button type="button" id="snapPrev" class="snap-arrow" aria-label="Previous">‹</button>
+          <button type="button" id="snapNext" class="snap-arrow" aria-label="Next">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARJETA ÚNICA DE ACCESO ANTICIPADO (SUPABASE fundadores_waitlist) -->
+    <section id="waitlist" class="waitlist-section">
+      <div class="container">
+        <div class="waitlist-card">
+          <div id="refPill" class="ref-pill"></div>
+          <h2 class="section-title font-display" style="margin-bottom:8px" data-i18n-html="wlTitle">
+            <span class="tone-bright">Solicita tu</span> <span class="tone-titanium">invitación.</span>
+          </h2>
+          <p class="section-sub" data-i18n="wlSub">Acceso prioritario por invitación.</p>
+
+          <form id="waitlistForm" novalidate>
+            <div class="seg-row" role="tablist">
+              <button type="button" class="seg-btn active" data-role="atleta" data-i18n="roleAthlete">Atleta</button>
+              <button type="button" class="seg-btn" data-role="club" data-i18n="roleClub">Club</button>
+              <button type="button" class="seg-btn" data-role="especialista" data-i18n="roleSpec">Especialista</button>
+            </div>
+            <div class="field-stack">
+              <input id="regName" type="text" class="field-input" required placeholder="Tu nombre completo" autocomplete="name" />
+              <input id="regEmail" type="email" class="field-input" required placeholder="Correo electrónico" autocomplete="email" autocapitalize="none" />
+              <input id="regWhatsapp" type="tel" inputmode="tel" class="field-input" required placeholder="WhatsApp (10 dígitos)" autocomplete="tel" />
+              <p id="formErr" class="form-err"></p>
+              <button id="submitBtn" type="submit" class="btn-pill btn-cyan" style="width:100%;margin-top:4px" data-i18n="wlSubmit">Solicitar Invitación</button>
+            </div>
+          </form>
+
+          <div id="formSuccess" class="form-ok">
+            <div class="font-display" style="font-size:18px;font-weight:800;color:var(--green);margin-bottom:6px" data-i18n="okTitle">Invitación en lista prioritaria</div>
+            <p style="font-size:13.5px;color:var(--text-sec);margin-bottom:14px" data-i18n="okDesc">Sigue las pistas oficiales y revelaciones progresivas en Instagram.</p>
+            <a href="https://www.instagram.com/kinetic.mex" target="_blank" rel="noopener noreferrer" class="btn-pill btn-purple" style="padding:10px 20px;font-size:12.5px">Instagram @kinetic.mex ›</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER DE ACORDEONES DESPLEGABLES (ESTILO APPLE + GOOGLE) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="acc-item">
+        <button type="button" class="acc-btn"><span data-i18n="fEco">El Ecosistema</span><span class="acc-chev">⌄</span></button>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fEcoBody">Una experiencia digital unificada que conecta disciplinas deportivas, estudios boutique, canchas y especialistas de recuperación en tu ciudad.</div></div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-btn"><span data-i18n="fAth">Experiencia Atleta</span><span class="acc-chev">⌄</span></button>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fAthBody">Explora el radar en vivo, selecciona tu estación exacta en 3D, conecta con tu comunidad mediante historias 24h y eleva tus cuatro pilares con cofres con premios y trofeos.</div></div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-btn"><span data-i18n="fB2B">Clubes y Especialistas</span><span class="acc-chev">⌄</span></button>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fB2BBody">Tecnología de ocupación inteligente y agenda garantizada para gimnasios, estudios boutique, clubes deportivos y consultorios dentro de la red fundadora.</div></div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-btn"><span data-i18n="fFaq">Preguntas Frecuentes</span><span class="acc-chev">⌄</span></button>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fFaqBody">El acceso se habilita mediante oleadas controladas por invitación. Solicitar tu lugar en la lista es gratuito y sin compromiso.</div></div>
+      </div>
+      <div class="acc-item">
+        <button type="button" class="acc-btn"><span data-i18n="fLeg">Legal y Privacidad</span><span class="acc-chev">⌄</span></button>
+        <div class="acc-panel">
+          <div class="acc-body">
+            <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+              <a href="/privacidad" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fPrivLink">Aviso de Privacidad</a>
+              <a href="/terminos" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fTermsLink">Términos de Uso</a>
+              <a href="mailto:soporte@kineticapp.com.mx" style="color:var(--text-sec)">soporte@kineticapp.com.mx</a>
+            </div>
+            <span data-i18n="fLegNote">Operado por KineticApp S.A.S. • México.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-base">
+        <span>© 2026 KineticApp S.A.S. • México.</span>
+        <button type="button" id="footerLangBtn" class="lang-pill">Español / English</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BOTÓN CONCIERGE 24/7 -->
+  <button type="button" id="conciergeFab" class="concierge-fab">✦ <span data-i18n="conciergeBtn">Concierge 24/7</span></button>
+
+  <!-- HOJA DE DETALLE GLASS / CONCIERGE -->
+  <div id="sheetOverlay" class="sheet-overlay" role="dialog" aria-modal="true">
+    <div class="sheet-box">
+      <div class="sheet-top">
+        <span id="sheetTag" style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--cyan)">KINETIC</span>
+        <button type="button" id="sheetCloseBtn" class="menu-btn" aria-label="Close">✕</button>
+      </div>
+      <h3 id="sheetTitle" class="font-display" style="font-size:26px;line-height:1.12"></h3>
+      <div id="sheetBody"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      try {
+        if (window.top === window && window.location.hostname === 'www.kineticapp.com.mx') {
+          window.location.replace('https://kineticapp.com.mx' + window.location.pathname + window.location.search + window.location.hash);
+          return;
+        }
+      } catch (_) {}
+      var SUPABASE_URL = 'https://gcppxrlzxlgkuapktxvl.supabase.co';
+      var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcHB4cmx6eGxna3VhcGt0eHZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MTY3NjUsImV4cCI6MjEwMjk5Mjc2NX0.OPrZgeE3dv_2P3wMe4QFxlf2w2Rye84jF1CahAm6kkc';
+      var state = { lang: 'es', scene: 0, paused: false, role: 'atleta', busy: false, ref: '', sede: '', waitlistVisible: false, inputFocused: false, conciergeTyping: null, chat: [] };
+
+      var I18N = {
+        es: {
+          docTitle: 'KINETIC — Fitness, Deporte & Wellness',
+          navLogin: 'Iniciar Sesión', dLogin: 'Iniciar Sesión',
+          navCta: 'Acceso Anticipado', dHome: 'Inicio', dExp: 'Experiencia', dDisc: 'Disciplinas', dInvite: 'Acceso Anticipado', dConcierge: 'Concierge 24/7',
+          ctaAthlete: 'Soy Atleta', ctaClub: 'Tengo un Club o Consultorio',
+          qRadar: 'Radar', qSpace: 'Espacio 3D', qEvo: 'Evolución', qComm: 'Comunidad', qVenues: 'Sedes',
+          scrollHead: '<span class="tone-bright">Diseñado para moverte</span> <span class="tone-titanium">sin límites.</span>',
+          scrollSub: 'Toca + en cualquier tarjeta para descubrir más detalles.',
+          card1Title: '<span class="tone-bright">Radar</span> <span class="tone-titanium">en vivo.</span>',
+          card2Title: '<span class="tone-bright">Mapa espacial</span> <span class="tone-titanium">sin filas.</span>',
+          card3Title: '<span class="tone-bright">Progreso y</span> <span class="tone-titanium">cofres con premios.</span>',
+          card4Title: '<span class="tone-bright">Alianza para</span> <span class="tone-titanium">clubes líderes.</span>',
+          snapHead: '<span class="tone-bright">Más de 230</span> <span class="tone-titanium">disciplinas vivas.</span>',
+          c1Title: '<span class="tone-bright">Fuerza &amp;</span> <span class="tone-titanium">Alto Rendimiento</span>',
+          c2Title: '<span class="tone-bright">Pádel &amp;</span> <span class="tone-titanium">Canchas</span>',
+          c3Title: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Movimiento</span>',
+          c4Title: '<span class="tone-bright">Boxeo &amp;</span> <span class="tone-titanium">Metabólico</span>',
+          c5Title: '<span class="tone-bright">Fisioterapia &amp;</span> <span class="tone-titanium">Recovery</span>',
+          wlTitle: '<span class="tone-bright">Solicita tu</span> <span class="tone-titanium">invitación.</span>',
+          wlSub: 'Acceso prioritario por invitación.',
+          roleAthlete: 'Atleta', roleClub: 'Club', roleSpec: 'Especialista',
+          nameAtletaPh: 'Tu nombre completo', nameClubPh: 'Nombre del club o estudio', nameSpecPh: 'Nombre del especialista o consultorio',
+          emailPh: 'Correo electrónico', waPh: 'WhatsApp (10 dígitos)', wlSubmit: 'Solicitar Invitación',
+          okTitle: 'Invitación en lista prioritaria', okDesc: 'Sigue las pistas oficiales y revelaciones progresivas en Instagram.',
+          fEco: 'El Ecosistema', fEcoBody: 'Una experiencia digital unificada que conecta disciplinas deportivas, estudios boutique, canchas y especialistas de recuperación en tu ciudad.',
+          fAth: 'Experiencia Atleta', fAthBody: 'Explora el radar en vivo, selecciona tu estación exacta en 3D, conecta con tu comunidad mediante historias 24h y eleva tus cuatro pilares con cofres con premios y trofeos.',
+          fB2B: 'Clubes y Especialistas', fB2BBody: 'Tecnología de ocupación inteligente y agenda garantizada para gimnasios, estudios boutique, clubes deportivos y consultorios dentro de la red fundadora.',
+          fFaq: 'Preguntas Frecuentes', fFaqBody: 'El acceso se habilita mediante oleadas controladas por invitación. Solicitar tu lugar en la lista es gratuito y sin compromiso.',
+          fLeg: 'Legal y Privacidad', fPrivLink: 'Aviso de Privacidad', fTermsLink: 'Términos de Uso',
+          fLegNote: 'Operado por KineticApp S.A.S. • México.',
+          conciergeBtn: 'Concierge 24/7',
+          errName: 'Ingresa tu nombre completo o el nombre de tu sede.',
+          errEmail: 'Ingresa un correo electrónico válido.',
+          errWa: 'Ingresa un WhatsApp válido de 10 dígitos.',
+          errNet: 'No pudimos enviar la solicitud ahora. Intenta de nuevo.'
+        },
+        en: {
+          docTitle: 'KINETIC — Fitness, Sports & Wellness',
+          navLogin: 'Sign In', dLogin: 'Sign In',
+          navCta: 'Early Access', dHome: 'Home', dExp: 'Experience', dDisc: 'Disciplines', dInvite: 'Early Access', dConcierge: '24/7 Concierge',
+          ctaAthlete: "I'm an Athlete", ctaClub: 'I Own a Club or Clinic',
+          qRadar: 'Radar', qSpace: '3D Space', qEvo: 'Evolution', qComm: 'Community', qVenues: 'Venues',
+          scrollHead: '<span class="tone-bright">Engineered to move</span> <span class="tone-titanium">without limits.</span>',
+          scrollSub: 'Tap + on any card to uncover more.',
+          card1Title: '<span class="tone-bright">Live</span> <span class="tone-titanium">radar.</span>',
+          card2Title: '<span class="tone-bright">Spatial 3D</span> <span class="tone-titanium">selection.</span>',
+          card3Title: '<span class="tone-bright">Progress and</span> <span class="tone-titanium">reward chests.</span>',
+          card4Title: '<span class="tone-bright">Built for</span> <span class="tone-titanium">leading venues.</span>',
+          snapHead: '<span class="tone-bright">Over 230</span> <span class="tone-titanium">living disciplines.</span>',
+          c1Title: '<span class="tone-bright">Strength &amp;</span> <span class="tone-titanium">Peak Output</span>',
+          c2Title: '<span class="tone-bright">Padel &amp;</span> <span class="tone-titanium">Courts</span>',
+          c3Title: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Motion</span>',
+          c4Title: '<span class="tone-bright">Boxing &amp;</span> <span class="tone-titanium">Metabolic</span>',
+          c5Title: '<span class="tone-bright">Physio &amp;</span> <span class="tone-titanium">Recovery</span>',
+          wlTitle: '<span class="tone-bright">Request your</span> <span class="tone-titanium">invitation.</span>',
+          wlSub: 'Priority access by invitation.',
+          roleAthlete: 'Athlete', roleClub: 'Club', roleSpec: 'Specialist',
+          nameAtletaPh: 'Your full name', nameClubPh: 'Club or studio name', nameSpecPh: 'Specialist or clinic name',
+          emailPh: 'Email address', waPh: 'WhatsApp (10 digits)', wlSubmit: 'Request Invitation',
+          okTitle: 'Invitation queued', okDesc: 'Follow official clues and progressive drops on Instagram.',
+          fEco: 'The Ecosystem', fEcoBody: 'A unified digital experience connecting sports, boutique studios, courts and recovery specialists in your city.',
+          fAth: 'Athlete Experience', fAthBody: 'Explore the live radar, lock your exact 3D spot, connect through 24h stories and awaken four living pillars with reward chests and trophies.',
+          fB2B: 'Clubs & Specialists', fB2BBody: 'Smart occupancy tech and verified scheduling for gyms, boutique studios, sports clubs and clinics inside the founding network.',
+          fFaq: 'FAQ', fFaqBody: 'Access opens via controlled invitation waves. Joining the list is free and carries zero commitment.',
+          fLeg: 'Legal & Privacy', fPrivLink: 'Privacy Notice', fTermsLink: 'Terms of Use',
+          fLegNote: 'Operated by KineticApp S.A.S. • Mexico.',
+          conciergeBtn: '24/7 Concierge',
+          errName: 'Please enter your full name or venue name.',
+          errEmail: 'Please enter a valid email address.',
+          errWa: 'Please enter a valid 10-digit WhatsApp number.',
+          errNet: 'Unable to send right now. Please try again.'
+        }
+      };
+
+      var SCENES = [
+        {
+          mode: 'radar', bg: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1400&q=80',
+          es: { h: '<span class="tone-bright">Tu ciudad entera,</span> <span class="tone-titanium">un solo pase.</span>', s: 'Más de 230 disciplinas, canchas y especialistas en tu ciudad.' },
+          en: { h: '<span class="tone-bright">Your entire city,</span> <span class="tone-titanium">one pass.</span>', s: 'Over 230 disciplines, courts and specialists in your city.' }
+        },
+        {
+          mode: 'space3d', bg: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1400&q=80',
+          es: { h: '<span class="tone-bright">Tu espacio exacto,</span> <span class="tone-titanium">en 3D.</span>', s: 'Reserva tu estación, cancha, bicicleta, cama de Pilates o camilla exacta antes de salir.' },
+          en: { h: '<span class="tone-bright">Your exact spot,</span> <span class="tone-titanium">in 3D.</span>', s: 'Book your exact station, court, bike, Pilates reformer or recovery bed before leaving home.' }
+        },
+        {
+          mode: 'aura', bg: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80',
+          es: { h: '<span class="tone-bright">Cada sesión</span> <span class="tone-titanium">te evoluciona.</span>', s: 'Eleva tu nivel en cuatro pilares, activa rachas, desbloquea cofres con premios y conecta con tu comunidad.' },
+          en: { h: '<span class="tone-bright">Every session</span> <span class="tone-titanium">evolves you.</span>', s: 'Level up across four pillars, build active streaks, unlock reward chests and connect with your community.' }
+        }
+      ];
+
+      var DETAILS = {
+        radar: {
+          tag: 'RADAR',
+          es: { t: '<span class="tone-bright">Radar</span> <span class="tone-titanium">activo.</span>', b: ['Más de 230 disciplinas deportivas y terapias en un solo pase.', 'Estudios boutique, canchas y especialistas conectados al instante.', 'Cobertura inicial: Cabo San Lucas y San José del Cabo.'] },
+          en: { t: '<span class="tone-bright">Active</span> <span class="tone-titanium">radar.</span>', b: ['Over 230 fitness, court and recovery disciplines on one pass.', 'Boutique studios, courts and clinics connected in real time.', 'Initial coverage: Cabo San Lucas and San José del Cabo.'] }
+        },
+        space3d: {
+          tag: 'ESPACIO 3D',
+          es: { t: '<span class="tone-bright">Tu estación</span> <span class="tone-titanium">exacta.</span>', b: ['Elige tu cama, bici, plataforma o cancha exacta en 3D.', 'Accede directo sin filas ni efectivo en recepción.', 'Control preciso de disponibilidad antes de salir de casa.'] },
+          en: { t: '<span class="tone-bright">Your exact</span> <span class="tone-titanium">station.</span>', b: ['Select your exact reformer, bike, rack or court in 3D.', 'Walk straight in with zero queues or cash at reception.', 'Live capacity precision before leaving home.'] }
+        },
+        evolution: {
+          tag: 'EVOLUCIÓN REAL',
+          es: { t: '<span class="tone-bright">Cuatro pilares</span> <span class="tone-titanium">en vivo.</span>', b: ['Tus sesiones reales alimentan tu nivel de Fuerza, Zen, Resistencia y Agilidad.', 'Mantén rachas activas para desbloquear cofres con premios y trofeos.', 'Progresión tangible y visual ligada a tu esfuerzo real.'] },
+          en: { t: '<span class="tone-bright">Four living</span> <span class="tone-titanium">pillars.</span>', b: ['Your real sessions fuel your Strength, Zen, Endurance and Agility levels.', 'Keep active streaks to unlock reward chests and trophies.', 'Tangible visual progression tied to your real effort.'] }
+        },
+        community: {
+          tag: 'COMUNIDAD & CONCIERGE',
+          es: { t: '<span class="tone-bright">Atletas reales,</span> <span class="tone-titanium">tu equipo.</span>', b: ['Comparte entrenamientos mediante Historias 24h desde cada sede.', 'Arma equipos y coordina sesiones con atletas de tu ciudad.', 'Concierge inteligente bilingüe disponible 24/7.'] },
+          en: { t: '<span class="tone-bright">Real athletes,</span> <span class="tone-titanium">your squad.</span>', b: ['Share workouts through 24h venue stories.', 'Form squads and coordinate sessions with local athletes.', 'Bilingual smart concierge ready 24/7.'] }
+        },
+        venues: {
+          tag: 'ALIANZA SEDES',
+          es: { t: '<span class="tone-bright">Agenda</span> <span class="tone-titanium">llena.</span>', b: ['Ocupación inteligente para gimnasios, estudios y canchas.', 'Asistencia verificada y agenda garantizada para especialistas.', 'Invitación prioritaria para sedes fundadoras.'] },
+          en: { t: '<span class="tone-bright">Full</span> <span class="tone-titanium">calendar.</span>', b: ['Smart occupancy for gyms, boutique studios and courts.', 'Verified attendance and reliable scheduling for clinics.', 'Priority invitation for founding venues.'] }
+        },
+        'disc-fuerza': { tag: 'FUERZA', es: { t: '<span class="tone-bright">Fuerza &amp;</span> <span class="tone-titanium">Alto Rendimiento</span>', b: ['Racks olímpicos y fuerza funcional en toda la ciudad.', 'Reserva tu plataforma exacta en 3D.', 'Eleva el pilar Fuerza en cada entrenamiento.'] }, en: { t: '<span class="tone-bright">Strength &amp;</span> <span class="tone-titanium">Peak Output</span>', b: ['Olympic racks and functional strength citywide.', 'Reserve your exact 3D training platform.', 'Level up your Strength pillar every workout.'] } },
+        'disc-padel': { tag: 'PÁDEL', es: { t: '<span class="tone-bright">Pádel &amp;</span> <span class="tone-titanium">Canchas</span>', b: ['Canchas panorámicas de pádel y tenis en tu ciudad.', 'Organiza equipos y comparte en Historias 24h.', 'Acceso inmediato sin filas en recepción.'] }, en: { t: '<span class="tone-bright">Padel &amp;</span> <span class="tone-titanium">Courts</span>', b: ['Panoramic padel and tennis courts in your city.', 'Form squads and share via 24h Stories.', 'Instant check-in with zero lobby lines.'] } },
+        'disc-pilates': { tag: 'PILATES', es: { t: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Movimiento</span>', b: ['Estudios boutique de Reformer, barre y movilidad.', 'Elige tu cama exacta antes de salir de casa.', 'Equilibra tu pilar Zen y Agilidad.'] }, en: { t: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Motion</span>', b: ['Boutique Reformer, barre and mobility studios.', 'Pick your exact bed before leaving home.', 'Balance your Zen and Agility pillars.'] } },
+        'disc-boxeo': { tag: 'BOXEO', es: { t: '<span class="tone-bright">Boxeo &amp;</span> <span class="tone-titanium">Metabólico</span>', b: ['Sacos, conditioning y sesiones de alta intensidad.', 'Aparta tu estación numerada al instante.', 'Activa rachas reales y cofres con premios.'] }, en: { t: '<span class="tone-bright">Boxing &amp;</span> <span class="tone-titanium">Metabolic</span>', b: ['Heavy bags, conditioning and metabolic training.', 'Lock your numbered station in seconds.', 'Ignite real streaks and reward chests.'] } },
+        'disc-recovery': { tag: 'RECOVERY', es: { t: '<span class="tone-bright">Fisioterapia &amp;</span> <span class="tone-titanium">Recovery</span>', b: ['Especialistas en fisioterapia, crioterapia y descarga.', 'Agenda tu camilla sin llamadas ni fricción.', 'Recuperación integrada con tu evolución física.'] }, en: { t: '<span class="tone-bright">Physio &amp;</span> <span class="tone-titanium">Recovery</span>', b: ['Physiotherapy, cryotherapy and recovery specialists.', 'Book your treatment bed with zero friction.', 'Recovery woven into your physical evolution.'] } }
+      };
+
+      function updateFormPlaceholders() {
+        var dict = I18N[state.lang];
+        var rn = document.getElementById('regName');
+        var re = document.getElementById('regEmail');
+        var rw = document.getElementById('regWhatsapp');
+        if (rn) {
+          rn.placeholder = state.role === 'club' ? dict.nameClubPh : state.role === 'especialista' ? dict.nameSpecPh : dict.nameAtletaPh;
+        }
+        if (re) re.placeholder = dict.emailPh;
+        if (rw) rw.placeholder = dict.waPh;
+      }
+
+      function applyLang(nextLang) {
+        state.lang = nextLang === 'en' ? 'en' : 'es';
+        var dict = I18N[state.lang];
+        document.documentElement.lang = state.lang;
+        document.title = dict.docTitle;
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          var k = el.getAttribute('data-i18n');
+          if (dict[k]) el.textContent = dict[k];
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+          var k = el.getAttribute('data-i18n-html');
+          if (dict[k]) el.innerHTML = dict[k];
+        });
+        updateFormPlaceholders();
+        state.chat = [];
+        renderScene(state.scene);
+      }
+
+      function renderScene(idx) {
+        state.scene = (idx + SCENES.length) % SCENES.length;
+        var s = SCENES[state.scene];
+        var bg = document.getElementById('heroBgLayer');
+        var hl = document.getElementById('heroHeadline');
+        var sub = document.getElementById('heroSub');
+        if (bg) bg.style.backgroundImage = "url('" + s.bg + "')";
+        if (hl) hl.innerHTML = s[state.lang].h;
+        if (sub) sub.textContent = s[state.lang].s;
+        document.querySelectorAll('#sceneDots .scene-dot').forEach(function (dot, i) {
+          dot.classList.toggle('active', i === state.scene);
+        });
+      }
+
+      // Query params (?ref= y ?sede=)
+      (function parseQueryParams() {
+        try {
+          var p = new URLSearchParams(window.location.search);
+          var clean = function (v) { return String(v || '').replace(/[<>"'`]/g, '').trim().slice(0, 64); };
+          state.ref = clean(p.get('ref'));
+          state.sede = clean(p.get('sede') || p.get('club') || p.get('evento'));
+          var pill = document.getElementById('refPill');
+          if (pill && (state.sede || state.ref)) {
+            pill.style.display = 'inline-flex';
+            pill.textContent = state.sede ? '📍 ' + state.sede : '✦ Ref: ' + state.ref;
+          }
+        } catch (_) {}
+      })();
+
+      // Hero GPU Canvas (60fps con pausa real)
+      var canvas = document.getElementById('heroCanvas');
+      var ctx = canvas ? canvas.getContext('2d') : null;
+      var particles = Array.from({ length: 44 }, function (_, i) {
+        return {
+          x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.0005,
+          vy: (Math.random() - 0.5) * 0.0005, r: (i % 3) + 1.2,
+          c: i % 2 === 0 ? 'rgba(0,240,255,0.55)' : 'rgba(168,85,247,0.55)'
+        };
+      });
+      function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      var tick = 0;
+      function drawHeroCanvas() {
+        if (ctx && canvas && !state.paused) {
+          tick += 0.015;
+          var w = canvas.width, h = canvas.height;
+          ctx.clearRect(0, 0, w, h);
+          var mode = SCENES[state.scene].mode;
+          if (mode === 'radar') {
+            for (var r = 0; r < 3; r++) {
+              var rad = ((tick * 55 + r * 95) % 280) + 40;
+              ctx.beginPath();
+              ctx.arc(w * 0.72, h * 0.42, rad, 0, Math.PI * 2);
+              ctx.strokeStyle = 'rgba(0,240,255,' + Math.max(0, 0.28 - rad / 1100) + ')';
+              ctx.lineWidth = 1.4;
+              ctx.stroke();
+            }
+          } else if (mode === 'space3d') {
+            ctx.strokeStyle = 'rgba(168,85,247,0.12)';
+            ctx.lineWidth = 1;
+            for (var g = -4; g <= 4; g++) {
+              ctx.beginPath();
+              ctx.moveTo(w * 0.5 + g * 80, h * 0.9);
+              ctx.lineTo(w * 0.5 + g * 28 + Math.sin(tick) * 18, h * 0.25);
+              ctx.stroke();
+            }
+          } else {
+            var grad = ctx.createRadialGradient(w * 0.65, h * 0.4, 10, w * 0.65, h * 0.4, 240);
+            grad.addColorStop(0, 'rgba(255,0,85,0.16)');
+            grad.addColorStop(0.5, 'rgba(0,240,255,0.08)');
+            grad.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+          }
+          particles.forEach(function (pt) {
+            pt.x = (pt.x + pt.vx + 1) % 1;
+            pt.y = (pt.y + pt.vy + 1) % 1;
+            ctx.beginPath();
+            ctx.arc(pt.x * w, pt.y * h, pt.r, 0, Math.PI * 2);
+            ctx.fillStyle = pt.c;
+            ctx.fill();
+          });
+        }
+        requestAnimationFrame(drawHeroCanvas);
+      }
+      requestAnimationFrame(drawHeroCanvas);
+
+      var sceneTimer = null;
+      function resetSceneTimer() {
+        if (sceneTimer) clearInterval(sceneTimer);
+        sceneTimer = setInterval(function () {
+          if (!state.paused) renderScene(state.scene + 1);
+        }, 5400);
+      }
+      resetSceneTimer();
+
+      document.querySelectorAll('#sceneDots .scene-dot').forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          renderScene(Number(dot.getAttribute('data-scene') || 0));
+          resetSceneTimer();
+        });
+      });
+
+      var heroEl = document.getElementById('hero');
+      var heroContent = document.getElementById('heroContent');
+      var dragStartX = null, dragStartY = null, dragMoved = false;
+      function beginHeroSwipe(x, y, target) {
+        if (target && target.closest && target.closest('button,a')) return;
+        dragStartX = x; dragStartY = y; dragMoved = false;
+      }
+      function moveHeroSwipe(x, y) {
+        if (dragStartX === null) return;
+        var dx = x - dragStartX, dy = y - dragStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10 && heroContent) {
+          dragMoved = true;
+          heroContent.style.transform = 'translate3d(' + Math.max(-36, Math.min(36, dx * 0.22)).toFixed(1) + 'px,0,0)';
+        }
+      }
+      function endHeroSwipe(x) {
+        if (dragStartX === null) return;
+        var dx = x - dragStartX;
+        dragStartX = null; dragStartY = null;
+        if (heroContent) heroContent.style.transform = '';
+        if (dragMoved && Math.abs(dx) >= 36) {
+          renderScene(state.scene + (dx < 0 ? 1 : -1));
+          resetSceneTimer();
+        }
+      }
+      if (heroEl) {
+        heroEl.addEventListener('touchstart', function (e) { if (e.touches[0]) beginHeroSwipe(e.touches[0].clientX, e.touches[0].clientY, e.target); }, { passive: true });
+        heroEl.addEventListener('touchmove', function (e) { if (e.touches[0]) moveHeroSwipe(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+        heroEl.addEventListener('touchend', function (e) { if (e.changedTouches[0]) endHeroSwipe(e.changedTouches[0].clientX); }, { passive: true });
+        heroEl.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse' && e.button === 0) beginHeroSwipe(e.clientX, e.clientY, e.target); });
+        heroEl.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') moveHeroSwipe(e.clientX, e.clientY); });
+        heroEl.addEventListener('pointerup', function (e) { if (e.pointerType === 'mouse') endHeroSwipe(e.clientX); });
+        heroEl.addEventListener('pointercancel', function () { dragStartX = null; if (heroContent) heroContent.style.transform = ''; });
+      }
+
+      var heroPauseBtn = document.getElementById('heroPauseBtn');
+      if (heroPauseBtn) {
+        heroPauseBtn.addEventListener('click', function () {
+          state.paused = !state.paused;
+          heroPauseBtn.textContent = state.paused ? '▶' : '⏸';
+        });
+      }
+
+      // Matriz 3D interactiva (Tarjeta 2 — siempre viva a 60fps)
+      var matrixGrid = document.getElementById('matrixGrid');
+      if (matrixGrid) {
+        for (var m = 0; m < 12; m++) {
+          var cell = document.createElement('button');
+          cell.type = 'button';
+          cell.className = 'm-cell' + (m === 5 ? ' active-pick' : m % 3 === 0 ? ' lit' : '');
+          cell.setAttribute('aria-label', 'Spot ' + (m + 1));
+          cell.addEventListener('click', function (ev) {
+            matrixGrid.querySelectorAll('.m-cell').forEach(function (c) { c.classList.remove('active-pick'); });
+            ev.currentTarget.classList.add('active-pick');
+          });
+          matrixGrid.appendChild(cell);
+        }
+        var waveIdx = 0;
+        var matrixCells = matrixGrid.querySelectorAll('.m-cell');
+        setInterval(function () {
+          if (matrixCells.length === 0) return;
+          matrixCells.forEach(function (c) { c.classList.remove('wave-lit'); });
+          matrixCells[waveIdx % matrixCells.length].classList.add('wave-lit');
+          waveIdx += 1;
+        }, 420);
+      }
+
+      // Scroll Ascenso 60fps estilo about.google
+      var cards = Array.prototype.slice.call(document.querySelectorAll('[data-reveal-card]'));
+      var scrollTicking = false;
+      function updateScrollCards() {
+        scrollTicking = false;
+        var vh = window.innerHeight || 800;
+        cards.forEach(function (c) {
+          var rect = c.getBoundingClientRect();
+          var progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.65)));
+          var scale = 0.94 + progress * 0.06;
+          var ty = (1 - progress) * 32;
+          var op = 0.45 + progress * 0.55;
+          c.style.transform = 'translate3d(0,' + ty.toFixed(1) + 'px,0) scale(' + scale.toFixed(3) + ')';
+          c.style.opacity = op.toFixed(2);
+        });
+      }
+      window.addEventListener('scroll', function () {
+        if (!scrollTicking) {
+          scrollTicking = true;
+          requestAnimationFrame(updateScrollCards);
+        }
+      }, { passive: true });
+      updateScrollCards();
+
+      // Carrusel Apple Store ‹ ›
+      var track = document.getElementById('snapTrack');
+      var snapPrev = document.getElementById('snapPrev');
+      var snapNext = document.getElementById('snapNext');
+      if (track && snapPrev && snapNext) {
+        snapPrev.addEventListener('click', function () { track.scrollBy({ left: -330, behavior: 'smooth' }); });
+        snapNext.addEventListener('click', function () { track.scrollBy({ left: 330, behavior: 'smooth' }); });
+      }
+
+      // Drawer
+      var drawer = document.getElementById('navDrawer');
+      var backdrop = document.getElementById('drawerBackdrop');
+      function setDrawer(open) {
+        if (!drawer || !backdrop) return;
+        drawer.classList.toggle('open', open);
+        backdrop.classList.toggle('open', open);
+      }
+      document.getElementById('menuOpenBtn').addEventListener('click', function () { setDrawer(true); });
+      document.getElementById('menuCloseBtn').addEventListener('click', function () { setDrawer(false); });
+      backdrop.addEventListener('click', function () { setDrawer(false); });
+      document.querySelectorAll('[data-close-drawer]').forEach(function (a) {
+        a.addEventListener('click', function () { setDrawer(false); });
+      });
+
+      // Hojas de Detalle Glass + Motor Conversacional IA Stealth 24/7
+      var overlay = document.getElementById('sheetOverlay');
+      var sheetTag = document.getElementById('sheetTag');
+      var sheetTitle = document.getElementById('sheetTitle');
+      var sheetBody = document.getElementById('sheetBody');
+      var fabEl = document.getElementById('conciergeFab');
+
+      function updateFabVisibility() {
+        if (!fabEl) return;
+        var modalOpen = overlay && overlay.classList.contains('open');
+        var drawerOpen = drawer && drawer.classList.contains('open');
+        fabEl.classList.toggle('fab-hidden', Boolean(state.waitlistVisible || state.inputFocused || modalOpen || drawerOpen));
+      }
+
+      var origSetDrawer = setDrawer;
+      setDrawer = function (open) { origSetDrawer(open); updateFabVisibility(); };
+
+      function closeSheet() {
+        if (state.conciergeTyping) { clearTimeout(state.conciergeTyping); state.conciergeTyping = null; }
+        if (overlay) overlay.classList.remove('open');
+        updateFabVisibility();
+      }
+      function openDetailSheet(key) {
+        var item = DETAILS[key];
+        if (!item || !overlay) return;
+        var loc = item[state.lang];
+        sheetTag.textContent = item.tag;
+        sheetTitle.innerHTML = loc.t;
+        sheetBody.innerHTML = '<ul class="sheet-list">' +
+          loc.b.map(function (pt) { return '<li><span style="color:var(--cyan)">•</span><span>' + pt + '</span></li>'; }).join('') +
+          '</ul><button type="button" id="sheetInviteBtn" class="btn-pill btn-cyan" style="width:100%">' + I18N[state.lang].wlSubmit + '</button>';
+        overlay.classList.add('open');
+        updateFabVisibility();
+        var btn = document.getElementById('sheetInviteBtn');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            closeSheet();
+            if (key === 'venues') selectRole('club');
+            document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+          });
+        }
+      }
+
+      var STEALTH_RIVAL_HASHES = [1507459749, 1800830082, 79832761, 2447318640, 2016519120];
+      function hasStealthRivalToken(q) {
+        return q.split(/[^a-z0-9]+/).some(function (tok) {
+          if (!tok) return false;
+          var h = 2166136261 >>> 0;
+          for (var i = 0; i < tok.length; i++) { h = Math.imul(h ^ tok.charCodeAt(i), 16777619) >>> 0; }
+          return STEALTH_RIVAL_HASHES.indexOf(h) !== -1;
+        });
+      }
+
+      function resolveConciergeAI(rawQ, lang) {
+        var q = String(rawQ || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        var en = lang === 'en';
+        var wantsClub = /\b(club|gym|gimnasio|estudio|studio|sede|cancha|venue|partner|socio|b2b)\b/.test(q);
+        var wantsSpec = /\b(especialista|consultorio|fisio|fisioterapia|recovery|specialist|clinic)\b/.test(q);
+        var roleHint = wantsSpec ? 'especialista' : wantsClub ? 'club' : 'atleta';
+
+        if (hasStealthRivalToken(q) || /\b(precio|precios|costo|costos|cuanto|cuesta|mensualidad|tarifa|comision|porcentaje|split|divide|pago|pagos|moneda|coin|competencia|rival|alternativa|membresia|plan|vs|versus|price|pricing|cost|fee|monthly|commission|percent|how much|membership)\b/.test(q)) {
+          return {
+            ctaRole: roleHint,
+            text: en
+              ? 'Exclusive opening conditions and access perks are revealed privately when your invitation activates. Leave your details in the priority list to receive private onboarding details.'
+              : 'Las condiciones exclusivas y beneficios de apertura se comparten de forma privada al activar tu invitación. Solicita tu invitación para recibir tu acceso directo en cuanto abra tu ola.'
+          };
+        }
+        if (/\b(donde|ciudad|ciudades|ubicacion|zona|cobertura|cabo|san lucas|san jose|where|city|cities|location|coverage)\b/.test(q)) {
+          return {
+            ctaRole: 'atleta',
+            text: en
+              ? 'Initial coverage opens across Cabo San Lucas and San José del Cabo, engineered to expand progressively into new cities by curated invitation.'
+              : 'La cobertura inicial arranca entre Cabo San Lucas y San José del Cabo, con una red diseñada para expandirse progresivamente a nuevas ciudades.'
+          };
+        }
+        if (/\b(3d|espacio|lugar|estacion|cama|reformer|bici|bicicleta|camilla|fila|filas|mapa|spot|station|bed|bike|court|line|queue)\b/.test(q)) {
+          return {
+            text: en
+              ? 'Preview the venue in 3D before stepping out and lock your exact bike, Pilates reformer, training rack, padel court or recovery bed — arriving straight in with zero queues.'
+              : 'Antes de salir abres el mapa espacial 3D de la sede para apartar tu bicicleta, cama de Pilates, estación, cancha o camilla exacta y llegar directo sin hacer fila.'
+          };
+        }
+        if (/\b(nivel|pilar|pilares|fuerza|zen|resistencia|agilidad|racha|rachas|cofre|cofres|premio|premios|trofeo|level|pillar|strength|endurance|agility|streak|chest|reward|trophy)\b/.test(q)) {
+          return {
+            text: en
+              ? 'Real workouts elevate Strength, Zen, Endurance and Agility. Keeping active streaks unlocks reward chests and trophies tied directly to your real consistency.'
+              : 'Tus sesiones reales elevan tu nivel en Fuerza, Zen, Resistencia y Agilidad. Mantener rachas activas desbloquea cofres con premios y trofeos ligados a tu constancia.'
+          };
+        }
+        if (/\b(comunidad|historia|historias|equipo|equipos|amigo|social|community|story|stories|squad|team)\b/.test(q)) {
+          return {
+            text: en
+              ? 'Connect with local athletes, organize squads for courts or group classes, and share real sessions via 24-hour venue stories.'
+              : 'Conecta con atletas de tu ciudad, organiza equipos para canchas o sesiones y comparte entrenamientos mediante historias efímeras de 24h desde cada sede.'
+          };
+        }
+        if (wantsClub || wantsSpec) {
+          return {
+            ctaRole: roleHint,
+            text: en
+              ? 'Kinetic delivers smart occupancy and verified scheduling for clubs, studios, courts and recovery clinics. Submit your venue details to apply for founding priority.'
+              : 'Kinetic impulsa a clubes, estudios, canchas y especialistas con ocupación inteligente y agenda verificada. Registra tu sede para evaluar tu ingreso fundador.'
+          };
+        }
+        if (/\b(app|ios|android|iphone|web|dispositivo|celular|device|mobile|download)\b/.test(q)) {
+          return {
+            text: en
+              ? 'Kinetic runs seamlessly across iOS, Android and mobile web browsers with live sync across reservations, 3D maps and progression.'
+              : 'Kinetic opera de forma nativa en iOS, Android y web móvil manteniendo tus reservas 3D, accesos y progreso sincronizados en tiempo real.'
+          };
+        }
+        if (/\b(privacidad|dato|datos|seguridad|privacy|data|security)\b/.test(q)) {
+          return {
+            text: en
+              ? 'Your details remain safeguarded by KineticApp S.A.S. exclusively to coordinate your early-access wave.'
+              : 'Tu información se resguarda bajo control exclusivo de KineticApp S.A.S. únicamente para coordinar tu invitación y avisos de apertura.'
+          };
+        }
+        if (/\b(invitacion|acceso|registro|espera|lista|invite|invitation|access|waitlist|join)\b/.test(q)) {
+          return {
+            ctaRole: 'atleta',
+            text: en
+              ? 'Invitations open in controlled waves. Add your name, email and 10-digit WhatsApp in the invitation card and we will notify you directly.'
+              : 'Las invitaciones se liberan por oleadas controladas. Deja tu nombre, correo y WhatsApp de 10 dígitos en la tarjeta de invitación para recibir tu turno.'
+          };
+        }
+        return {
+          ctaRole: 'atleta',
+          text: en
+            ? 'Kinetic unites 230+ fitness, court and recovery disciplines on one pass — with 3D spot selection before leaving home, four progression pillars, reward chests and community.'
+            : 'Kinetic conecta más de 230 disciplinas deportivas y de recuperación bajo un solo pase digital: reserva tu lugar exacto en 3D, sube de nivel en cuatro pilares y desbloquea cofres con premios.'
+        };
+      }
+
+      function renderConciergeStream(streamEl, isTyping) {
+        if (!streamEl) return;
+        streamEl.textContent = '';
+        state.chat.forEach(function (msg) {
+          var b = document.createElement('div');
+          b.className = 'c-msg ' + (msg.from === 'user' ? 'user' : 'ai');
+          var p = document.createElement('div');
+          p.textContent = msg.text;
+          b.appendChild(p);
+          if (msg.ctaRole) {
+            var cta = document.createElement('button');
+            cta.type = 'button';
+            cta.className = 'btn-pill btn-cyan';
+            cta.style.cssText = 'margin-top:10px;padding:9px 16px;font-size:12px;';
+            cta.textContent = I18N[state.lang].wlSubmit;
+            cta.addEventListener('click', function () {
+              closeSheet();
+              selectRole(msg.ctaRole);
+              document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+            });
+            b.appendChild(cta);
+          }
+          streamEl.appendChild(b);
+        });
+        if (isTyping) {
+          var tw = document.createElement('div');
+          tw.className = 'c-msg ai';
+          tw.innerHTML = '<div class="c-typing"><span></span><span></span><span></span></div>';
+          streamEl.appendChild(tw);
+        }
+        streamEl.scrollTop = streamEl.scrollHeight;
+      }
+
+      function openConciergeSheet() {
+        var isEn = state.lang === 'en';
+        sheetTag.textContent = isEn ? 'SMART CONCIERGE 24/7' : 'CONCIERGE INTELIGENTE 24/7';
+        sheetTitle.innerHTML = isEn ? '<span class="tone-bright">Ask</span> <span class="tone-titanium">Kinetic.</span>' : '<span class="tone-bright">Pregunta a</span> <span class="tone-titanium">Kinetic.</span>';
+        if (state.chat.length === 0) {
+          state.chat.push({
+            from: 'ai',
+            text: isEn
+              ? 'Welcome to Kinetic Concierge. Ask about +230 disciplines, 3D spot selection, levels & reward chests, or how founding clubs join.'
+              : 'Bienvenido al Concierge de Kinetic. Pregúntame sobre las +230 disciplinas, cómo elegir tu lugar en 3D, niveles y cofres con premios o cómo sumar tu sede.'
+          });
+        }
+        var chips = isEn
+          ? [['What is Kinetic?', 'What is Kinetic?'], ['3D Selection', 'How does 3D spot selection work?'], ['Level & Chests', 'How do levels and reward chests work?'], ['I Own a Club or Clinic', 'I own a club or clinic']]
+          : [['¿Qué es Kinetic?', '¿Qué es Kinetic?'], ['Selección 3D', '¿Cómo funciona la selección 3D?'], ['Nivel y Cofres', '¿Cómo funcionan los niveles y cofres con premios?'], ['Tengo un Club o Consultorio', 'Tengo un club o consultorio']];
+
+        sheetBody.textContent = '';
+        var chipsRow = document.createElement('div');
+        chipsRow.className = 'concierge-chips';
+        var streamEl = document.createElement('div');
+        streamEl.className = 'concierge-stream';
+        var formEl = document.createElement('form');
+        formEl.className = 'concierge-form';
+        var inputEl = document.createElement('input');
+        inputEl.type = 'text';
+        inputEl.className = 'concierge-input';
+        inputEl.placeholder = isEn ? 'Ask anything...' : 'Escribe tu pregunta...';
+        var sendBtn = document.createElement('button');
+        sendBtn.type = 'submit';
+        sendBtn.className = 'concierge-send';
+        sendBtn.setAttribute('aria-label', isEn ? 'Send' : 'Enviar');
+        sendBtn.textContent = '↑';
+        formEl.appendChild(inputEl);
+        formEl.appendChild(sendBtn);
+
+        function sendQuery(rawTxt) {
+          var q = String(rawTxt || '').trim();
+          if (!q || state.conciergeTyping) return;
+          state.chat.push({ from: 'user', text: q });
+          inputEl.value = '';
+          renderConciergeStream(streamEl, true);
+          var reply = resolveConciergeAI(q, state.lang);
+          state.conciergeTyping = setTimeout(function () {
+            state.conciergeTyping = null;
+            state.chat.push({ from: 'ai', text: reply.text, ctaRole: reply.ctaRole });
+            renderConciergeStream(streamEl, false);
+          }, 420);
+        }
+
+        chips.forEach(function (c) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'concierge-chip';
+          btn.textContent = c[0];
+          btn.addEventListener('click', function () { sendQuery(c[1]); });
+          chipsRow.appendChild(btn);
+        });
+        formEl.addEventListener('submit', function (ev) { ev.preventDefault(); sendQuery(inputEl.value); });
+
+        sheetBody.appendChild(chipsRow);
+        sheetBody.appendChild(streamEl);
+        sheetBody.appendChild(formEl);
+        renderConciergeStream(streamEl, false);
+        overlay.classList.add('open');
+        updateFabVisibility();
+      }
+      document.querySelectorAll('[data-detail]').forEach(function (el) {
+        el.addEventListener('click', function () { openDetailSheet(el.getAttribute('data-detail')); });
+      });
+      document.getElementById('conciergeFab').addEventListener('click', openConciergeSheet);
+      document.getElementById('drawerConciergeBtn').addEventListener('click', function () { setDrawer(false); openConciergeSheet(); });
+      document.getElementById('sheetCloseBtn').addEventListener('click', closeSheet);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSheet(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeSheet(); setDrawer(false); } });
+
+      var waitlistSection = document.getElementById('waitlist');
+      if (waitlistSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          state.waitlistVisible = Boolean(entries[0] && entries[0].isIntersecting);
+          updateFabVisibility();
+        }, { threshold: 0.25 }).observe(waitlistSection);
+      }
+      document.addEventListener('focusin', function (e) {
+        if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) { state.inputFocused = true; updateFabVisibility(); }
+      });
+      document.addEventListener('focusout', function () {
+        setTimeout(function () {
+          var active = document.activeElement;
+          state.inputFocused = Boolean(active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
+          updateFabVisibility();
+        }, 120);
+      });
+
+      // Selector de Rol & Botones Hero
+      function selectRole(next) {
+        state.role = next;
+        document.querySelectorAll('.seg-btn').forEach(function (b) {
+          b.classList.toggle('active', b.getAttribute('data-role') === next);
+        });
+        updateFormPlaceholders();
+      }
+      document.querySelectorAll('.seg-btn').forEach(function (b) {
+        b.addEventListener('click', function () { selectRole(b.getAttribute('data-role')); });
+      });
+      document.getElementById('heroBtnAthlete').addEventListener('click', function () {
+        selectRole('atleta');
+        document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+      });
+      document.getElementById('heroBtnClub').addEventListener('click', function () {
+        selectRole('club');
+        document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // Envío Real a Supabase (public.fundadores_waitlist)
+      var form = document.getElementById('waitlistForm');
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (state.busy) return;
+        var nowMs = Date.now();
+        var dict = I18N[state.lang];
+        var errEl = document.getElementById('formErr');
+        if (nowMs < (state.cooldownUntil || 0)) {
+          errEl.textContent = state.lang === 'en' ? 'Please wait a few seconds before submitting again.' : 'Espera unos segundos antes de volver a enviar.';
+          errEl.style.display = 'block';
+          return;
+        }
+        var btn = document.getElementById('submitBtn');
+        var rawName = document.getElementById('regName').value.trim();
+        var rawEmail = document.getElementById('regEmail').value.trim().toLowerCase();
+        var rawWa = document.getElementById('regWhatsapp').value.trim();
+        var digits = rawWa.replace(/\D/g, '');
+        errEl.style.display = 'none';
+
+        if (rawName.length < 2) { errEl.textContent = dict.errName; errEl.style.display = 'block'; return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(rawEmail)) { errEl.textContent = dict.errEmail; errEl.style.display = 'block'; return; }
+        if (digits.length < 10 || digits.length > 15) { errEl.textContent = dict.errWa; errEl.style.display = 'block'; return; }
+
+        state.cooldownUntil = nowMs + 10000;
+
+        var tipoPerfil = state.role === 'club' ? 'Club / Estudio B2B' : state.role === 'especialista' ? 'Especialista / Consultorio B2B' : 'Atleta Acceso Prioritario';
+        var discTags = ['Acceso Anticipado Web'];
+        if (state.sede) discTags.push('Sede: ' + state.sede);
+        if (state.ref) discTags.push('Ref: ' + state.ref);
+        var discVal = discTags.join(' • ');
+        var zoneNeutral = 'Acceso Prioritario Web';
+
+        state.busy = true;
+        btn.disabled = true;
+        btn.textContent = '...';
+
+        var controller = new AbortController();
+        var timer = setTimeout(function () { controller.abort(); }, 10000);
+        try {
+          var endpoint = SUPABASE_URL + '/rest/v1/fundadores_waitlist';
+          var headers = {
+            'Content-Type': 'application/json',
+            apikey: SUPABASE_KEY,
+            Authorization: 'Bearer ' + SUPABASE_KEY,
+            Prefer: 'return=minimal'
+          };
+          var resp = await fetch(endpoint, {
+            method: 'POST', headers: headers, signal: controller.signal,
+            body: JSON.stringify({
+              nombre: rawName, email: rawEmail, whatsapp: digits,
+              perfil_interes: tipoPerfil, zona: zoneNeutral, disciplina_favorita: discVal, origen: 'kineticapp.com.mx'
+            })
+          });
+          if (!resp.ok && resp.status !== 201 && resp.status !== 409 && resp.status === 400) {
+            resp = await fetch(endpoint, {
+              method: 'POST', headers: headers, signal: controller.signal,
+              body: JSON.stringify({
+                nombre: rawName, email: rawEmail, telefono: digits,
+                tipo_perfil: tipoPerfil, ciudad_zona: zoneNeutral, disciplina_interes: discVal, origen: 'kineticapp.com.mx'
+              })
+            });
+          }
+          if (resp.ok || resp.status === 201 || resp.status === 409) {
+            form.style.display = 'none';
+            document.getElementById('formSuccess').style.display = 'block';
+          } else {
+            throw new Error('HTTP_' + resp.status);
+          }
+        } catch (_) {
+          errEl.textContent = dict.errNet;
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = dict.wlSubmit;
+        } finally {
+          clearTimeout(timer);
+          state.busy = false;
+        }
+      });
+
+      // Acordeones del Footer
+      document.querySelectorAll('.acc-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var parent = btn.parentElement;
+          var wasOpen = parent.classList.contains('open');
+          document.querySelectorAll('.acc-item').forEach(function (it) { it.classList.remove('open'); });
+          if (!wasOpen) parent.classList.add('open');
+        });
+      });
+
+      // Toggle Idioma ES | EN
+      var toggleLang = function () { applyLang(state.lang === 'es' ? 'en' : 'es'); };
+      document.getElementById('langBtn').addEventListener('click', toggleLang);
+      document.getElementById('footerLangBtn').addEventListener('click', toggleLang);
+      applyLang('es');
+    })();
+  </script>
+</body>
+</html>

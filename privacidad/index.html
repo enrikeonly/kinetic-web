@@ -1,158 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Aviso de Privacidad — KINETIC | KineticApp S.A.S.</title>
-  <meta name="theme-color" content="#050505" />
-  <link rel="icon" type="image/png" href="/kinetic-mark.png" />
-  <link rel="apple-touch-icon" href="/kinetic-mark.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root { --bg:#050505; --panel:#090C12; --text:#F5F7FA; --muted:#94A3B8; --cyan:#00F0FF; --purple:#A855F7; --border:rgba(255,255,255,.10); }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
-    .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(5,5,5,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;font-size:15px}
-    .brand-mark{width:30px;height:30px;border-radius:8px;background:#050505;border:1px solid rgba(0,240,255,.28);overflow:hidden;display:inline-flex;flex-shrink:0}
-    .actions{display:flex;align-items:center;gap:10px}
-    .pill{border:1px solid var(--border);background:rgba(15,20,30,.75);color:var(--text);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none}
-    .pill-cyan{border-color:rgba(0,240,255,.4);color:var(--cyan)}
-    .wrap{max-width:820px;margin:40px auto 72px;padding:0 20px}
-    .card{background:linear-gradient(160deg,rgba(14,18,28,.9),rgba(9,12,18,.96));border:1px solid var(--border);border-radius:24px;padding:32px 28px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
-    .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
-    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,36px);line-height:1.15;margin-bottom:14px}
-    .lead{color:var(--muted);font-size:15px;margin-bottom:26px}
-    h2{font-family:'Space Grotesk',sans-serif;font-size:18px;color:#E2E8F0;margin:24px 0 8px}
-    p,li{color:#CBD5E1;font-size:14.5px;margin-bottom:10px}
-    ul{padding-left:20px;margin-bottom:12px}
-    a{color:var(--cyan)}
-    .foot{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:12.5px;color:#64748B}
-  </style>
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="/">
-      <span class="brand-mark"><img src="/kinetic-mark.png" alt="Kinetic" width="30" height="30" style="width:100%;height:100%;object-fit:cover;display:block" /></span>
-      <span>KINETIC</span>
-    </a>
-    <div class="actions">
-      <button id="langBtn" class="pill" type="button">ES | EN</button>
-      <a class="pill pill-cyan" id="backBtn" href="/">Volver al inicio</a>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <article class="card">
-      <span class="eyebrow" id="eyebrow">LFPDPPP • DERECHOS ARCO</span>
-      <h1 id="title">Aviso de Privacidad Integral</h1>
-      <p class="lead" id="lead">KineticApp S.A.S., con domicilio en México, es responsable del tratamiento y protección de los datos personales recabados a través de kineticapp.com.mx.</p>
-
-      <h2 id="h1">1. Datos personales recabados</h2>
-      <p id="p1">Únicamente solicitamos la información mínima indispensable para gestionar tu solicitud de acceso anticipado o vinculación como sede/especialista: nombre completo o razón social, correo electrónico, teléfono de contacto, perfil de interés, zona geográfica y disciplina deportiva o de bienestar.</p>
-
-      <h2 id="h2">2. Finalidades del tratamiento</h2>
-      <ul id="l2">
-        <li>Evaluar y priorizar invitaciones de acceso anticipado al ecosistema KINETIC.</li>
-        <li>Contactarte por correo o mensajería directa respecto a la disponibilidad de tu cuenta o sede aliada.</li>
-        <li>Proteger la integridad de la red contra registros automatizados o duplicados.</li>
-      </ul>
-
-      <h2 id="h3">3. Transferencia y resguardo de datos</h2>
-      <p id="p3">KineticApp S.A.S. no vende ni comercializa tus datos personales con terceros. La información se almacena bajo controles de acceso restringido y cifrado en tránsito.</p>
-
-      <h2 id="h4">4. Ejercicio de Derechos ARCO y revocación</h2>
-      <p id="p4">Puedes ejercer tus derechos de Acceso, Rectificación, Cancelación u Oposición (ARCO), así como revocar tu consentimiento, enviando una solicitud clara al correo oficial <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a> indicando tu nombre completo y el correo electrónico registrado.</p>
-
-      <div class="foot">
-        <span>© 2026 KineticApp S.A.S. • México.</span>
-        <a id="termsLink" href="/terminos/">Términos de Uso</a>
-      </div>
-    </article>
-  </main>
-
-  <script>
-    (function () {
-      var lang = 'es';
-      var dict = {
-        es: {
-          back: 'Volver al inicio',
-          eyebrow: 'LFPDPPP • DERECHOS ARCO',
-          title: 'Aviso de Privacidad Integral',
-          lead: 'KineticApp S.A.S., con domicilio en México, es responsable del tratamiento y protección de los datos personales recabados a través de kineticapp.com.mx.',
-          h1: '1. Datos personales recabados',
-          p1: 'Únicamente solicitamos la información mínima indispensable para gestionar tu solicitud de acceso anticipado o vinculación como sede/especialista: nombre completo o razón social, correo electrónico, teléfono de contacto, perfil de interés, zona geográfica y disciplina deportiva o de bienestar.',
-          h2: '2. Finalidades del tratamiento',
-          l2: [
-            'Evaluar y priorizar invitaciones de acceso anticipado al ecosistema KINETIC.',
-            'Contactarte por correo o mensajería directa respecto a la disponibilidad de tu cuenta o sede aliada.',
-            'Proteger la integridad de la red contra registros automatizados o duplicados.'
-          ],
-          h3: '3. Transferencia y resguardo de datos',
-          p3: 'KineticApp S.A.S. no vende ni comercializa tus datos personales con terceros. La información se almacena bajo controles de acceso restringido y cifrado en tránsito.',
-          h4: '4. Ejercicio de Derechos ARCO y revocación',
-          p4Prefix: 'Puedes ejercer tus derechos de Acceso, Rectificación, Cancelación u Oposición (ARCO), así como revocar tu consentimiento, enviando una solicitud clara al correo oficial ',
-          p4Suffix: ' indicando tu nombre completo y el correo electrónico registrado.',
-          terms: 'Términos de Uso'
-        },
-        en: {
-          back: 'Back to Home',
-          eyebrow: 'LFPDPPP • ARCO PRIVACY RIGHTS',
-          title: 'Comprehensive Privacy Notice',
-          lead: 'KineticApp S.A.S., domiciled in Mexico, is responsible for protecting and processing personal data collected through kineticapp.com.mx.',
-          h1: '1. Personal data collected',
-          p1: 'We request only the minimum details needed to manage your early-access request or partner studio onboarding: full name or business entity, email address, phone number, profile type, area, and sport or wellness discipline.',
-          h2: '2. Purpose of processing',
-          l2: [
-            'Review and prioritize early-access invitations to the KINETIC ecosystem.',
-            'Contact you via email or direct message regarding availability for your account or partner venue.',
-            'Protect network integrity against automated or duplicate submissions.'
-          ],
-          h3: '3. Data protection and transfers',
-          p3: 'KineticApp S.A.S. never sells or trades personal data with third parties. All records are stored behind strict access controls and encrypted in transit.',
-          h4: '4. ARCO Rights and consent withdrawal',
-          p4Prefix: 'You may exercise your Access, Rectification, Cancellation, or Opposition (ARCO) rights, or withdraw consent, by writing to ',
-          p4Suffix: ' with your full name and registered email address.',
-          terms: 'Terms of Use'
-        }
-      };
-      function render() {
-        var t = dict[lang];
-        document.documentElement.lang = lang;
-        document.getElementById('backBtn').textContent = t.back;
-        document.getElementById('eyebrow').textContent = t.eyebrow;
-        document.getElementById('title').textContent = t.title;
-        document.getElementById('lead').textContent = t.lead;
-        document.getElementById('h1').textContent = t.h1;
-        document.getElementById('p1').textContent = t.p1;
-        document.getElementById('h2').textContent = t.h2;
-        var ul = document.getElementById('l2');
-        ul.innerHTML = '';
-        t.l2.forEach(function (item) {
-          var li = document.createElement('li');
-          li.textContent = item;
-          ul.appendChild(li);
-        });
-        document.getElementById('h3').textContent = t.h3;
-        document.getElementById('p3').textContent = t.p3;
-        document.getElementById('h4').textContent = t.h4;
-        var p4 = document.getElementById('p4');
-        p4.textContent = '';
-        p4.appendChild(document.createTextNode(t.p4Prefix));
-        var mail = document.createElement('a');
-        mail.href = 'mailto:soporte@kineticapp.com.mx';
-        mail.textContent = 'soporte@kineticapp.com.mx';
-        p4.appendChild(mail);
-        p4.appendChild(document.createTextNode(t.p4Suffix));
-        document.getElementById('termsLink').textContent = t.terms;
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#050505" />
+    <title>Kinetic — Red Élite de Entrenamiento</title>
+    <style id="kinetic-critical-boot">
+      html,
+      body,
+      #root {
+        background-color: #050505;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        min-height: 100%;
       }
-      document.getElementById('langBtn').addEventListener('click', function () {
-        lang = lang === 'es' ? 'en' : 'es';
-        render();
-      });
-    })();
-  </script>
+      html[data-kinetic-theme='light'],
+      html[data-kinetic-theme='light'] body,
+      html[data-kinetic-theme='light'] #root,
+      html[data-theme='light'],
+      html[data-theme='light'] body,
+      html[data-theme='light'] #root {
+        background-color: #ecf1f8;
+      }
+      body {
+        overflow: hidden;
+      }
+      #root {
+        display: flex;
+        flex: 1;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          if (window.location.hostname === 'www.kineticapp.com.mx') {
+            window.location.replace('https://kineticapp.com.mx' + window.location.pathname + window.location.search + window.location.hash);
+            return;
+          }
+          if (window.location.pathname.replace(/\/+$/, '') === '/oauth' && window.location.hash && window.location.hash.indexOf('id_token=') !== -1) {
+            var hp = new URLSearchParams(window.location.hash.slice(1));
+            var idTok = String(hp.get('id_token') || '').trim();
+            var st = String(hp.get('state') || '').trim();
+            if (/^knt1\.native\.(b2c|b2b)\.[0-9a-f]{32}$/.test(st) && /^[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}$/.test(idTok)) {
+              if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', '/oauth');
+              }
+              window.location.replace('kinetic://login#id_token=' + encodeURIComponent(idTok) + '&state=' + encodeURIComponent(st));
+              return;
+            }
+          }
+        } catch (e) {}
+        try {
+          var t =
+            window.localStorage &&
+            window.localStorage.getItem('@kinetic_user_theme_pref') === 'light'
+              ? 'light'
+              : 'dark';
+          var bg = t === 'light' ? '#ECF1F8' : '#050505';
+          var r = document.documentElement;
+          r.setAttribute('data-kinetic-theme', t);
+          r.dataset.theme = t;
+          r.style.backgroundColor = bg;
+          var l =
+            window.localStorage &&
+            (window.localStorage.getItem('@kinetic_language_v25') ||
+              window.localStorage.getItem('@kinetic_user_lang_pref'));
+          if (l === 'es' || l === 'en') r.lang = l;
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', bg);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="manifest" href="/manifest.json?v=274" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=274" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=274" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=274" />
+    <link rel="shortcut icon" href="/favicon.png?v=274" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=274" />
+    <meta property="og:image" content="/icon-512.png?v=274" />
+  <meta name="theme-color" content="#00F0FF">
+<link rel="icon" href="/favicon.ico"/></head>
+  <body>
+    <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
+    <div id="root"></div>
+  <script src="/_expo/static/js/web/entry-a748139bf773e7322f72f8a68921ea59.js" defer></script>
 </body>
 </html>

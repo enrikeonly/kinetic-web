@@ -1,158 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Términos de Uso — KINETIC | KineticApp S.A.S.</title>
-  <meta name="theme-color" content="#050505" />
-  <link rel="icon" type="image/png" href="/kinetic-mark.png" />
-  <link rel="apple-touch-icon" href="/kinetic-mark.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root { --bg:#050505; --panel:#090C12; --text:#F5F7FA; --muted:#94A3B8; --cyan:#00F0FF; --purple:#A855F7; --border:rgba(255,255,255,.10); }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
-    .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(5,5,5,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.14em;font-size:15px}
-    .brand-mark{width:30px;height:30px;border-radius:8px;background:#050505;border:1px solid rgba(0,240,255,.28);overflow:hidden;display:inline-flex;flex-shrink:0}
-    .actions{display:flex;align-items:center;gap:10px}
-    .pill{border:1px solid var(--border);background:rgba(15,20,30,.75);color:var(--text);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none}
-    .pill-cyan{border-color:rgba(0,240,255,.4);color:var(--cyan)}
-    .wrap{max-width:820px;margin:40px auto 72px;padding:0 20px}
-    .card{background:linear-gradient(160deg,rgba(14,18,28,.9),rgba(9,12,18,.96));border:1px solid var(--border);border-radius:24px;padding:32px 28px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
-    .eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--purple);margin-bottom:10px}
-    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,36px);line-height:1.15;margin-bottom:14px}
-    .lead{color:var(--muted);font-size:15px;margin-bottom:26px}
-    h2{font-family:'Space Grotesk',sans-serif;font-size:18px;color:#E2E8F0;margin:24px 0 8px}
-    p,li{color:#CBD5E1;font-size:14.5px;margin-bottom:10px}
-    ul{padding-left:20px;margin-bottom:12px}
-    a{color:var(--cyan)}
-    .foot{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:12.5px;color:#64748B}
-  </style>
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="/">
-      <span class="brand-mark"><img src="/kinetic-mark.png" alt="Kinetic" width="30" height="30" style="width:100%;height:100%;object-fit:cover;display:block" /></span>
-      <span>KINETIC</span>
-    </a>
-    <div class="actions">
-      <button id="langBtn" class="pill" type="button">ES | EN</button>
-      <a class="pill pill-cyan" id="backBtn" href="/">Volver al inicio</a>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <article class="card">
-      <span class="eyebrow" id="eyebrow">KINETICAPP S.A.S. • MARCO GENERAL</span>
-      <h1 id="title">Términos de Uso y Acceso Anticipado</h1>
-      <p class="lead" id="lead">El acceso y navegación en kineticapp.com.mx, así como el envío de solicitudes de pre-registro para atletas, clubes y especialistas, se rigen por estos términos operados por KineticApp S.A.S.</p>
-
-      <h2 id="h1">1. Naturaleza del registro anticipado</h2>
-      <p id="p1">El registro en la lista de acceso anticipado es gratuito y de carácter informativo. El envío del formulario no crea obligación comercial inmediata ni garantiza asignación automática de cupo hasta recibir confirmación oficial.</p>
-
-      <h2 id="h2">2. Conducta y veracidad</h2>
-      <ul id="l2">
-        <li>El solicitante se compromete a proporcionar datos verídicos y vigentes.</li>
-        <li>Queda prohibido el uso de herramientas automatizadas para saturar o alterar el sitio público.</li>
-        <li>Las activaciones regionales se liberan por invitación progresiva conforme a disponibilidad operativa.</li>
-      </ul>
-
-      <h2 id="h3">3. Propiedad intelectual</h2>
-      <p id="p3">Los textos, arquitectura visual, interfaces, código fuente y signos distintivos mostrados en este sitio pertenecen exclusivamente a KineticApp S.A.S.</p>
-
-      <h2 id="h4">4. Legislación aplicable y contacto</h2>
-      <p id="p4">Estos términos se interpretan conforme a las leyes aplicables de los Estados Unidos Mexicanos. Para dudas legales o de soporte escribe a <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a>.</p>
-
-      <div class="foot">
-        <span>© 2026 KineticApp S.A.S. • México.</span>
-        <a id="privacyLink" href="/privacidad/">Aviso de Privacidad</a>
-      </div>
-    </article>
-  </main>
-
-  <script>
-    (function () {
-      var lang = 'es';
-      var dict = {
-        es: {
-          back: 'Volver al inicio',
-          eyebrow: 'KINETICAPP S.A.S. • MARCO GENERAL',
-          title: 'Términos de Uso y Acceso Anticipado',
-          lead: 'El acceso y navegación en kineticapp.com.mx, así como el envío de solicitudes de pre-registro para atletas, clubes y especialistas, se rigen por estos términos operados por KineticApp S.A.S.',
-          h1: '1. Naturaleza del registro anticipado',
-          p1: 'El registro en la lista de acceso anticipado es gratuito y de carácter informativo. El envío del formulario no crea obligación comercial inmediata ni garantiza asignación automática de cupo hasta recibir confirmación oficial.',
-          h2: '2. Conducta y veracidad',
-          l2: [
-            'El solicitante se compromete a proporcionar datos verídicos y vigentes.',
-            'Queda prohibido el uso de herramientas automatizadas para saturar o alterar el sitio público.',
-            'Las activaciones regionales se liberan por invitación progresiva conforme a disponibilidad operativa.'
-          ],
-          h3: '3. Propiedad intelectual',
-          p3: 'Los textos, arquitectura visual, interfaces, código fuente y signos distintivos mostrados en este sitio pertenecen exclusivamente a KineticApp S.A.S.',
-          h4: '4. Legislación aplicable y contacto',
-          p4Prefix: 'Estos términos se interpretan conforme a las leyes aplicables de los Estados Unidos Mexicanos. Para dudas legales o de soporte escribe a ',
-          p4Suffix: '.',
-          privacy: 'Aviso de Privacidad'
-        },
-        en: {
-          back: 'Back to Home',
-          eyebrow: 'KINETICAPP S.A.S. • GENERAL TERMS',
-          title: 'Terms of Use & Early Access',
-          lead: 'Access to kineticapp.com.mx and submission of early-access pre-registration requests for athletes, clubs, and specialists are governed by these terms operated by KineticApp S.A.S.',
-          h1: '1. Nature of early pre-registration',
-          p1: 'Early-access registration is free and informational. Submitting the form creates no immediate commercial obligation and does not guarantee spot allocation until official confirmation is issued.',
-          h2: '2. Conduct and accuracy',
-          l2: [
-            'Applicants agree to submit accurate and up-to-date contact information.',
-            'Automated tools aimed at scraping, flooding, or disrupting the public portal are strictly prohibited.',
-            'Regional onboarding opens progressively by invitation according to operational readiness.'
-          ],
-          h3: '3. Intellectual property',
-          p3: 'All copy, visual architecture, interfaces, source code, and distinctive emblems presented on this site belong exclusively to KineticApp S.A.S.',
-          h4: '4. Governing law and contact',
-          p4Prefix: 'These terms are governed by the applicable laws of Mexico. For legal or support inquiries, write to ',
-          p4Suffix: '.',
-          privacy: 'Privacy Notice'
-        }
-      };
-      function render() {
-        var t = dict[lang];
-        document.documentElement.lang = lang;
-        document.getElementById('backBtn').textContent = t.back;
-        document.getElementById('eyebrow').textContent = t.eyebrow;
-        document.getElementById('title').textContent = t.title;
-        document.getElementById('lead').textContent = t.lead;
-        document.getElementById('h1').textContent = t.h1;
-        document.getElementById('p1').textContent = t.p1;
-        document.getElementById('h2').textContent = t.h2;
-        var ul = document.getElementById('l2');
-        ul.innerHTML = '';
-        t.l2.forEach(function (item) {
-          var li = document.createElement('li');
-          li.textContent = item;
-          ul.appendChild(li);
-        });
-        document.getElementById('h3').textContent = t.h3;
-        document.getElementById('p3').textContent = t.p3;
-        document.getElementById('h4').textContent = t.h4;
-        var p4 = document.getElementById('p4');
-        p4.textContent = '';
-        p4.appendChild(document.createTextNode(t.p4Prefix));
-        var mail = document.createElement('a');
-        mail.href = 'mailto:soporte@kineticapp.com.mx';
-        mail.textContent = 'soporte@kineticapp.com.mx';
-        p4.appendChild(mail);
-        p4.appendChild(document.createTextNode(t.p4Suffix));
-        document.getElementById('privacyLink').textContent = t.privacy;
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#050505" />
+    <title>Kinetic — Red Élite de Entrenamiento</title>
+    <style id="kinetic-critical-boot">
+      html,
+      body,
+      #root {
+        background-color: #050505;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        min-height: 100%;
       }
-      document.getElementById('langBtn').addEventListener('click', function () {
-        lang = lang === 'es' ? 'en' : 'es';
-        render();
-      });
-    })();
-  </script>
+      html[data-kinetic-theme='light'],
+      html[data-kinetic-theme='light'] body,
+      html[data-kinetic-theme='light'] #root,
+      html[data-theme='light'],
+      html[data-theme='light'] body,
+      html[data-theme='light'] #root {
+        background-color: #ecf1f8;
+      }
+      body {
+        overflow: hidden;
+      }
+      #root {
+        display: flex;
+        flex: 1;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          if (window.location.hostname === 'www.kineticapp.com.mx') {
+            window.location.replace('https://kineticapp.com.mx' + window.location.pathname + window.location.search + window.location.hash);
+            return;
+          }
+          if (window.location.pathname.replace(/\/+$/, '') === '/oauth' && window.location.hash && window.location.hash.indexOf('id_token=') !== -1) {
+            var hp = new URLSearchParams(window.location.hash.slice(1));
+            var idTok = String(hp.get('id_token') || '').trim();
+            var st = String(hp.get('state') || '').trim();
+            if (/^knt1\.native\.(b2c|b2b)\.[0-9a-f]{32}$/.test(st) && /^[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}$/.test(idTok)) {
+              if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', '/oauth');
+              }
+              window.location.replace('kinetic://login#id_token=' + encodeURIComponent(idTok) + '&state=' + encodeURIComponent(st));
+              return;
+            }
+          }
+        } catch (e) {}
+        try {
+          var t =
+            window.localStorage &&
+            window.localStorage.getItem('@kinetic_user_theme_pref') === 'light'
+              ? 'light'
+              : 'dark';
+          var bg = t === 'light' ? '#ECF1F8' : '#050505';
+          var r = document.documentElement;
+          r.setAttribute('data-kinetic-theme', t);
+          r.dataset.theme = t;
+          r.style.backgroundColor = bg;
+          var l =
+            window.localStorage &&
+            (window.localStorage.getItem('@kinetic_language_v25') ||
+              window.localStorage.getItem('@kinetic_user_lang_pref'));
+          if (l === 'es' || l === 'en') r.lang = l;
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', bg);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="manifest" href="/manifest.json?v=274" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=274" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=274" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=274" />
+    <link rel="shortcut icon" href="/favicon.png?v=274" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=274" />
+    <meta property="og:image" content="/icon-512.png?v=274" />
+  <meta name="theme-color" content="#00F0FF">
+<link rel="icon" href="/favicon.ico"/></head>
+  <body>
+    <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
+    <div id="root"></div>
+  <script src="/_expo/static/js/web/entry-a748139bf773e7322f72f8a68921ea59.js" defer></script>
 </body>
 </html>
