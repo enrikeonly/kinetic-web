@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 01: CORE, CONFIG, AUTH, LOGIN/REGISTRO, MOTOR 3D Y LANDING WEB</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-21T12:35:08.515Z | Total archivos en este módulo: 130</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-21T19:02:30.997Z | Total archivos en este módulo: 130</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`app.config.js`</li>
 <li>`eas.json`</li>
@@ -153,7 +153,7 @@ export default {
   expo: {
     name: &#39;Kinetic&#39;,
     slug: &#39;kinetic&#39;,
-    version: &#39;2.8.0&#39;,
+    version: &#39;2.8.1&#39;,
     orientation: &#39;portrait&#39;,
     icon: &#39;./assets/logo.png&#39;,
     scheme: &#39;kinetic&#39;,
@@ -280,12 +280,7 @@ export default {
       },
       &quot;env&quot;: {
         &quot;EXPO_PUBLIC_SUPABASE_URL&quot;: &quot;https://gcppxrlzxlgkuapktxvl.supabase.co&quot;,
-        &quot;EXPO_PUBLIC_SUPABASE_ANON_KEY&quot;: &quot;&lt;REDACTED_JWT&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_API_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_IOS_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY&quot;: &quot;&lt;REDACTED_STRIPE_KEY&gt;&quot;
+        &quot;EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID&quot;: &quot;702074850389-v61e4bbha3nc7m0cch2si5panjnqt7r1.apps.googleusercontent.com&quot;
       }
     },
     &quot;preview&quot;: {
@@ -295,12 +290,7 @@ export default {
       },
       &quot;env&quot;: {
         &quot;EXPO_PUBLIC_SUPABASE_URL&quot;: &quot;https://gcppxrlzxlgkuapktxvl.supabase.co&quot;,
-        &quot;EXPO_PUBLIC_SUPABASE_ANON_KEY&quot;: &quot;&lt;REDACTED_JWT&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_API_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_IOS_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY&quot;: &quot;&lt;REDACTED_STRIPE_KEY&gt;&quot;
+        &quot;EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID&quot;: &quot;702074850389-v61e4bbha3nc7m0cch2si5panjnqt7r1.apps.googleusercontent.com&quot;
       }
     },
     &quot;production&quot;: {
@@ -312,12 +302,7 @@ export default {
       },
       &quot;env&quot;: {
         &quot;EXPO_PUBLIC_SUPABASE_URL&quot;: &quot;https://gcppxrlzxlgkuapktxvl.supabase.co&quot;,
-        &quot;EXPO_PUBLIC_SUPABASE_ANON_KEY&quot;: &quot;&lt;REDACTED_JWT&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_API_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_IOS_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY&quot;: &quot;&lt;REDACTED_MAPS_KEY&gt;&quot;,
-        &quot;EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY&quot;: &quot;&lt;REDACTED_STRIPE_KEY&gt;&quot;
+        &quot;EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID&quot;: &quot;702074850389-v61e4bbha3nc7m0cch2si5panjnqt7r1.apps.googleusercontent.com&quot;
       }
     }
   }
@@ -327,7 +312,7 @@ export default {
 <pre><code class="language-json">{
   &quot;name&quot;: &quot;kinetic&quot;,
   &quot;main&quot;: &quot;expo-router/entry&quot;,
-  &quot;version&quot;: &quot;2.8.0&quot;,
+  &quot;version&quot;: &quot;2.8.1&quot;,
   &quot;dependencies&quot;: {
     &quot;@expo/ui&quot;: &quot;~57.0.12&quot;,
     &quot;@expo/vector-icons&quot;: &quot;^15.0.2&quot;,
@@ -2618,15 +2603,8 @@ import {
   validateSupabaseAuthorizeUrl,
 } from &#39;../../services/kineticWebOAuthPopupHelper&#39;;
 
-interface NodeFsModule {
-  existsSync(p: string): boolean;
-  readdirSync(p: string, opts: { withFileTypes: true }): { name: string; isDirectory(): boolean }[];
-  readFileSync(p: string, enc: &#39;utf8&#39;): string;
-}
-interface NodePathModule {
-  resolve(...parts: string[]): string;
-  join(...parts: string[]): string;
-}
+interface NodeFsModule { existsSync(p: string): boolean; readdirSync(p: string, opts: { withFileTypes: true }): { name: string; isDirectory(): boolean }[]; readFileSync(p: string, enc: &#39;utf8&#39;): string; }
+interface NodePathModule { resolve(...parts: string[]): string; join(...parts: string[]): string; dirname(p: string): string; }
 declare const require: (id: string) =&gt; unknown;
 declare const __dirname: string;
 declare const describe: (name: string, fn: () =&gt; void) =&gt; void;
@@ -2683,7 +2661,7 @@ const scanDirFiles = (relDir: string, out: string[] = []): string[] =&gt; {
   return out;
 };
 
-describe(&#39;Paso 13 Integral v2.8.0 — Identidad Corporativa Pura + Paquete com.kineticapp.mx + Google OIDC Directo (500x)&#39;, () =&gt; {
+describe(&#39;Paso 13 Integral v2.8.1 — Identidad Corporativa Pura + Paquete com.kineticapp.mx + Google OIDC Directo (500x)&#39;, () =&gt; {
   it(&#39;Propiedad 1: Cero nombres/usuarios personales en src/, app.config.js, eas.json, public/, scripts/ y Edge Functions + paquete com.kineticapp.mx&#39;, () =&gt; {
     const targets = [
       &#39;app.config.js&#39;,
@@ -2702,7 +2680,7 @@ describe(&#39;Paso 13 Integral v2.8.0 — Identidad Corporativa Pura + Paquete c
     }
 
     const appCfg = fs.readFileSync(path.join(ROOT, &#39;app.config.js&#39;), &#39;utf8&#39;);
-    assertTrue(appCfg.includes(&quot;version: &#39;2.8.0&#39;&quot;), &#39;app.config.js version debe ser 2.8.0&#39;);
+    assertTrue(appCfg.includes(&quot;version: &#39;2.8.1&#39;&quot;), &#39;app.config.js version debe ser 2.8.1&#39;);
     assertTrue(appCfg.includes(&quot;bundleIdentifier: &#39;com.kineticapp.mx&#39;&quot;), &#39;ios.bundleIdentifier debe ser com.kineticapp.mx&#39;);
     assertTrue(appCfg.includes(&quot;package: &#39;com.kineticapp.mx&#39;&quot;), &#39;android.package debe ser com.kineticapp.mx&#39;);
     assertEq(/\bowner\s*:/.test(appCfg), false, &#39;app.config.js no debe exponer owner personal&#39;);
@@ -2816,6 +2794,134 @@ describe(&#39;Paso 13 Integral v2.8.0 — Identidad Corporativa Pura + Paquete c
       ),
       { numRuns: NUM_RUNS }
     );
+  });
+
+  it(&#39;Propiedad 4: Cold Boot Nativo/Web libre de ciclos OIDC/TDZ, evaluación real Babel (_layout -&gt; AuthContext -&gt; supabase) y resiliencia env&#39;, () =&gt; {
+    interface NodeStatFs extends NodeFsModule { statSync(p: string): { isFile(): boolean } }
+    const sfs = fs as NodeStatFs;
+    const tsMod = require(path.join(ROOT, &#39;node_modules&#39;, &#39;typescript&#39;)) as {
+      preProcessFile(src: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): { importedFiles: { fileName: string }[] };
+    };
+    const babelMod = require(path.join(ROOT, &#39;node_modules&#39;, &#39;@babel&#39;, &#39;core&#39;)) as {
+      transformSync(code: string, opts: Record&lt;string, unknown&gt;): { code: string };
+    };
+    const realSupaJs = require(path.join(ROOT, &#39;node_modules&#39;, &#39;@supabase&#39;, &#39;supabase-js&#39;));
+
+    const oidcSrc = fs.readFileSync(path.join(ROOT, &#39;src&#39;, &#39;services&#39;, &#39;kineticGoogleOidcService.ts&#39;), &#39;utf8&#39;);
+    assertEq(oidcSrc.includes(&#39;terminalSpeiAndStudioService&#39;), false, &#39;kineticGoogleOidcService no debe importar terminalSpeiAndStudioService&#39;);
+
+    const resolveLocal = (fromFile: string, spec: string): string | null =&gt; {
+      if (!spec.startsWith(&#39;.&#39;)) return null;
+      const base = path.resolve(path.dirname(fromFile), spec);
+      for (const ext of [&#39;&#39;, &#39;.ts&#39;, &#39;.tsx&#39;, &#39;.js&#39;, &#39;.jsx&#39;, &#39;/index.ts&#39;, &#39;/index.tsx&#39;, &#39;/index.js&#39;]) {
+        const cand = `${base}${ext}`;
+        if (sfs.existsSync(cand) &amp;&amp; sfs.statSync(cand).isFile()) return cand;
+      }
+      return null;
+    };
+    const depGraph = new Map&lt;string, string[]&gt;();
+    const collectGraph = (fileAbs: string) =&gt; {
+      if (depGraph.has(fileAbs)) return;
+      const deps = tsMod.preProcessFile(sfs.readFileSync(fileAbs, &#39;utf8&#39;), true, true)
+        .importedFiles.map((i) =&gt; resolveLocal(fileAbs, i.fileName)).filter((x): x is string =&gt; Boolean(x));
+      depGraph.set(fileAbs, deps);
+      deps.forEach(collectGraph);
+    };
+    collectGraph(path.join(ROOT, &#39;src&#39;, &#39;app&#39;, &#39;_layout.tsx&#39;));
+    const oidcDeps = new Set((depGraph.get(path.join(ROOT, &#39;src&#39;, &#39;services&#39;, &#39;kineticGoogleOidcService.ts&#39;)) || []).map((a) =&gt; a.slice(ROOT.length + 1).replace(/\\/g, &#39;/&#39;)));
+    assertEq(oidcDeps.has(&#39;src/services/terminalSpeiAndStudioService.ts&#39;), false, &#39;Ciclo OIDC-&gt;terminalSpei sigue presente&#39;);
+    assertEq(oidcDeps.has(&#39;src/services/terminalSwrCacheHelper.ts&#39;), false, &#39;Ciclo OIDC-&gt;terminalSwrCacheHelper presente&#39;);
+    for (const rel of [&#39;src/app/_layout.tsx&#39;, &#39;src/context/AuthContext.tsx&#39;, &#39;src/services/kineticAuthHelpers.ts&#39;, &#39;src/services/kineticGoogleOidcService.ts&#39;, &#39;src/services/kineticSessionPersistence.ts&#39;, &#39;src/lib/supabase.js&#39;]) {
+      assertEq((depGraph.get(path.join(ROOT, rel)) || []).some((d) =&gt; /terminalSpeiAndStudioService|terminalSwrCacheHelper/.test(d)), false, `Cadena ${rel} arrastra módulo terminal`);
+    }
+
+    const compiledCodeCache = new Map&lt;string, string&gt;();
+    const compileBabel = (absFile: string): string =&gt; {
+      let code = compiledCodeCache.get(absFile);
+      if (!code) {
+        code = babelMod.transformSync(sfs.readFileSync(absFile, &#39;utf8&#39;), { filename: absFile, presets: [&#39;babel-preset-expo&#39;] }).code;
+        compiledCodeCache.set(absFile, code);
+      }
+      return code;
+    };
+    const asyncStub = { getItem: async () =&gt; null, setItem: async () =&gt; {}, removeItem: async () =&gt; {}, multiGet: async () =&gt; [], multiRemove: async () =&gt; {} };
+    const deepStub = (): unknown =&gt; new Proxy(function () {}, {
+      get: (_t, p) =&gt; (p === &#39;__esModule&#39; ? true : p === &#39;then&#39; ? undefined : p === &#39;catch&#39; ? () =&gt; Promise.resolve() : p === Symbol.toPrimitive ? () =&gt; &#39;&#39; : deepStub()),
+      apply: () =&gt; deepStub(),
+    });
+    const rnMock = {
+      Platform: { OS: &#39;android&#39;, select: (o: Record&lt;string, unknown&gt;) =&gt; o.android ?? o.native ?? o.default },
+      AppState: { addEventListener: () =&gt; ({ remove() {} }) }, StyleSheet: { create: (o: unknown) =&gt; o, flatten: (o: unknown) =&gt; o },
+      Text: {}, TextInput: {}, FlatList: {}, ScrollView: {}, View: {}, TouchableOpacity: {},
+      Animated: { Value: function () {}, loop: () =&gt; ({ start() {}, stop() {} }), sequence: () =&gt; {}, timing: () =&gt; ({ start() {} }) },
+      Easing: { inOut: () =&gt; () =&gt; {}, quad: {} }, Dimensions: { get: () =&gt; ({ width: 390, height: 844 }) },
+      PixelRatio: { roundToNearestPixel: (n: number) =&gt; n, get: () =&gt; 2 }, Linking: deepStub(), Image: { resolveAssetSource: () =&gt; ({ uri: &#39;x&#39; }) },
+    };
+    const makeIsolatedLoader = (envObj: Record&lt;string, string | undefined&gt;) =&gt; {
+      const modCache = new Map&lt;string, { exports: Record&lt;string, unknown&gt; }&gt;();
+      const loadFile = (absFile: string): Record&lt;string, unknown&gt; =&gt; {
+        const existing = modCache.get(absFile);
+        if (existing) return existing.exports;
+        const mod = { exports: {} as Record&lt;string, unknown&gt; };
+        modCache.set(absFile, mod);
+        const localReq = (spec: string): unknown =&gt; {
+          if (spec === &#39;expo/virtual/env&#39;) return { __esModule: true, env: envObj };
+          if (spec === &#39;@supabase/supabase-js&#39;) return realSupaJs;
+          if (spec === &#39;@react-native-async-storage/async-storage&#39;) return { __esModule: true, default: asyncStub, ...asyncStub };
+          if (spec === &#39;react-native&#39;) return rnMock;
+          if (spec === &#39;react&#39;) return require(&#39;react&#39;);
+          if (/\.(png|jpe?g|webp|gif|svg|ttf|otf|css|mp4)$/i.test(spec)) return 1;
+          if (spec.startsWith(&#39;.&#39;)) {
+            const target = resolveLocal(absFile, spec);
+            if (!target) throw new Error(`MODULE_NOT_FOUND: ${spec} from ${absFile}`);
+            return loadFile(target);
+          }
+          if (spec.startsWith(&#39;@babel/&#39;) || spec.startsWith(&#39;tslib&#39;)) return require(spec);
+          return new Proxy({ __esModule: true, default: deepStub() }, { get: (t, p) =&gt; (p in t ? (t as Record&lt;string | symbol, unknown&gt;)[p] : deepStub()) });
+        };
+        new Function(&#39;exports&#39;, &#39;require&#39;, &#39;module&#39;, &#39;__filename&#39;, &#39;__dirname&#39;, compileBabel(absFile))(mod.exports, localReq, mod, absFile, path.dirname(absFile));
+        return mod.exports;
+      };
+      return { loadFile };
+    };
+
+    const bootLoader = makeIsolatedLoader({});
+    const layoutExports = bootLoader.loadFile(path.join(ROOT, &#39;src&#39;, &#39;app&#39;, &#39;_layout.tsx&#39;));
+    assertTrue(typeof layoutExports.default === &#39;function&#39;, &#39;_layout.tsx no exportó RootLayout&#39;);
+    const persistExports = bootLoader.loadFile(path.join(ROOT, &#39;src&#39;, &#39;services&#39;, &#39;kineticSessionPersistence.ts&#39;));
+    assertTrue(typeof persistExports.registerSessionCleanupHook === &#39;function&#39;, &#39;registerSessionCleanupHook no fue función tras ciclo&#39;);
+
+    const supaPath = path.join(ROOT, &#39;src&#39;, &#39;lib&#39;, &#39;supabase.js&#39;);
+    const supaDirect = bootLoader.loadFile(supaPath) as {
+      resolveSafeSupabaseClientConfig: (u: unknown, k: unknown) =&gt; { url: string; anonKey: string; isConfigured: boolean };
+      isSupabaseEnvConfigured: boolean; supabase: { auth?: unknown };
+    };
+    assertEq(supaDirect.isSupabaseEnvConfigured, false, &#39;isSupabaseEnvConfigured debe ser false con env vacío&#39;);
+    assertTrue(Boolean(supaDirect.supabase?.auth), &#39;supabase client no inicializó en fallback seguro&#39;);
+
+    fc.assert(
+      fc.property(
+        fc.constantFrom&lt;unknown&gt;(&#39;&#39;, undefined, &#39;   &#39;, &#39;&lt;REDACTED_SUPABASE_URL&gt;&#39;, &#39;http://insecure.local&#39;, &#39;not-a-url&#39;, null),
+        fc.constantFrom&lt;unknown&gt;(&#39;&#39;, undefined, &#39;   &#39;, &#39;&lt;REDACTED_JWT&gt;&#39;, &#39;&lt;REDACTED_KEY&gt;&#39;, null),
+        (badUrl, badKey) =&gt; {
+          const cfg = supaDirect.resolveSafeSupabaseClientConfig(badUrl, badKey);
+          assertTrue(cfg.url.startsWith(&#39;https://&#39;) &amp;&amp; cfg.anonKey.length &gt; 0 &amp;&amp; !cfg.anonKey.includes(&#39;&lt;REDACTED_&#39;), &#39;Fallback supabase inválido&#39;);
+          assertEq(cfg.isConfigured, false, &#39;Marcó isConfigured=true con env vacío/redactado&#39;);
+          const loaded = makeIsolatedLoader({
+            EXPO_PUBLIC_SUPABASE_URL: typeof badUrl === &#39;string&#39; ? badUrl : undefined,
+            EXPO_PUBLIC_SUPABASE_ANON_KEY: typeof badKey === &#39;string&#39; ? badKey : undefined,
+          }).loadFile(supaPath) as { supabase: { auth?: unknown } };
+          assertTrue(Boolean(loaded.supabase?.auth), &#39;supabase.js lanzó crash top-level ante env faltante&#39;);
+        }
+      ),
+      { numRuns: NUM_RUNS }
+    );
+    for (const secretSample of [[&#39;sk_live&#39;, &#39;abc123&#39;].join(&#39;_&#39;), [&#39;whsec&#39;, &#39;secret999&#39;].join(&#39;_&#39;), &#39;{&quot;role&quot;:&quot;service_role&quot;}&#39;]) {
+      let threwSecret = false;
+      try { supaDirect.resolveSafeSupabaseClientConfig(&#39;https://gcppxrlzxlgkuapktxvl.supabase.co&#39;, secretSample); }
+      catch (e) { threwSecret = String((e as Error)?.message || e).includes(&#39;FATAL_SECURITY_GUARD&#39;); }
+      assertEq(threwSecret, true, `FATAL_SECURITY_GUARD no bloqueó secreto privado: ${secretSample}`);
+    }
   });
 });
 </code></pre>
@@ -17499,8 +17605,15 @@ import {
 export { KINETIC_PERSISTED_SESSION_KEY };
 
 const assertNoSecretInPublicEnv = (val) =&gt; {
-  const v = String(val || &#39;&#39;).trim();
-  if (/^(sk_live_|sk_test_|rk_live_|rk_test_|whsec_)/i.test(v) || v.includes(&#39;&quot;service_role&quot;&#39;)) {
+  const v = typeof val === &#39;string&#39; ? val.trim() : &#39;&#39;;
+  const lower = v.toLowerCase();
+  if (
+    /^(sk_live_|sk_test_|rk_live_|rk_test_|whsec_)/i.test(v) ||
+    lower.includes(&#39;&quot;service_role&quot;&#39;) ||
+    lower.includes(&#39;service_role&#39;) ||
+    lower.includes(&#39;gemini_api_key&#39;) ||
+    lower.includes(&#39;google_maps_server_api_key&#39;)
+  ) {
     throw new Error(&#39;FATAL_SECURITY_GUARD: Llave secreta detectada en variable EXPO_PUBLIC_*.&#39;);
   }
 };
@@ -17508,9 +17621,42 @@ const assertNoSecretInPublicEnv = (val) =&gt; {
 assertNoSecretInPublicEnv(process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY);
 assertNoSecretInPublicEnv(process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
+const SAFE_FALLBACK_SUPABASE_URL = &#39;https://gcppxrlzxlgkuapktxvl.supabase.co&#39;;
+const SAFE_FALLBACK_SUPABASE_ANON_KEY = &#39;sb-anon-unconfigured-placeholder&#39;;
+
+export function resolveSafeSupabaseClientConfig(rawUrl, rawAnonKey) {
+  assertNoSecretInPublicEnv(rawAnonKey);
+  const candidateUrl = typeof rawUrl === &#39;string&#39; ? rawUrl.trim() : &#39;&#39;;
+  const candidateKey = typeof rawAnonKey === &#39;string&#39; ? rawAnonKey.trim() : &#39;&#39;;
+
+  let validHttpsUrl = false;
+  if (candidateUrl &amp;&amp; !candidateUrl.includes(&#39;&lt;REDACTED_&#39;)) {
+    try {
+      const parsed = new URL(candidateUrl);
+      validHttpsUrl = parsed.protocol === &#39;https:&#39; &amp;&amp; Boolean(parsed.hostname);
+    } catch {
+      validHttpsUrl = false;
+    }
+  }
+
+  const validKey = Boolean(candidateKey &amp;&amp; !candidateKey.includes(&#39;&lt;REDACTED_&#39;));
+  const isConfigured = validHttpsUrl &amp;&amp; validKey;
+
+  return {
+    url: validHttpsUrl ? candidateUrl : SAFE_FALLBACK_SUPABASE_URL,
+    anonKey: validKey ? candidateKey : SAFE_FALLBACK_SUPABASE_ANON_KEY,
+    isConfigured,
+  };
+}
+
 // Inyección segura mediante variables de entorno nativas de Expo (Cero exposición de llaves en consola)
-const supabaseUrl = (process.env.EXPO_PUBLIC_SUPABASE_URL || &#39;&#39;).trim();
-const supabaseAnonKey = (process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || &#39;&#39;).trim();
+const resolvedSupabaseConfig = resolveSafeSupabaseClientConfig(
+  process.env.EXPO_PUBLIC_SUPABASE_URL,
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
+);
+export const isSupabaseEnvConfigured = resolvedSupabaseConfig.isConfigured;
+const supabaseUrl = resolvedSupabaseConfig.url;
+const supabaseAnonKey = resolvedSupabaseConfig.anonKey;
 
 const mirrorAuthTokenToPersistedSession = (key, value) =&gt; {
   if (!key || typeof value !== &#39;string&#39; || !/^sb-.*-auth-token$/.test(String(key))) return;
@@ -17630,7 +17776,8 @@ export const isSupabaseQuotaOr402Error = (errOrRes) =&gt; {
 
 // Fetch con timeout defensivo (10s) y Circuit Breaker ante HTTP 402 / throttling de Egress
 const kineticResilientFetch = async (input, init) =&gt; {
-  const method = String(init?.method || &#39;GET&#39;).toUpperCase();
+  const reqMethod = typeof input === &#39;object&#39; &amp;&amp; input !== null &amp;&amp; &#39;method&#39; in input ? input.method : undefined;
+  const method = String(init?.method || reqMethod || &#39;GET&#39;).toUpperCase();
   const isReadMethod = method === &#39;GET&#39; || method === &#39;HEAD&#39;;
 
   if (isReadMethod &amp;&amp; isSupabaseQuotaExceeded()) {
@@ -17678,13 +17825,17 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 
 // Sincronización de Token con el ciclo de vida nativo (Foreground / Background)
 if (Platform.OS !== &#39;web&#39;) {
-  AppState.addEventListener(&#39;change&#39;, (state) =&gt; {
-    if (state === &#39;active&#39;) {
-      supabase.auth.startAutoRefresh();
-    } else {
-      supabase.auth.stopAutoRefresh();
-    }
-  });
+  try {
+    AppState.addEventListener(&#39;change&#39;, (state) =&gt; {
+      try {
+        if (state === &#39;active&#39;) {
+          supabase.auth.startAutoRefresh();
+        } else {
+          supabase.auth.stopAutoRefresh();
+        }
+      } catch {}
+    });
+  } catch {}
 }
 </code></pre>
 <h2>FILE: src/services/clubAmenitiesAndReviewsHelper.ts</h2>
@@ -22420,7 +22571,7 @@ export async function runWebGoogleGisSignIn(
 import AsyncStorage from &#39;@react-native-async-storage/async-storage&#39;;
 import Constants from &#39;expo-constants&#39;;
 import { supabase } from &#39;../lib/supabase&#39;;
-import { sha256HexSync } from &#39;./terminalSpeiAndStudioService&#39;;
+import { sha256BytesSync } from &#39;./kineticOwaspSecurityGuards&#39;;
 
 const DEFAULT_GOOGLE_WEB_CLIENT_ID =
   &#39;702074850389-v61e4bbha3nc7m0cch2si5panjnqt7r1.apps.googleusercontent.com&#39;;
@@ -22498,24 +22649,40 @@ export interface ExtractedGoogleIdToken {
 }
 
 export function resolveGoogleWebClientId(): string {
-  const rawEnv = process?.env?.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
-  const fromEnv = typeof rawEnv === &#39;string&#39; ? rawEnv.trim() : &#39;&#39;;
-  const extraRaw = (Constants?.expoConfig?.extra as { googleWebClientId?: unknown } | undefined)?.googleWebClientId;
-  const fromExtra = typeof extraRaw === &#39;string&#39; ? extraRaw.trim() : &#39;&#39;;
-  const candidate = fromEnv || fromExtra || DEFAULT_GOOGLE_WEB_CLIENT_ID;
-  if (
-    !/^[0-9]{6,}-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(candidate) ||
-    /secret|gocsp|supabase\.co|\s/i.test(candidate)
-  ) {
+  try {
+    const rawEnv = typeof process !== &#39;undefined&#39; ? process?.env?.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID : undefined;
+    const fromEnv = typeof rawEnv === &#39;string&#39; ? rawEnv.trim() : &#39;&#39;;
+    let fromExtra = &#39;&#39;;
+    try {
+      const extraRaw = (Constants?.expoConfig?.extra as { googleWebClientId?: unknown } | undefined)?.googleWebClientId;
+      fromExtra = typeof extraRaw === &#39;string&#39; ? extraRaw.trim() : &#39;&#39;;
+    } catch {
+      fromExtra = &#39;&#39;;
+    }
+    const candidate = fromEnv || fromExtra || DEFAULT_GOOGLE_WEB_CLIENT_ID;
+    if (
+      !/^[0-9]{6,}-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(candidate) ||
+      /secret|gocsp|supabase\.co|\s/i.test(candidate)
+    ) {
+      return DEFAULT_GOOGLE_WEB_CLIENT_ID;
+    }
+    return candidate;
+  } catch {
     return DEFAULT_GOOGLE_WEB_CLIENT_ID;
   }
-  return candidate;
 }
 
-export const KINETIC_GOOGLE_WEB_CLIENT_ID = resolveGoogleWebClientId();
+export const KINETIC_GOOGLE_WEB_CLIENT_ID = DEFAULT_GOOGLE_WEB_CLIENT_ID;
+
+const encodeUtf8BytesPure = (str: string): Uint8Array =&gt; {
+  if (typeof TextEncoder !== &#39;undefined&#39;) return new TextEncoder().encode(str);
+  const encoded = unescape(encodeURIComponent(str));
+  return Uint8Array.from(encoded, (c) =&gt; c.charCodeAt(0) &amp; 0xff);
+};
 
 export function sha256HexOidc(input: string): string {
-  return sha256HexSync(String(input ?? &#39;&#39;)).toLowerCase();
+  const digest = sha256BytesSync(encodeUtf8BytesPure(String(input ?? &#39;&#39;)));
+  return Array.from(digest, (b) =&gt; b.toString(16).padStart(2, &#39;0&#39;)).join(&#39;&#39;).toLowerCase();
 }
 
 const randomHexBytes = (byteCount: number): string =&gt; {
@@ -22576,7 +22743,7 @@ export function buildGoogleOidcAuthorizeUrl(params: {
   nonceHash: string;
   state: string;
 }): string {
-  const clientId = String(params?.clientId || KINETIC_GOOGLE_WEB_CLIENT_ID).trim();
+  const clientId = String(params?.clientId || resolveGoogleWebClientId()).trim();
   const redirectUri = String(params?.redirectUri || KINETIC_OIDC_REDIRECT_URI).trim();
   const nonceHash = String(params?.nonceHash || &#39;&#39;).trim().toLowerCase();
   const parsedState = parseAndVerifyKineticOidcState(params?.state);
@@ -22681,7 +22848,7 @@ export function validateGoogleIdTokenClaims(
   const exp = Number(payload.exp);
   const nowSec = Number.isFinite(options?.nowSec) ? Number(options?.nowSec) : Math.floor(Date.now() / 1000);
   if (!Number.isFinite(exp) || exp &lt;= nowSec - 30) return { ok: false, nonce: null };
-  const expectedAud = String(options?.expectedClientId || KINETIC_GOOGLE_WEB_CLIENT_ID).trim();
+  const expectedAud = String(options?.expectedClientId || resolveGoogleWebClientId()).trim();
   if (!expectedAud) return { ok: false, nonce: null };
   const audMatches = Array.isArray(payload.aud)
     ? payload.aud.includes(expectedAud)
@@ -22770,33 +22937,52 @@ export async function clearPendingOidcChallenge(): Promise&lt;void&gt; {
   await withChallengeLock(() =&gt; AsyncStorage.removeItem(PENDING_OIDC_CHALLENGE_KEY).catch(() =&gt; {}));
 }
 
+const parsePendingOidcChallengeJson = (raw: string | null): PendingOidcChallenge | null =&gt; {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Partial&lt;PendingOidcChallenge&gt;;
+    if (
+      !parsed ||
+      typeof parsed.rawNonce !== &#39;string&#39; ||
+      typeof parsed.nonceHash !== &#39;string&#39; ||
+      typeof parsed.state !== &#39;string&#39; ||
+      typeof parsed.createdAtMs !== &#39;number&#39;
+    ) {
+      return null;
+    }
+    if (Date.now() - parsed.createdAtMs &gt; PENDING_OIDC_CHALLENGE_TTL_MS) return null;
+    if (sha256HexOidc(parsed.rawNonce) !== parsed.nonceHash.toLowerCase()) return null;
+    const parsedState = parseAndVerifyKineticOidcState(parsed.state);
+    if (!parsedState) return null;
+    return {
+      rawNonce: parsed.rawNonce,
+      nonceHash: parsed.nonceHash.toLowerCase(),
+      state: parsed.state,
+      mode: parsedState.mode,
+      createdAtMs: parsed.createdAtMs,
+    };
+  } catch {
+    return null;
+  }
+};
+
+export async function peekPendingOidcChallenge(): Promise&lt;PendingOidcChallenge | null&gt; {
+  return withChallengeLock(async () =&gt; {
+    try {
+      const raw = await AsyncStorage.getItem(PENDING_OIDC_CHALLENGE_KEY);
+      return parsePendingOidcChallengeJson(raw);
+    } catch {
+      return null;
+    }
+  });
+}
+
 export async function consumePendingOidcChallenge(): Promise&lt;PendingOidcChallenge | null&gt; {
   return withChallengeLock(async () =&gt; {
     try {
       const raw = await AsyncStorage.getItem(PENDING_OIDC_CHALLENGE_KEY);
       await AsyncStorage.removeItem(PENDING_OIDC_CHALLENGE_KEY).catch(() =&gt; {});
-      if (!raw) return null;
-      const parsed = JSON.parse(raw) as Partial&lt;PendingOidcChallenge&gt;;
-      if (
-        !parsed ||
-        typeof parsed.rawNonce !== &#39;string&#39; ||
-        typeof parsed.nonceHash !== &#39;string&#39; ||
-        typeof parsed.state !== &#39;string&#39; ||
-        typeof parsed.createdAtMs !== &#39;number&#39;
-      ) {
-        return null;
-      }
-      if (Date.now() - parsed.createdAtMs &gt; PENDING_OIDC_CHALLENGE_TTL_MS) return null;
-      if (sha256HexOidc(parsed.rawNonce) !== parsed.nonceHash.toLowerCase()) return null;
-      const parsedState = parseAndVerifyKineticOidcState(parsed.state);
-      if (!parsedState) return null;
-      return {
-        rawNonce: parsed.rawNonce,
-        nonceHash: parsed.nonceHash.toLowerCase(),
-        state: parsed.state,
-        mode: parsedState.mode,
-        createdAtMs: parsed.createdAtMs,
-      };
+      return parsePendingOidcChallengeJson(raw);
     } catch {
       return null;
     }
@@ -22812,14 +22998,19 @@ export async function exchangeGoogleIdTokenWithSupabase(idToken: string, rawNonc
 }
 
 export async function verifyAndExchangeNativeGoogleOidcUrl(callbackUrl: string) {
-  const consumed = await consumePendingOidcChallenge();
-  if (!consumed) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
+  if (typeof callbackUrl !== &#39;string&#39; || !isAllowedOidcCallbackTarget(callbackUrl.trim())) {
+    throw new Error(&#39;OIDC_CALLBACK_INVALID&#39;);
+  }
+  const peeked = await peekPendingOidcChallenge();
+  if (!peeked) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
   const extracted = extractGoogleIdTokenFromCallbackUrl(callbackUrl, {
-    expectedState: consumed.state,
-    expectedNonceHash: consumed.nonceHash,
-    expectedClientId: KINETIC_GOOGLE_WEB_CLIENT_ID,
+    expectedState: peeked.state,
+    expectedNonceHash: peeked.nonceHash,
+    expectedClientId: resolveGoogleWebClientId(),
   });
   if (!extracted) throw new Error(&#39;OIDC_CALLBACK_INVALID&#39;);
+  const consumed = await consumePendingOidcChallenge();
+  if (!consumed || consumed.state !== peeked.state) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
   const authRes = await exchangeGoogleIdTokenWithSupabase(extracted.idToken, consumed.rawNonce);
   if (authRes.error) throw authRes.error;
   return authRes;
@@ -25672,43 +25863,39 @@ const OPERATIONAL_ACCOUNT_BLUEPRINTS: Record&lt;string, IOperationalAccountBluep
   &#39;kinetic@kinetic.com&#39;: MASTER_BLUEPRINT, &#39;admin@kinetic.com&#39;: MASTER_BLUEPRINT,
 };
 
-let _explicitSignOutActive = false;
-let _persistEpoch = 0;
-let _memoryPersistedSnapshot: IKineticPersistedSessionPayload | null = null;
-const _explicitSignOutListeners = new Set&lt;(active: boolean) =&gt; void&gt;();
-const _sessionCleanupHooks = new Set&lt;() =&gt; void&gt;();
-export const registerSessionCleanupHook = (hook: () =&gt; void): (() =&gt; void) =&gt; {
-  _sessionCleanupHooks.add(hook);
-  return () =&gt; {
-    _sessionCleanupHooks.delete(hook);
-  };
+type PersistenceState = {
+  explicitSignOut: boolean; persistEpoch: number; memSnapshot: IKineticPersistedSessionPayload | null;
+  signOutListeners: Set&lt;(active: boolean) =&gt; void&gt;; cleanupHooks: Set&lt;() =&gt; void&gt;;
 };
-const notifyExplicitSignOutListeners = (active: boolean): void =&gt; {
-  _explicitSignOutListeners.forEach((fn) =&gt; {
-    try {
-      fn(active);
-    } catch {}
-  });
-};
-export const subscribeExplicitKineticSignOut = (listener: (active: boolean) =&gt; void): (() =&gt; void) =&gt; {
-  _explicitSignOutListeners.add(listener);
-  return () =&gt; {
-    _explicitSignOutListeners.delete(listener);
-  };
-};
-export const markExplicitKineticSignOut = (): void =&gt; {
-  _explicitSignOutActive = true;
-  _persistEpoch += 1;
-  _memoryPersistedSnapshot = null;
+function getPersistenceState(): PersistenceState {
+  const h = getPersistenceState as unknown as { _s?: PersistenceState };
+  if (!h._s) h._s = { explicitSignOut: false, persistEpoch: 0, memSnapshot: null, signOutListeners: new Set(), cleanupHooks: new Set() };
+  return h._s;
+}
+export function registerSessionCleanupHook(hook: () =&gt; void): () =&gt; void {
+  const hooks = getPersistenceState().cleanupHooks;
+  hooks.add(hook);
+  return () =&gt; { hooks.delete(hook); };
+}
+function notifyExplicitSignOutListeners(active: boolean): void {
+  getPersistenceState().signOutListeners.forEach((fn) =&gt; { try { fn(active); } catch {} });
+}
+export function subscribeExplicitKineticSignOut(listener: (active: boolean) =&gt; void): () =&gt; void {
+  const listeners = getPersistenceState().signOutListeners;
+  listeners.add(listener);
+  return () =&gt; { listeners.delete(listener); };
+}
+export function markExplicitKineticSignOut(): void {
+  const st = getPersistenceState();
+  st.explicitSignOut = true; st.persistEpoch += 1; st.memSnapshot = null;
   notifyExplicitSignOutListeners(true);
-};
-export const resetExplicitKineticSignOut = (): void =&gt; {
-  _explicitSignOutActive = false;
+}
+export function resetExplicitKineticSignOut(): void {
+  getPersistenceState().explicitSignOut = false;
   notifyExplicitSignOutListeners(false);
-};
-export const isExplicitKineticSignOut = (): boolean =&gt; _explicitSignOutActive;
-
-export const isRealSupabaseJwt = (token?: string | null): boolean =&gt; isValidRealSupabaseJwt(token);
+}
+export function isExplicitKineticSignOut(): boolean { return getPersistenceState().explicitSignOut; }
+export function isRealSupabaseJwt(token?: string | null): boolean { return isValidRealSupabaseJwt(token); }
 
 const enforceJwtRoleGuard = (payload: IKineticPersistedSessionPayload): IKineticPersistedSessionPayload =&gt; {
   const token = (payload.session as Record&lt;string, unknown&gt; | null)?.access_token as string | undefined;
@@ -25750,6 +25937,11 @@ const safeWebRemoveItem = (key: string): void =&gt; {
   try { window.localStorage?.removeItem(key); } catch {}
 };
 
+const safeFiniteNumber = (val: unknown, fallback = 0): number =&gt; {
+  const n = Number(val);
+  return Number.isFinite(n) ? n : fallback;
+};
+
 export const synthesizeProfileFromUser = (
   user: IKineticPersistedUser, existingProfile?: Record&lt;string, unknown&gt; | null, _fallbackMode: &#39;b2c&#39; | &#39;b2b&#39; = &#39;b2c&#39;
 ): IKineticPersistedProfile =&gt; {
@@ -25784,14 +25976,14 @@ export const synthesizeProfileFromUser = (
     nombre: resolvedName, avatar_url: avatar, rol: resolvedRole || &#39;atleta&#39;,
     tipo_cuenta: !isMasterEmail &amp;&amp; (rawTipo === &#39;admin&#39; || rawTipo === &#39;fundador&#39; || rawTipo === &#39;ceo&#39;) ? &#39;atleta&#39; : rawTipo,
     nivel: resolvedNivel || &#39;Acceso Base&#39;,
-    kc_membresia: Number(existingProfile?.kc_membresia ?? opBlueprint?.kc_membresia ?? 0),
-    kc_topup: Number(existingProfile?.kc_topup ?? opBlueprint?.kc_topup ?? 0),
-    racha_dias: Math.max(1, Number(existingProfile?.racha_dias ?? opBlueprint?.racha_dias ?? 1)),
-    xp_total: Math.max(0, Number(existingProfile?.xp_total ?? opBlueprint?.xp_total ?? 0)),
+    kc_membresia: Math.max(0, safeFiniteNumber(existingProfile?.kc_membresia ?? opBlueprint?.kc_membresia, 0)),
+    kc_topup: Math.max(0, safeFiniteNumber(existingProfile?.kc_topup ?? opBlueprint?.kc_topup, 0)),
+    racha_dias: Math.max(1, safeFiniteNumber(existingProfile?.racha_dias ?? opBlueprint?.racha_dias, 1)),
+    xp_total: Math.max(0, safeFiniteNumber(existingProfile?.xp_total ?? opBlueprint?.xp_total, 0)),
     radar_publico: typeof existingProfile?.radar_publico === &#39;boolean&#39; ? existingProfile.radar_publico : opBlueprint?.radar_publico ?? true,
     waiver_firmado: true, waiver_fecha: String(existingProfile?.waiver_fecha || nowIso),
     fecha_activacion_membresia: String(existingProfile?.fecha_activacion_membresia || nowIso),
-    perdones_mensuales_usados: Number(existingProfile?.perdones_mensuales_usados ?? 0),
+    perdones_mensuales_usados: Math.max(0, safeFiniteNumber(existingProfile?.perdones_mensuales_usados, 0)),
     mes_perdones_control: String(existingProfile?.mes_perdones_control || nowIso.slice(0, 7)),
   };
 };
@@ -25828,10 +26020,11 @@ const decodeStoredJson = (raw: string | null, salt: string): { json: string | nu
 };
 
 export const readPersistedKineticSessionSync = (): IKineticPersistedSessionPayload | null =&gt; {
-  if (_explicitSignOutActive || isPendingMfaGateActive()) return null;
-  if (_memoryPersistedSnapshot?.user?.id) {
-    if (doesSessionRequireMfaAal2(_memoryPersistedSnapshot.session as any)) return null;
-    return enforceJwtRoleGuard(_memoryPersistedSnapshot);
+  const pState = getPersistenceState();
+  if (pState.explicitSignOut || isPendingMfaGateActive()) return null;
+  if (pState.memSnapshot?.user?.id) {
+    if (doesSessionRequireMfaAal2(pState.memSnapshot.session as any)) return null;
+    return enforceJwtRoleGuard(pState.memSnapshot);
   }
 
   const webSalt = getOrCreateWebSaltSync();
@@ -25851,7 +26044,7 @@ export const readPersistedKineticSessionSync = (): IKineticPersistedSessionPaylo
             profile: synthesizeProfileFromUser(parsed.user, (parsed.profile as Record&lt;string, unknown&gt;) || null),
             updatedAt: Number(parsed.updatedAt) || Date.now(),
           });
-          _memoryPersistedSnapshot = hydrated;
+          pState.memSnapshot = hydrated;
           return hydrated;
         }
       }
@@ -25861,7 +26054,7 @@ export const readPersistedKineticSessionSync = (): IKineticPersistedSessionPaylo
   const fromSbToken = readSupabaseAuthTokenSyncWeb();
   if (fromSbToken) {
     const guarded = enforceJwtRoleGuard(fromSbToken);
-    _memoryPersistedSnapshot = guarded;
+    pState.memSnapshot = guarded;
     safeWebSetItem(KINETIC_PERSISTED_SESSION_KEY, encryptKineticString(JSON.stringify(guarded), webSalt));
     return guarded;
   }
@@ -25871,13 +26064,16 @@ export const readPersistedKineticSessionSync = (): IKineticPersistedSessionPaylo
 export const readPersistedKineticSessionAsync = async (): Promise&lt;IKineticPersistedSessionPayload | null&gt; =&gt; {
   const syncHit = readPersistedKineticSessionSync();
   if (syncHit) return syncHit;
-  if (_explicitSignOutActive || isPendingMfaGateActive()) return null;
+  const pState = getPersistenceState();
+  if (pState.explicitSignOut || isPendingMfaGateActive()) return null;
+  const epochAtStart = pState.persistEpoch;
   try {
     void purgeLegacyPlaintextStorageKeys();
     const [salt, raw] = await Promise.all([
       ensureDeviceCipherSaltAsync(),
       AsyncStorage.getItem(KINETIC_PERSISTED_SESSION_KEY),
     ]);
+    if (pState.explicitSignOut || isPendingMfaGateActive() || pState.persistEpoch !== epochAtStart) return null;
     const { json: decoded, wasPlain } = decodeStoredJson(raw, salt);
     if (!decoded) return null;
     const parsed = JSON.parse(decoded) as Partial&lt;IKineticPersistedSessionPayload&gt;;
@@ -25886,13 +26082,14 @@ export const readPersistedKineticSessionAsync = async (): Promise&lt;IKineticPer
     const tok = (parsed.session as Record&lt;string, unknown&gt; | null)?.access_token as string | undefined;
     if (!isKineticDevRuntime() &amp;&amp; !isRealSupabaseJwt(tok)) return null;
     if (wasPlain) await AsyncStorage.setItem(KINETIC_PERSISTED_SESSION_KEY, encryptKineticString(decoded, salt)).catch(() =&gt; {});
+    if (pState.explicitSignOut || isPendingMfaGateActive() || pState.persistEpoch !== epochAtStart) return null;
     const hydrated = enforceJwtRoleGuard({
       session: (parsed.session as Record&lt;string, unknown&gt;) || null,
       user: parsed.user,
       profile: synthesizeProfileFromUser(parsed.user, (parsed.profile as Record&lt;string, unknown&gt;) || null),
       updatedAt: Number(parsed.updatedAt) || Date.now(),
     });
-    _memoryPersistedSnapshot = hydrated;
+    pState.memSnapshot = hydrated;
     return hydrated;
   } catch {
     return null;
@@ -25904,12 +26101,13 @@ export const persistKineticSessionSnapshot = (
   profile?: Record&lt;string, unknown&gt; | null,
   session?: Record&lt;string, unknown&gt; | null
 ): IKineticPersistedSessionPayload | null =&gt; {
-  if (!user?.id || _explicitSignOutActive || isPendingMfaGateActive()) return null;
-  const prevProfile = _memoryPersistedSnapshot?.user?.id === user.id ? _memoryPersistedSnapshot.profile : null;
+  const pState = getPersistenceState();
+  if (!user?.id || pState.explicitSignOut || isPendingMfaGateActive()) return null;
+  const prevProfile = pState.memSnapshot?.user?.id === user.id ? pState.memSnapshot.profile : null;
   const mergedProfile = synthesizeProfileFromUser(user, profile || prevProfile);
   const effectiveSession =
     session ||
-    (_memoryPersistedSnapshot?.user?.id === user.id ? _memoryPersistedSnapshot.session : null) ||
+    (pState.memSnapshot?.user?.id === user.id ? pState.memSnapshot.session : null) ||
     (isKineticDevRuntime() ? { access_token: `kinetic-resilient-${user.id}`, token_type: &#39;bearer&#39;, user } : null);
   if (doesSessionRequireMfaAal2((effectiveSession as any) || null)) return null;
   if (!isKineticDevRuntime() &amp;&amp; !isRealSupabaseJwt((effectiveSession as Record&lt;string, unknown&gt; | null)?.access_token as string)) return null;
@@ -25920,15 +26118,15 @@ export const persistKineticSessionSnapshot = (
     profile: mergedProfile,
     updatedAt: Date.now(),
   });
-  _memoryPersistedSnapshot = payload;
+  pState.memSnapshot = payload;
   const serialized = JSON.stringify(payload);
   const emailLower = String(user.email || mergedProfile.email || &#39;&#39;).trim().toLowerCase();
   const accountSnapshot: IKineticPersistedSessionPayload = { ...payload, session: null };
 
   // Diferir escrituras SWR post-login para mantener TTI/FPS en 0ms
-  const epochAtSchedule = ++_persistEpoch;
+  const epochAtSchedule = ++pState.persistEpoch;
   setTimeout(() =&gt; {
-    if (_explicitSignOutActive || isPendingMfaGateActive() || _persistEpoch !== epochAtSchedule) return;
+    if (pState.explicitSignOut || isPendingMfaGateActive() || pState.persistEpoch !== epochAtSchedule) return;
     if (Platform.OS === &#39;web&#39;) {
       try {
         const webSalt = getOrCreateWebSaltSync();
@@ -25936,28 +26134,24 @@ export const persistKineticSessionSnapshot = (
         if (emailLower &amp;&amp; emailLower.includes(&#39;@&#39;)) {
           const { json: rawMap } = decodeStoredJson(safeWebGetItem(KINETIC_PERSISTED_ACCOUNTS_CACHE_KEY), webSalt);
           let accountsCache: Record&lt;string, IKineticPersistedSessionPayload&gt; = {};
-          if (rawMap) {
-            try {
-              accountsCache = JSON.parse(rawMap) || {};
-            } catch {
-              accountsCache = {};
-            }
-          }
+          if (rawMap) { try { accountsCache = JSON.parse(rawMap) || {}; } catch { accountsCache = {}; } }
           accountsCache[emailLower] = accountSnapshot;
           safeWebSetItem(KINETIC_PERSISTED_ACCOUNTS_CACHE_KEY, encryptKineticString(JSON.stringify(accountsCache), webSalt));
         }
       } catch {}
+      return;
     }
 
     ensureDeviceCipherSaltAsync()
       .then(async (salt) =&gt; {
-        if (_explicitSignOutActive || isPendingMfaGateActive() || _persistEpoch !== epochAtSchedule) return;
+        if (pState.explicitSignOut || isPendingMfaGateActive() || pState.persistEpoch !== epochAtSchedule) return;
         await AsyncStorage.setItem(KINETIC_PERSISTED_SESSION_KEY, encryptKineticString(serialized, salt));
         if (emailLower &amp;&amp; emailLower.includes(&#39;@&#39;)) {
           const asyncRaw = await AsyncStorage.getItem(KINETIC_PERSISTED_ACCOUNTS_CACHE_KEY);
           const { json: decMap } = decodeStoredJson(asyncRaw, salt);
-          const parsedAsync = decMap ? JSON.parse(decMap) : {};
-          if (_explicitSignOutActive || isPendingMfaGateActive() || _persistEpoch !== epochAtSchedule) return;
+          let parsedAsync: Record&lt;string, unknown&gt; = {};
+          if (decMap) { try { const o = JSON.parse(decMap); if (o &amp;&amp; typeof o === &#39;object&#39; &amp;&amp; !Array.isArray(o)) parsedAsync = o as Record&lt;string, unknown&gt;; } catch {} }
+          if (pState.explicitSignOut || isPendingMfaGateActive() || pState.persistEpoch !== epochAtSchedule) return;
           await AsyncStorage.setItem(
             KINETIC_PERSISTED_ACCOUNTS_CACHE_KEY,
             encryptKineticString(JSON.stringify({ ...parsedAsync, [emailLower]: accountSnapshot }), salt)
@@ -25972,7 +26166,7 @@ export const persistKineticSessionSnapshot = (
 
 export const clearPersistedKineticSessionExplicit = async (): Promise&lt;void&gt; =&gt; {
   markExplicitKineticSignOut();
-  _sessionCleanupHooks.forEach((fn) =&gt; { try { fn(); } catch {} });
+  getPersistenceState().cleanupHooks.forEach((fn) =&gt; { try { fn(); } catch {} });
   safeWebRemoveItem(KINETIC_PERSISTED_SESSION_KEY);
   safeWebRemoveItem(KINETIC_PERSISTED_ACCOUNTS_CACHE_KEY);
   safeWebRemoveItem(&#39;@kinetic_biometric_email_v1&#39;);
@@ -26004,8 +26198,9 @@ export const clearPersistedKineticSessionExplicit = async (): Promise&lt;void&gt
 };
 
 export const purgeKineticPersistedSnapshotOnly = async (): Promise&lt;void&gt; =&gt; {
-  _persistEpoch += 1;
-  _memoryPersistedSnapshot = null; safeWebRemoveItem(KINETIC_PERSISTED_SESSION_KEY);
+  const pState = getPersistenceState();
+  pState.persistEpoch += 1;
+  pState.memSnapshot = null; safeWebRemoveItem(KINETIC_PERSISTED_SESSION_KEY);
   await AsyncStorage.removeItem(KINETIC_PERSISTED_SESSION_KEY).catch(() =&gt; {});
 };
 
@@ -31435,6 +31630,7 @@ export function buildWhatsAppDirectUrl(phoneRaw?: string, customMsg?: string): s
 <pre><code class="language-ts">// === src/utils/hermesWebPolyfill.ts === //
 import { Platform } from &quot;react-native&quot;;
 import * as ExpoCrypto from &quot;expo-crypto&quot;;
+import * as SplashScreen from &quot;expo-splash-screen&quot;;
 
 let hermesEntropyCounter = 1;
 
@@ -31491,8 +31687,8 @@ installKineticWarnFilter();
 
 type ListenerFn = (event: any) =&gt; void;
 
-const hermesListenersMap: Record&lt;string, Set&lt;ListenerFn&gt;&gt; = {};
-const hermesMemoryStorage: Record&lt;string, string&gt; = {};
+const hermesListenersMap: Record&lt;string, Set&lt;ListenerFn&gt;&gt; = Object.create(null);
+const hermesMemoryStorage: Record&lt;string, string&gt; = Object.create(null);
 
 export function canUseHermesDevPrngFallback(devFlag?: unknown, nodeEnv?: unknown): boolean {
   return devFlag === true &amp;&amp; String(nodeEnv ?? &quot;&quot;).trim().toLowerCase() !== &quot;production&quot;;
@@ -31540,14 +31736,14 @@ export function installHermesNativePolyfills(): void {
   if (typeof g.window.addEventListener !== &quot;function&quot;) {
     g.window.addEventListener = (type: string, callback: ListenerFn) =&gt; {
       if (!type || typeof callback !== &quot;function&quot;) return;
-      if (!hermesListenersMap[type]) hermesListenersMap[type] = new Set();
+      if (!Object.prototype.hasOwnProperty.call(hermesListenersMap, type)) hermesListenersMap[type] = new Set();
       hermesListenersMap[type].add(callback);
     };
   }
 
   if (typeof g.window.removeEventListener !== &quot;function&quot;) {
     g.window.removeEventListener = (type: string, callback: ListenerFn) =&gt; {
-      if (!type || !hermesListenersMap[type]) return;
+      if (!type || !Object.prototype.hasOwnProperty.call(hermesListenersMap, type)) return;
       hermesListenersMap[type].delete(callback);
     };
   }
@@ -31555,7 +31751,7 @@ export function installHermesNativePolyfills(): void {
   if (typeof g.window.dispatchEvent !== &quot;function&quot;) {
     g.window.dispatchEvent = (event: any): boolean =&gt; {
       const type = typeof event === &quot;string&quot; ? event : event?.type;
-      if (!type || !hermesListenersMap[type]) return false;
+      if (!type || !Object.prototype.hasOwnProperty.call(hermesListenersMap, type)) return false;
       hermesListenersMap[type].forEach((fn) =&gt; {
         try {
           fn(event);
@@ -31591,6 +31787,9 @@ export function installHermesNativePolyfills(): void {
   }
   if (typeof g.crypto.getRandomValues !== &quot;function&quot;) {
     g.crypto.getRandomValues = &lt;T extends ArrayBufferView&gt;(arr: T): T =&gt; {
+      if (!arr || !ArrayBuffer.isView(arr)) {
+        throw new TypeError(&quot;Invalid ArrayBufferView&quot;);
+      }
       const bytes = new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
       try {
         const res = ExpoCrypto.getRandomValues(bytes);
@@ -31620,6 +31819,43 @@ export function installHermesNativePolyfills(): void {
       }
       return arr;
     };
+  }
+
+  if (!g.__KINETIC_NATIVE_ERROR_GUARD_INSTALLED__ &amp;&amp; g.ErrorUtils &amp;&amp; typeof g.ErrorUtils.setGlobalHandler === &quot;function&quot;) {
+    g.__KINETIC_NATIVE_ERROR_GUARD_INSTALLED__ = true;
+    const prevHandler = typeof g.ErrorUtils.getGlobalHandler === &quot;function&quot; ? g.ErrorUtils.getGlobalHandler() : null;
+    g.ErrorUtils.setGlobalHandler((error: unknown, isFatal?: boolean) =&gt; {
+      let rawMsg = &quot;KINETIC_NATIVE_BOOT_ERROR&quot;;
+      try {
+        rawMsg =
+          error &amp;&amp; typeof (error as { message?: unknown }).message === &quot;string&quot;
+            ? String((error as { message?: string }).message)
+            : String(error || &quot;KINETIC_NATIVE_BOOT_ERROR&quot;);
+      } catch {
+        rawMsg = &quot;KINETIC_NATIVE_BOOT_ERROR&quot;;
+      }
+      const safeMsg = rawMsg
+        .replace(/Bearer\s+[^\s&quot;&#39;]+/gi, &quot;Bearer [REDACTED]&quot;)
+        .replace(/\beyJ[A-Za-z0-9_-]{6,}\.[A-Za-z0-9_-]{6,}\.[A-Za-z0-9_-]{6,}\b/g, &quot;[REDACTED]&quot;)
+        .replace(/\bAIza[0-9A-Za-z_-]{12,}\b/g, &quot;[REDACTED]&quot;)
+        .slice(0, 240);
+      g.__KINETIC_LAST_BOOT_ERROR__ = { message: safeMsg, isFatal: Boolean(isFatal), ts: Date.now() };
+      if (typeof console !== &quot;undefined&quot; &amp;&amp; typeof console.error === &quot;function&quot;) {
+        console.error(&quot;[KINETIC_BOOT_SHIELD]&quot;, safeMsg);
+      }
+      const hideSplashSafe = () =&gt; {
+        try {
+          Promise.resolve(SplashScreen?.hideAsync?.()).catch(() =&gt; {});
+        } catch {}
+      };
+      hideSplashSafe();
+      if (typeof setTimeout === &quot;function&quot;) {
+        setTimeout(hideSplashSafe, 250);
+      }
+      if (typeof __DEV__ !== &quot;undefined&quot; &amp;&amp; __DEV__ === true &amp;&amp; typeof prevHandler === &quot;function&quot;) {
+        prevHandler(error, isFatal);
+      }
+    });
   }
   if (typeof g.sessionStorage === &quot;undefined&quot;) {
     g.sessionStorage = safeStorage;
