@@ -429,9 +429,27 @@
       .quick-label { font-size: 10.5px; }
       .cta-mag { padding: 8px 12px; font-size: 11px; }
     }
+    @media (max-width: 580px) {
+      .topbar-inner { padding: 0 10px; gap: 6px; }
+      .topbar-left { gap: 6px; min-width: 0; }
+      .menu-btn { width: 32px; height: 32px; font-size: 14px; flex-shrink: 0; }
+      .brand { gap: 6px; min-width: 0; }
+      .brand-mark { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; }
+      .brand-word { font-size: clamp(11px, 3vw, 13px); letter-spacing: 1.4px; }
+      .topbar-right { gap: 5px; flex-shrink: 0; }
+      .lang-pill { padding: 6px 8px; font-size: 10px; letter-spacing: 0.3px; white-space: nowrap; flex-shrink: 0; }
+      .cta-mag { padding: 6px 9px; font-size: 10px; letter-spacing: 0; white-space: nowrap; flex-shrink: 0; }
+    }
     @media (max-width: 480px) {
       .seg-row { grid-template-columns: 1fr; }
       .quick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 360px) {
+      .topbar-inner { padding: 0 8px; gap: 4px; }
+      .brand-word { display: none; }
+      .topbar-right { gap: 4px; }
+      .lang-pill { padding: 5px 6px; font-size: 9.5px; }
+      .cta-mag { padding: 5px 7px; font-size: 9.5px; }
     }
   </style>
 </head>
