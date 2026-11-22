@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 01: CORE, CONFIG, AUTH, LOGIN/REGISTRO, MOTOR 3D Y LANDING WEB</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-22T20:10:00.777Z | Total archivos en este módulo: 160</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-22T21:14:31.058Z | Total archivos en este módulo: 160</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`app.config.js`</li>
 <li>`eas.json`</li>
@@ -39500,6 +39500,7 @@ export const buildOmniWebM3Css = (): string =&gt; {
 </code></pre>
 <h2>FILE: src/utils/kineticWebMapEngine.ts</h2>
 <pre><code class="language-ts">// === src/utils/kineticWebMapEngine.ts === //
+import Constants from &#39;expo-constants&#39;;
 import { Image as RNImage } from &#39;react-native&#39;;
 import {
   buildOfficialPinSvgMarkup,
@@ -39553,26 +39554,27 @@ export function resolvePlatformGoogleMapsKey(
   platform: &#39;web&#39; | &#39;android&#39; | &#39;ios&#39; = &#39;web&#39;,
   envSource?: Record&lt;string, unknown&gt;
 ): string {
-  const env: Record&lt;string, unknown&gt; = envSource ?? {
-    EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY,
-    EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_KEY,
-    EXPO_PUBLIC_GOOGLE_MAPS_IOS_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_IOS_KEY,
-    EXPO_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY,
-    GOOGLE_MAPS_WEB_KEY: typeof process !== &#39;undefined&#39; &amp;&amp; process?.env ? process.env.GOOGLE_MAPS_WEB_KEY : undefined,
-  };
+  const runtimeEnv: Record&lt;string, unknown&gt; =
+    envSource ??
+    (typeof process !== &#39;undefined&#39; &amp;&amp; process?.env
+      ? (process.env as Record&lt;string, unknown&gt;)
+      : {});
   const specificVar =
     platform === &#39;android&#39;
       ? &#39;EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_KEY&#39;
       : platform === &#39;ios&#39;
       ? &#39;EXPO_PUBLIC_GOOGLE_MAPS_IOS_KEY&#39;
       : &#39;EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY&#39;;
-  const specificVal = assertNoSecretInPublicEnv(env[specificVar], specificVar);
+  const specificVal = assertNoSecretInPublicEnv(runtimeEnv[specificVar], specificVar);
   if (specificVal) return specificVal;
   if (platform === &#39;web&#39;) {
-    const webAlias = assertNoSecretInPublicEnv(env.GOOGLE_MAPS_WEB_KEY, &#39;GOOGLE_MAPS_WEB_KEY&#39;);
+    const extraRaw = (Constants?.expoConfig?.extra as Record&lt;string, unknown&gt; | undefined)?.googleMapsWebKey;
+    const extraVal = assertNoSecretInPublicEnv(extraRaw, &#39;EXPO_PUBLIC_GOOGLE_MAPS_WEB_KEY&#39;);
+    if (extraVal) return extraVal;
+    const webAlias = assertNoSecretInPublicEnv(runtimeEnv.GOOGLE_MAPS_WEB_KEY, &#39;GOOGLE_MAPS_WEB_KEY&#39;);
     if (webAlias) return webAlias;
   }
-  return assertNoSecretInPublicEnv(env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY, &#39;EXPO_PUBLIC_GOOGLE_MAPS_API_KEY&#39;);
+  return assertNoSecretInPublicEnv(runtimeEnv.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY, &#39;EXPO_PUBLIC_GOOGLE_MAPS_API_KEY&#39;);
 }
 
 export const KINETIC_WEB_GOOGLE_MAPS_KEY = resolvePlatformGoogleMapsKey(&#39;web&#39;);
