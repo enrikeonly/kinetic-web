@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["<TEAM_ID>.com.kineticapp.mx"],
+        "components": [
+          { "/": "/oauth/*" },
+          { "/": "/boveda*" },
+          { "/": "/events*" },
+          { "/": "/eventos*" },
+          { "/": "/explore*" }
+        ]
+      }
+    ]
+  }
+}

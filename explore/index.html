@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#050505" />
+    <title>Kinetic — Red Élite de Entrenamiento</title>
+    <style id="kinetic-critical-boot">
+      html,
+      body,
+      #root {
+        background-color: #050505;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        min-height: 100%;
+      }
+      html[data-kinetic-theme='light'],
+      html[data-kinetic-theme='light'] body,
+      html[data-kinetic-theme='light'] #root,
+      html[data-theme='light'],
+      html[data-theme='light'] body,
+      html[data-theme='light'] #root {
+        background-color: #ecf1f8;
+      }
+      body {
+        overflow: hidden;
+      }
+      #root {
+        display: flex;
+        flex: 1;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          if (window.location.hostname === 'www.kineticapp.com.mx') {
+            window.location.replace('https://kineticapp.com.mx' + window.location.pathname + window.location.search + window.location.hash);
+            return;
+          }
+          if (window.location.pathname.replace(/\/+$/, '') === '/oauth' && window.location.hash && window.location.hash.indexOf('id_token=') !== -1) {
+            var hp = new URLSearchParams(window.location.hash.slice(1));
+            var idTok = String(hp.get('id_token') || '').trim();
+            var st = String(hp.get('state') || '').trim();
+            if (/^knt1\.native\.(b2c|b2b)\.[0-9a-f]{32}$/.test(st) && /^[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}$/.test(idTok)) {
+              if (window.history && window.history.replaceState) {
+                window.history.replaceState(null, '', '/oauth');
+              }
+              window.location.replace('kinetic://login#id_token=' + encodeURIComponent(idTok) + '&state=' + encodeURIComponent(st));
+              return;
+            }
+          }
+        } catch (e) {}
+        try {
+          var t =
+            window.localStorage &&
+            window.localStorage.getItem('@kinetic_user_theme_pref') === 'light'
+              ? 'light'
+              : 'dark';
+          var bg = t === 'light' ? '#ECF1F8' : '#050505';
+          var r = document.documentElement;
+          r.setAttribute('data-kinetic-theme', t);
+          r.dataset.theme = t;
+          r.style.backgroundColor = bg;
+          var l =
+            window.localStorage &&
+            (window.localStorage.getItem('@kinetic_language_v25') ||
+              window.localStorage.getItem('@kinetic_user_lang_pref'));
+          if (l === 'es' || l === 'en') r.lang = l;
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', bg);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="manifest" href="/manifest.json?v=274" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=274" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=274" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=274" />
+    <link rel="shortcut icon" href="/favicon.png?v=274" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=274" />
+    <meta property="og:image" content="/icon-512.png?v=274" />
+  <meta name="theme-color" content="#00F0FF">
+<link rel="icon" href="/favicon.ico"/></head>
+  <body>
+    <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
+    <div id="root"></div>
+  <script src="/_expo/static/js/web/entry-c760d7aa7bb5e29717fc92be53414c67.js" defer></script>
+</body>
+</html>
