@@ -438,6 +438,7 @@
       .brand-word { font-size: clamp(11px, 3vw, 13px); letter-spacing: 1.4px; }
       .topbar-right { gap: 5px; flex-shrink: 0; }
       .lang-pill { padding: 6px 8px; font-size: 10px; letter-spacing: 0.3px; white-space: nowrap; flex-shrink: 0; }
+      #navPartnersBtn { display: none; }
       .cta-mag { padding: 6px 9px; font-size: 10px; letter-spacing: 0; white-space: nowrap; flex-shrink: 0; }
     }
     @media (max-width: 480px) {
@@ -468,6 +469,7 @@
       </div>
       <div class="topbar-right">
         <button type="button" id="langBtn" class="lang-pill" aria-label="Language">ES | EN</button>
+        <a href="/socios" target="_top" id="navPartnersBtn" class="lang-pill" style="border-color:rgba(123,97,255,0.5);color:#C4B5FD;white-space:nowrap;" data-i18n="navPartners">Portal Socios</a>
         <a href="/login" target="_top" id="navLoginBtn" class="lang-pill" style="border-color:rgba(0,240,255,0.45);color:var(--cyan);white-space:nowrap;" data-i18n="navLogin">Iniciar Sesión</a>
         <a href="#waitlist" id="navCtaBtn" class="cta-mag" style="white-space:nowrap;" data-i18n="navCta">Acceso Anticipado</a>
       </div>
@@ -488,6 +490,7 @@
         <button type="button" id="menuCloseBtn" class="menu-btn" aria-label="Close">✕</button>
       </div>
       <nav class="drawer-links">
+        <a href="/socios" target="_top" class="drawer-link" style="color:#C4B5FD;font-weight:800;"><span data-i18n="dPartners">Portal Socios</span><span>→</span></a>
         <a href="/login" target="_top" class="drawer-link" style="color:var(--cyan);font-weight:800;"><span data-i18n="dLogin">Iniciar Sesión</span><span>→</span></a>
         <a href="#hero" class="drawer-link" data-close-drawer><span data-i18n="dHome">Inicio</span><span>›</span></a>
         <a href="#discover" class="drawer-link" data-close-drawer><span data-i18n="dExp">Experiencia</span><span>›</span></a>
@@ -761,6 +764,7 @@
         <div class="acc-panel">
           <div class="acc-body">
             <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
+              <a href="/socios" target="_top" id="footerAccPartnersLink" style="color:#C4B5FD;font-weight:700" data-i18n="fPartnersLink">Portal Socios</a>
               <a href="/privacidad" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fPrivLink">Aviso de Privacidad</a>
               <a href="/terminos" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fTermsLink">Términos de Uso</a>
               <a href="mailto:soporte@kineticapp.com.mx" style="color:var(--text-sec)">soporte@kineticapp.com.mx</a>
@@ -772,7 +776,10 @@
 
       <div class="footer-base">
         <span>© 2026 KineticApp S.A.S. • México.</span>
-        <button type="button" id="footerLangBtn" class="lang-pill">Español / English</button>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <a href="/socios" target="_top" id="footerPartnersLink" class="lang-pill" style="border-color:rgba(123,97,255,0.45);color:#C4B5FD;" data-i18n="fPartnersLink">Portal Socios</a>
+          <button type="button" id="footerLangBtn" class="lang-pill">Español / English</button>
+        </div>
       </div>
     </div>
   </footer>
@@ -807,6 +814,7 @@
       var I18N = {
         es: {
           docTitle: 'KINETIC — Fitness, Deporte & Wellness',
+          navPartners: 'Portal Socios', dPartners: 'Portal Socios', fPartnersLink: 'Portal Socios',
           navLogin: 'Iniciar Sesión', dLogin: 'Iniciar Sesión',
           navCta: 'Acceso Anticipado', dHome: 'Inicio', dExp: 'Experiencia', dDisc: 'Disciplinas', dInvite: 'Acceso Anticipado', dConcierge: 'Concierge 24/7',
           ctaAthlete: 'Soy Atleta', ctaClub: 'Tengo un Club o Consultorio',
@@ -843,6 +851,7 @@
         },
         en: {
           docTitle: 'KINETIC — Fitness, Sports & Wellness',
+          navPartners: 'Partner Login', dPartners: 'Partner Login', fPartnersLink: 'Partner Login',
           navLogin: 'Sign In', dLogin: 'Sign In',
           navCta: 'Early Access', dHome: 'Home', dExp: 'Experience', dDisc: 'Disciplines', dInvite: 'Early Access', dConcierge: '24/7 Concierge',
           ctaAthlete: "I'm an Athlete", ctaClub: 'I Own a Club or Clinic',
