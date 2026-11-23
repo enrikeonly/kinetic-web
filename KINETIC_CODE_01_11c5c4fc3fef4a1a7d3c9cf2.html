@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 01: CORE, CONFIG, AUTH, LOGIN/REGISTRO, MOTOR 3D Y LANDING WEB</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-23T21:04:32.418Z | Total archivos en este módulo: 175</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-23T23:29:35.687Z | Total archivos en este módulo: 177</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`app.config.js`</li>
 <li>`eas.json`</li>
@@ -62,6 +62,8 @@
 <li>`src/components/partner-web/PartnerWebAuthGate.tsx`</li>
 <li>`src/components/partner-web/PartnerWebCatalogAndProfileView.tsx`</li>
 <li>`src/components/partner-web/PartnerWebDashboardAndOpsView.tsx`</li>
+<li>`src/components/partner-web/partnerWebEntry.ts`</li>
+<li>`src/components/partner-web/partnerWebEntry.web.ts`</li>
 <li>`src/components/partner-web/PartnerWebFinanceView.tsx`</li>
 <li>`src/components/partner-web/PartnerWebProfileEditorView.tsx`</li>
 <li>`src/components/partner-web/PartnerWebSidebar.tsx`</li>
@@ -212,7 +214,7 @@ export default {
   expo: {
     name: &#39;Kinetic&#39;,
     slug: &#39;kinetic&#39;,
-    version: &#39;2.8.3&#39;,
+    version: &#39;2.8.5&#39;,
     orientation: &#39;portrait&#39;,
     icon: &#39;./assets/logo.png&#39;,
     scheme: &#39;kinetic&#39;,
@@ -334,7 +336,6 @@ export default {
           action: &#39;VIEW&#39;,
           autoVerify: true,
           data: [
-            { scheme: &#39;https&#39;, host: &#39;kineticapp.com.mx&#39;, pathPrefix: &#39;/oauth&#39; },
             { scheme: &#39;https&#39;, host: &#39;kineticapp.com.mx&#39;, pathPrefix: &#39;/boveda&#39; },
             { scheme: &#39;https&#39;, host: &#39;kineticapp.com.mx&#39;, pathPrefix: &#39;/events&#39; },
             { scheme: &#39;https&#39;, host: &#39;kineticapp.com.mx&#39;, pathPrefix: &#39;/explore&#39; },
@@ -455,7 +456,7 @@ export default {
 <pre><code class="language-json">{
   &quot;name&quot;: &quot;kinetic&quot;,
   &quot;main&quot;: &quot;expo-router/entry&quot;,
-  &quot;version&quot;: &quot;2.8.3&quot;,
+  &quot;version&quot;: &quot;2.8.5&quot;,
   &quot;dependencies&quot;: {
     &quot;@expo/ui&quot;: &quot;~57.0.12&quot;,
     &quot;@expo/vector-icons&quot;: &quot;^15.0.2&quot;,
@@ -3011,7 +3012,7 @@ describe(&#39;KINETIC v2.8.3 Ola 1 — SWR &lt;300ms, Shimmer 60fps, Google Vect
 
   it(&#39;Pillar 4 (500x PBT): Shield Nearby Devices, Permisos Escalonados, OIDC/SignOut, Calendario 1-Tap, Biometría Web y Guard UGC/SQL&#39;, async () =&gt; {
     const appCfgSrc = readRel(&#39;app.config.js&#39;);
-    expectTrue(appCfgSrc.includes(&quot;version: &#39;2.8.3&#39;&quot;) &amp;&amp; appCfgSrc.includes(&#39;autoVerify: true&#39;), &#39;app.config.js debe preservar 2.8.3 y autoVerify&#39;);
+    expectTrue(appCfgSrc.includes(&quot;version: &#39;2.8.5&#39;&quot;) &amp;&amp; appCfgSrc.includes(&#39;autoVerify: true&#39;), &#39;app.config.js debe preservar 2.8.5 y autoVerify&#39;);
     for (const perm of [
       &#39;android.permission.BLUETOOTH&#39;, &#39;android.permission.BLUETOOTH_ADMIN&#39;, &#39;android.permission.BLUETOOTH_SCAN&#39;,
       &#39;android.permission.BLUETOOTH_CONNECT&#39;, &#39;android.permission.BLUETOOTH_ADVERTISE&#39;, &#39;android.permission.NEARBY_WIFI_DEVICES&#39;,
@@ -3696,9 +3697,9 @@ describe(&#39;KINETIC OS v2.8.3 — Ola 2 Volumetría 3D, UI Claro/Oscuro, PDFs 
     expectTrue(astCycles === 0, `AST cycles detectados: ${astCycles}`);
 
     const pkg = JSON.parse(readRel(&#39;package.json&#39;)) as { version?: string };
-    expectTrue(pkg.version === &#39;2.8.3&#39;, &#39;package.json version must be 2.8.3&#39;);
-    expectTrue(readRel(&#39;app.config.js&#39;).includes(&quot;version: &#39;2.8.3&#39;&quot;), &#39;app.config.js must be 2.8.3&#39;);
-    expectTrue(readRel(&#39;src/utils/kineticIcsCalendarLeaf.ts&#39;).includes(&#39;v2.8.3&#39;), &#39;ICS PRODID must be v2.8.3&#39;);
+    expectTrue(pkg.version === &#39;2.8.5&#39;, &#39;package.json version must be 2.8.5&#39;);
+    expectTrue(readRel(&#39;app.config.js&#39;).includes(&quot;version: &#39;2.8.5&#39;&quot;), &#39;app.config.js must be 2.8.5&#39;);
+    expectTrue(readRel(&#39;src/utils/kineticIcsCalendarLeaf.ts&#39;).includes(&#39;v2.8.5&#39;), &#39;ICS PRODID must be v2.8.5&#39;);
     expectTrue(readRel(&#39;.agents/workflows/guardia-nocturna.md&#39;).split(/\r?\n/).length &lt; 220, &#39;guardia-nocturna.md &lt; 220L&#39;);
     expectTrue(readRel(&#39;public/landing.html&#39;).includes(&#39;@media (max-width: 580px)&#39;) &amp;&amp; readRel(&#39;public/landing.html&#39;).includes(&#39;@media (max-width: 360px)&#39;), &#39;landing.html responsive &lt;=360px rules&#39;);
     expectTrue(readRel(&#39;src/services/kineticNativePdfHtmlBuilder.ts&#39;).includes(&#39;size: A4 portrait&#39;), &#39;Native PDF A4 size&#39;);
@@ -4280,12 +4281,12 @@ describeSuite(&#39;KINETIC OS v2.8.2 — Ola 4 Store Readiness, Native Calendar,
     assertEq(fs.statSync(path.join(ROOT, &#39;.env.example&#39;)).size, 887, &#39;.env.example size must stay 887B&#39;);
 
     const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, &#39;package.json&#39;), &#39;utf8&#39;)) as { version?: string; dependencies?: Record&lt;string, string&gt; };
-    assertEq(pkg.version, &#39;2.8.3&#39;, &#39;package.json version must be 2.8.3&#39;);
+    assertEq(pkg.version, &#39;2.8.5&#39;, &#39;package.json version must be 2.8.5&#39;);
     assertTrue(Boolean(pkg.dependencies?.[&#39;expo-calendar&#39;]), &#39;expo-calendar dependency missing&#39;);
 
     const cfgText = fs.readFileSync(path.join(ROOT, &#39;app.config.js&#39;), &#39;utf8&#39;);
     for (const reqTok of [
-      &quot;version: &#39;2.8.3&#39;&quot;, &#39;privacyManifests:&#39;, &#39;NSPrivacyTracking: false&#39;, &#39;NSPrivacyAccessedAPIType:&#39;, &#39;NSPrivacyAccessedAPITypeReasons:&#39;, &#39;CA92.1&#39;, &#39;C617.1&#39;, &#39;35F9.1&#39;, &#39;E174.1&#39;,
+      &quot;version: &#39;2.8.5&#39;&quot;, &#39;privacyManifests:&#39;, &#39;NSPrivacyTracking: false&#39;, &#39;NSPrivacyAccessedAPIType:&#39;, &#39;NSPrivacyAccessedAPITypeReasons:&#39;, &#39;CA92.1&#39;, &#39;C617.1&#39;, &#39;35F9.1&#39;, &#39;E174.1&#39;,
       &#39;blockedPermissions:&#39;, &#39;android.permission.READ_MEDIA_IMAGES&#39;, &#39;android.permission.RECORD_AUDIO&#39;,
       &#39;android.permission.READ_EXTERNAL_STORAGE&#39;, &#39;android.permission.ACCESS_BACKGROUND_LOCATION&#39;, &#39;android.permission.SYSTEM_ALERT_WINDOW&#39;,
     ]) {
@@ -4740,6 +4741,7 @@ const PLATFORM_EXTS = [&#39;&#39;, &#39;.ts&#39;, &#39;.tsx&#39;, &#39;.js&#39;,
 
 const PARTNER_WEB_FILES = [
   &#39;src/app/socios.tsx&#39;, &#39;src/hooks/partner-web/usePartnerWebEventsCrud.ts&#39;,
+  &#39;src/components/partner-web/partnerWebEntry.ts&#39;, &#39;src/components/partner-web/partnerWebEntry.web.ts&#39;,
   &#39;src/services/partner-web/partnerWebTypes.ts&#39;, &#39;src/services/partner-web/partnerWebGuards.ts&#39;,
   &#39;src/services/partner-web/partnerWebAuthService.ts&#39;, &#39;src/services/partner-web/partnerWebDataService.ts&#39;,
   &#39;src/services/partner-web/partnerWebMediaAndCatalogService.ts&#39;, &#39;src/components/partner-web/partnerWebThemeStyles.ts&#39;,
@@ -5181,12 +5183,16 @@ import {
 import {
   KINETIC_APP_PACKAGE_ID,
   KINETIC_GOOGLE_WEB_CLIENT_ID,
+  beginNativeOidcFlow,
   buildGoogleOidcAuthorizeUrl,
   buildNativeKineticIdTokenDeepLink,
   buildNativeOidcBridgeStartUrl,
+  endNativeOidcFlow,
   extractGoogleIdTokenFromCallbackUrl,
   generateOidcNonceAndState,
   parseAndVerifyKineticOidcState,
+  recordCapturedNativeOidcUrl,
+  resolveNativeOidcAuthSessionCallbackUrl,
   sha256HexOidc,
 } from &#39;../../services/kineticGoogleOidcService&#39;;
 import {
@@ -5271,9 +5277,10 @@ describe(&#39;Paso 13 Integral v2.8.2 — Identidad Corporativa Pura + Paquete c
     }
 
     const appCfg = fs.readFileSync(path.join(ROOT, &#39;app.config.js&#39;), &#39;utf8&#39;);
-    assertTrue(appCfg.includes(&quot;version: &#39;2.8.3&#39;&quot;), &#39;app.config.js version debe ser 2.8.3&#39;);
+    assertTrue(appCfg.includes(&quot;version: &#39;2.8.5&#39;&quot;), &#39;app.config.js version debe ser 2.8.5&#39;);
     assertTrue(appCfg.includes(&quot;bundleIdentifier: &#39;com.kineticapp.mx&#39;&quot;), &#39;ios.bundleIdentifier debe ser com.kineticapp.mx&#39;);
     assertTrue(appCfg.includes(&quot;package: &#39;com.kineticapp.mx&#39;&quot;), &#39;android.package debe ser com.kineticapp.mx&#39;);
+    assertTrue(!/pathPrefix:\s*[&#39;&quot;]\/oauth[&#39;&quot;]/.test(appCfg) &amp;&amp; !/pathPrefix:\s*[&#39;&quot;]\/socios[&#39;&quot;]/.test(appCfg), &#39;android.intentFilters no debe secuestrar /oauth ni /socios&#39;);
     assertEq(/\bowner\s*:/.test(appCfg), false, &#39;app.config.js no debe exponer owner personal&#39;);
     assertEq(KINETIC_APP_PACKAGE_ID, &#39;com.kineticapp.mx&#39;, &#39;KINETIC_APP_PACKAGE_ID debe ser com.kineticapp.mx&#39;);
 
@@ -5381,6 +5388,58 @@ describe(&#39;Paso 13 Integral v2.8.2 — Identidad Corporativa Pura + Paquete c
           assertTrue(evLink.startsWith(&#39;https://kineticapp.com.mx/eventos?&#39;), `Link evento fuera de dominio único: ${evLink}`);
           assertTrue(sqLink.startsWith(&#39;https://kineticapp.com.mx/reservation-detail?&#39;), `Link squad fuera de dominio único: ${sqLink}`);
           assertEq(new RegExp(`${[&#39;enrike&#39;, &#39;only&#39;].join(&#39;&#39;)}|supabase\\.co`, &#39;i&#39;).test(`${evLink} ${sqLink}`), false, &#39;Enlace público expuso identidad o supabase.co&#39;);
+        }
+      ),
+      { numRuns: NUM_RUNS }
+    );
+  });
+
+  it(&#39;Propiedad 5 (500x async): Anti-secuestro /oauth en AppLinks/AASA y captura Custom Tabs tras dismiss&#39;, async () =&gt; {
+    const appCfg = fs.readFileSync(path.join(ROOT, &#39;app.config.js&#39;), &#39;utf8&#39;);
+    const aasa = JSON.parse(fs.readFileSync(path.join(ROOT, &#39;public&#39;, &#39;.well-known&#39;, &#39;apple-app-site-association&#39;), &#39;utf8&#39;)) as {
+      applinks?: { details?: { components?: Record&lt;string, unknown&gt;[] }[] };
+    };
+    const comps = aasa.applinks?.details?.[0]?.components || [];
+    for (const reqPath of [&#39;/boveda&#39;, &#39;/events&#39;, &#39;/explore&#39;]) {
+      assertTrue(appCfg.includes(`pathPrefix: &#39;${reqPath}&#39;`), `Falta pathPrefix ${reqPath}`);
+    }
+    assertTrue(!appCfg.includes(&quot;pathPrefix: &#39;/oauth&#39;&quot;) &amp;&amp; !appCfg.includes(&quot;pathPrefix: &#39;/socios&#39;&quot;), &#39;/oauth o /socios no pueden secuestrar App Links&#39;);
+    assertTrue(comps.some((c) =&gt; c[&#39;/&#39;] === &#39;/oauth*&#39; &amp;&amp; c.exclude === true) &amp;&amp; comps.some((c) =&gt; c[&#39;/&#39;] === &#39;/socios*&#39; &amp;&amp; c.exclude === true), &#39;AASA debe excluir /oauth* y /socios*&#39;);
+
+    const futureExp = Math.floor(Date.now() / 1000) + 3600;
+    const header = toB64Url({ alg: &#39;RS256&#39;, typ: &#39;JWT&#39; });
+    await new Promise&lt;void&gt;((resolve) =&gt; setTimeout(resolve, 0));
+    await fc.assert(
+      fc.asyncProperty(
+        fc.constantFrom&lt;&#39;b2c&#39; | &#39;b2b&#39;&gt;(&#39;b2c&#39;, &#39;b2b&#39;),
+        fc.constantFrom&lt;&#39;dismiss&#39; | &#39;cancel&#39;&gt;(&#39;dismiss&#39;, &#39;cancel&#39;),
+        fc.boolean(),
+        async (mode, dismissType, useMicrotask) =&gt; {
+          const { nonceHash, state } = generateOidcNonceAndState(&#39;native&#39;, mode);
+          const decoy = generateOidcNonceAndState(&#39;native&#39;, mode === &#39;b2c&#39; ? &#39;b2b&#39; : &#39;b2c&#39;);
+          const jwt = `${header}.${toB64Url({ iss: &#39;https://accounts.google.com&#39;, aud: KINETIC_GOOGLE_WEB_CLIENT_ID, sub: &#39;99887766&#39;, nonce: nonceHash, exp: futureExp })}.SigNativeDismiss`;
+          const deepLink = buildNativeKineticIdTokenDeepLink(jwt, state);
+          const decoyLink = buildNativeKineticIdTokenDeepLink(jwt, decoy.state);
+          const flowId = beginNativeOidcFlow();
+          let subCb: ((u: string) =&gt; void) | null = null;
+          let timerId: ReturnType&lt;typeof setTimeout&gt; | null = null;
+          recordCapturedNativeOidcUrl(decoyLink);
+          const emitReal = () =&gt; { recordCapturedNativeOidcUrl(deepLink); subCb?.(deepLink); };
+          if (useMicrotask) queueMicrotask(emitReal); else timerId = setTimeout(emitReal, 1);
+          try {
+            const captured = await resolveNativeOidcAuthSessionCallbackUrl({
+              authSession: { type: dismissType },
+              graceMs: 1500,
+              expectedState: state,
+              subscribeUrl: (cb) =&gt; { subCb = cb; return () =&gt; { subCb = null; }; },
+            });
+            assertEq(captured, deepLink, `Falló captura tras ${dismissType}`);
+            const parsed = extractGoogleIdTokenFromCallbackUrl(captured, { expectedState: state, expectedNonceHash: nonceHash, expectedClientId: KINETIC_GOOGLE_WEB_CLIENT_ID });
+            assertTrue(parsed !== null &amp;&amp; parsed.idToken === jwt &amp;&amp; parsed.mode === mode, &#39;Token tras dismiss no validó&#39;);
+          } finally {
+            if (timerId) clearTimeout(timerId);
+            endNativeOidcFlow(flowId);
+          }
         }
       ),
       { numRuns: NUM_RUNS }
@@ -8016,7 +8075,7 @@ export default function LoginAtletaScreen() {
 </code></pre>
 <h2>FILE: src/app/oauth.tsx</h2>
 <pre><code class="language-tsx">// === src/app/oauth.tsx === //
-import { useRouter } from &#39;expo-router&#39;;
+import { useLocalSearchParams, useRouter } from &#39;expo-router&#39;;
 import React, { useEffect, useRef, useState } from &#39;react&#39;;
 import { Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from &#39;react-native&#39;;
 import { useAuth } from &#39;../context/AuthContext&#39;;
@@ -8029,12 +8088,15 @@ import { doesSessionRequireMfaAal2, getMfaSecuritySnapshot, type IMfaSessionLike
 import { mountKineticGoogleGisWidget } from &#39;../services/kineticGoogleGisWebRunner&#39;;
 import {
   KINETIC_NATIVE_OIDC_DEEP_LINK,
+  KINETIC_OIDC_REDIRECT_URI,
+  buildGoogleOidcAuthorizeUrl,
   buildNativeKineticIdTokenDeepLink,
   consumePendingOidcChallenge,
   exchangeGoogleIdTokenWithSupabase,
   extractGoogleIdTokenFromCallbackUrl,
   isNativeOidcFlowInFlight,
   parseAndVerifyKineticOidcState,
+  peekPendingOidcChallenge,
   recordCapturedNativeOidcUrl,
   resolveGoogleWebClientId,
   verifyAndExchangeNativeGoogleOidcUrl,
@@ -8048,16 +8110,19 @@ const SHA256_HEX_RE = /^[0-9a-f]{64}$/;
 
 export default function KineticOAuthBridgeScreen() {
   const router = useRouter();
+  const routeParams = useLocalSearchParams&lt;{ platform?: string; mode?: string; nonce?: string; state?: string }&gt;();
   const { activateResilientSession } = useAuth();
   const { tx, language } = useKineticPreferences();
   const gisSlotRef = useRef&lt;HTMLDivElement | null&gt;(null);
   const startedRef = useRef(false);
-  const latestRef = useRef({ activateResilientSession, router, tx, language });
-  latestRef.current = { activateResilientSession, router, tx, language };
+  const latestRef = useRef({ activateResilientSession, router, tx, language, routeParams });
+  latestRef.current = { activateResilientSession, router, tx, language, routeParams };
   const [nativeBridgeMode, setNativeBridgeMode] = useState(false);
   const [statusMsg, setStatusMsg] = useState(() =&gt; tx(&#39;Conectando acceso seguro…&#39;, &#39;Connecting secure sign-in…&#39;));
   const [errorMsg, setErrorMsg] = useState&lt;string | null&gt;(null);
   const [showNativeButton, setShowNativeButton] = useState(false);
+  const [readyDeepLink, setReadyDeepLink] = useState&lt;string | null&gt;(null);
+  const [directOidcUrl, setDirectOidcUrl] = useState&lt;string | null&gt;(null);
 
   useEffect(() =&gt; {
     if (Platform.OS !== &#39;web&#39; || typeof window === &#39;undefined&#39;) {
@@ -8074,26 +8139,17 @@ export default function KineticOAuthBridgeScreen() {
         if (!incomingUrl || !incomingUrl.includes(&#39;id_token=&#39;) || !isAllowedKineticOAuthRedirectUrl(incomingUrl)) return false;
         handledNativeUrl = true;
         if (graceTimer) { clearTimeout(graceTimer); graceTimer = null; }
+        if (fallbackTimer) { clearTimeout(fallbackTimer); fallbackTimer = null; }
         try {
           recordCapturedNativeOidcUrl(incomingUrl);
           const authRes = await verifyAndExchangeNativeGoogleOidcUrl(incomingUrl);
           const sessRaw = authRes?.data?.session;
           const kUser = toKineticAuthUser(authRes?.data?.user);
           const mfaSnap = sessRaw ? await getMfaSecuritySnapshot().catch(() =&gt; null) : null;
-          if (
-            !kUser ||
-            !sessRaw ||
-            doesSessionRequireMfaAal2(sessRaw as IMfaSessionLike) ||
-            mfaSnap?.requiresMfaChallenge ||
-            !mfaSnap ||
-            mfaSnap.checkFailed
-          ) {
+          if (!kUser || !sessRaw || doesSessionRequireMfaAal2(sessRaw as IMfaSessionLike) || mfaSnap?.requiresMfaChallenge || !mfaSnap || mfaSnap.checkFailed) {
             await supabase.auth.signOut().catch(() =&gt; {});
             await clearPersistedKineticSessionExplicit().catch(() =&gt; {});
-            if (!cancelled) {
-              setOidcReturnTransitionActive(false);
-              latestRef.current.router.replace(&#39;/login&#39;);
-            }
+            if (!cancelled) { setOidcReturnTransitionActive(false); latestRef.current.router.replace(&#39;/login&#39;); }
             return true;
           }
           const prof = await ensureFirstTimeProfile(kUser).catch(() =&gt; null);
@@ -8103,42 +8159,60 @@ export default function KineticOAuthBridgeScreen() {
             setTimeout(() =&gt; setOidcReturnTransitionActive(false), 380);
           }
           return true;
-        } catch {
-          if (!cancelled) {
-            setOidcReturnTransitionActive(false);
-            latestRef.current.router.replace(&#39;/login&#39;);
-          }
+        } catch (err) {
+          void err;
+          if (!cancelled) { setOidcReturnTransitionActive(false); latestRef.current.router.replace(&#39;/login&#39;); }
           return true;
         }
       };
 
-      const urlSub = Linking.addEventListener(&#39;url&#39;, ({ url }) =&gt; {
-        if (!isNativeOidcFlowInFlight()) void handleNativeUrl(url);
-      });
+      const dispatchIncomingIdToken = (url: string | null | undefined) =&gt; {
+        if (!url || !url.includes(&#39;id_token=&#39;)) return false;
+        recordCapturedNativeOidcUrl(url);
+        if (!isNativeOidcFlowInFlight()) {
+          void handleNativeUrl(url);
+          return true;
+        }
+        if (graceTimer) { clearTimeout(graceTimer); graceTimer = null; }
+        graceTimer = setTimeout(() =&gt; {
+          if (cancelled || handledNativeUrl || isNativeOidcFlowInFlight()) return;
+          void peekPendingOidcChallenge().then((pending) =&gt; {
+            if (!cancelled &amp;&amp; !handledNativeUrl &amp;&amp; !isNativeOidcFlowInFlight() &amp;&amp; pending) void handleNativeUrl(url);
+          });
+        }, 350);
+        return true;
+      };
 
-      if (isNativeOidcFlowInFlight()) {
-        fallbackTimer = setTimeout(() =&gt; {
+      const urlSub = Linking.addEventListener(&#39;url&#39;, ({ url }) =&gt; { dispatchIncomingIdToken(url); });
+
+      void (async () =&gt; {
+        try {
+          const initialUrl = await Linking.getInitialURL().catch(() =&gt; null);
           if (cancelled) return;
-          setOidcReturnTransitionActive(false);
-          latestRef.current.router.replace(&#39;/login&#39;);
-        }, 4500);
-      } else {
-        void (async () =&gt; {
-          try {
-            const initialUrl = await Linking.getInitialURL().catch(() =&gt; null);
-            if (cancelled) return;
-            const handled = await handleNativeUrl(initialUrl);
-            if (handled || cancelled) return;
-          } catch {}
-          if (!cancelled &amp;&amp; !handledNativeUrl) {
-            graceTimer = setTimeout(() =&gt; {
-              if (cancelled || handledNativeUrl) return;
+          if (dispatchIncomingIdToken(initialUrl)) return;
+          const p = latestRef.current.routeParams;
+          const pNonce = String(p?.nonce || &#39;&#39;).trim().toLowerCase();
+          const pState = String(p?.state || &#39;&#39;).trim();
+          const pParsed = parseAndVerifyKineticOidcState(pState);
+          if (!isNativeOidcFlowInFlight() &amp;&amp; String(p?.platform || &#39;&#39;) === &#39;native&#39; &amp;&amp; SHA256_HEX_RE.test(pNonce) &amp;&amp; pParsed) {
+            const authUrl = buildGoogleOidcAuthorizeUrl({ redirectUri: KINETIC_OIDC_REDIRECT_URI, nonceHash: pNonce, state: pState });
+            await Linking.openURL(authUrl).catch(() =&gt; null);
+            if (!cancelled) {
               setOidcReturnTransitionActive(false);
               latestRef.current.router.replace(&#39;/login&#39;);
-            }, 900);
+            }
+            return;
           }
-        })();
-      }
+        } catch (err) { void err; }
+        if (!cancelled &amp;&amp; !handledNativeUrl) {
+          const waitMs = isNativeOidcFlowInFlight() ? 4500 : 250;
+          fallbackTimer = setTimeout(() =&gt; {
+            if (cancelled || handledNativeUrl) return;
+            setOidcReturnTransitionActive(false);
+            latestRef.current.router.replace(&#39;/login&#39;);
+          }, waitMs);
+        }
+      })();
       return () =&gt; {
         cancelled = true;
         startedRef.current = false;
@@ -8169,14 +8243,20 @@ export default function KineticOAuthBridgeScreen() {
       scrubOAuthSecretsFromWebLocation();
 
       if (parsedHashState?.platform === &#39;native&#39;) {
+        setNativeBridgeMode(true);
         try {
-          window.location.replace(buildNativeKineticIdTokenDeepLink(hashToken, hashState));
-        } catch {
+          const deepLink = buildNativeKineticIdTokenDeepLink(hashToken, hashState);
+          setReadyDeepLink(deepLink);
+          setStatusMsg(tLocal(&#39;Credencial verificada. Regresando a la app Kinetic…&#39;, &#39;Verified. Returning to the Kinetic app…&#39;));
+          window.location.replace(deepLink);
+        } catch (err) {
+          void err;
           setErrorMsg(tLocal(&#39;Token de Google inválido o expirado.&#39;, &#39;Invalid or expired Google token.&#39;));
         }
-        return;
+        return () =&gt; { cancelled = true; startedRef.current = false; };
       }
 
+      let mfaRedirectTimer: ReturnType&lt;typeof setTimeout&gt; | null = null;
       void (async () =&gt; {
         try {
           const challenge = await consumePendingOidcChallenge();
@@ -8200,7 +8280,7 @@ export default function KineticOAuthBridgeScreen() {
                   &#39;Your account requires 2FA verification on /login to complete sign-in.&#39;
                 )
               );
-              setTimeout(() =&gt; { if (!cancelled) latestRef.current.router.replace(&#39;/login&#39;); }, 1200);
+              mfaRedirectTimer = setTimeout(() =&gt; { if (!cancelled) latestRef.current.router.replace(&#39;/login&#39;); }, 1200);
             }
             return;
           }
@@ -8216,11 +8296,16 @@ export default function KineticOAuthBridgeScreen() {
           });
           latestRef.current.activateResilientSession(kUser, profile, kSess);
           latestRef.current.router.replace(resolveRoleDestination(kUser, profile, data.session.access_token) as never);
-        } catch {
+        } catch (err) {
+          void err;
           if (!cancelled) setErrorMsg(tLocal(&#39;No fue posible validar tu sesión con Google.&#39;, &#39;Unable to verify your Google session.&#39;));
         }
       })();
-      return () =&gt; { cancelled = true; };
+      return () =&gt; {
+        cancelled = true;
+        startedRef.current = false;
+        if (mfaRedirectTimer) clearTimeout(mfaRedirectTimer);
+      };
     }
 
     if (reqPlatform === &#39;native&#39;) {
@@ -8228,8 +8313,14 @@ export default function KineticOAuthBridgeScreen() {
       const parsedState = parseAndVerifyKineticOidcState(reqState);
       if (!parsedState || parsedState.platform !== &#39;native&#39; || !SHA256_HEX_RE.test(reqNonce)) {
         setErrorMsg(tLocal(&#39;Solicitud de enlace móvil inválida o expirada.&#39;, &#39;Invalid or expired mobile bridge request.&#39;));
-        return;
+        return () =&gt; { cancelled = true; startedRef.current = false; };
       }
+      const fallbackOidcUrl = buildGoogleOidcAuthorizeUrl({
+        redirectUri: KINETIC_OIDC_REDIRECT_URI,
+        nonceHash: reqNonce,
+        state: reqState,
+      });
+      setDirectOidcUrl(fallbackOidcUrl);
       setShowNativeButton(true);
       setStatusMsg(tLocal(&#39;Elige tu cuenta de Google para entrar a Kinetic&#39;, &#39;Choose your Google account to enter Kinetic&#39;));
       let attempts = 0;
@@ -8238,7 +8329,7 @@ export default function KineticOAuthBridgeScreen() {
         if (!gisSlotRef.current) {
           attempts += 1;
           if (attempts &lt; 30) { rafId = requestAnimationFrame(tryMount); return; }
-          setErrorMsg(tLocal(&#39;No se pudo inicializar el selector de Google.&#39;, &#39;Could not initialize Google Sign-In.&#39;));
+          window.location.assign(fallbackOidcUrl);
           return;
         }
         void mountKineticGoogleGisWidget({
@@ -8247,12 +8338,20 @@ export default function KineticOAuthBridgeScreen() {
           locale: langLocal === &#39;en&#39; ? &#39;en&#39; : &#39;es&#39;,
           isAborted: () =&gt; cancelled,
           onError: () =&gt; {
-            if (!cancelled) setErrorMsg(tLocal(&#39;Google no devolvió credenciales válidas.&#39;, &#39;Google did not return valid credentials.&#39;));
+            if (!cancelled) window.location.assign(fallbackOidcUrl);
           },
           onCredential: (idToken) =&gt; {
             if (cancelled) return;
-            setStatusMsg(tLocal(&#39;Regresando a la app Kinetic…&#39;, &#39;Returning to the Kinetic app…&#39;));
-            window.location.replace(buildNativeKineticIdTokenDeepLink(idToken, reqState));
+            try {
+              const deepLink = buildNativeKineticIdTokenDeepLink(idToken, reqState);
+              setReadyDeepLink(deepLink);
+              setShowNativeButton(false);
+              setStatusMsg(tLocal(&#39;Credencial lista. Regresando a la app Kinetic…&#39;, &#39;Credential ready. Returning to the Kinetic app…&#39;));
+              window.location.replace(deepLink);
+            } catch (err) {
+              void err;
+              setErrorMsg(tLocal(&#39;Token de Google inválido o expirado.&#39;, &#39;Invalid or expired Google token.&#39;));
+            }
           },
         })
           .then((dispose) =&gt; {
@@ -8260,7 +8359,7 @@ export default function KineticOAuthBridgeScreen() {
             disposeGis = dispose;
           })
           .catch(() =&gt; {
-            if (!cancelled) setErrorMsg(tLocal(&#39;No se pudo cargar el selector de Google.&#39;, &#39;Could not load Google Sign-In.&#39;));
+            if (!cancelled) window.location.assign(fallbackOidcUrl);
           });
       };
       rafId = requestAnimationFrame(tryMount);
@@ -8273,6 +8372,13 @@ export default function KineticOAuthBridgeScreen() {
       };
     }
 
+    const hashParamsFallback = new URLSearchParams(hash.startsWith(&#39;#&#39;) ? hash.slice(1) : hash);
+    const nativeErrState = String(hashParamsFallback.get(&#39;state&#39;) || searchParams.get(&#39;state&#39;) || &#39;&#39;).trim();
+    if (parseAndVerifyKineticOidcState(nativeErrState)?.platform === &#39;native&#39;) {
+      setNativeBridgeMode(true);
+      try { window.location.replace(`${KINETIC_NATIVE_OIDC_DEEP_LINK}?cancelled=1`); } catch (err) { void err; }
+      return () =&gt; { cancelled = true; startedRef.current = false; };
+    }
     latestRef.current.router.replace(&#39;/login&#39;);
     return () =&gt; {
       cancelled = true;
@@ -8286,7 +8392,7 @@ export default function KineticOAuthBridgeScreen() {
       try {
         window.location.replace(`${KINETIC_NATIVE_OIDC_DEEP_LINK}?cancelled=1`);
         return;
-      } catch {}
+      } catch (err) { void err; }
     }
     router.replace(&#39;/login&#39;);
   };
@@ -8296,14 +8402,34 @@ export default function KineticOAuthBridgeScreen() {
       &lt;View style={styles.card}&gt;
         &lt;Text style={styles.brand}&gt;KINETIC&lt;/Text&gt;
         &lt;Text style={styles.domain}&gt;kineticapp.com.mx&lt;/Text&gt;
-        {!errorMsg &amp;&amp; !showNativeButton &amp;&amp; &lt;KineticLoader size={24} color=&quot;#00F0FF&quot; /&gt;}
+        {!errorMsg &amp;&amp; !showNativeButton &amp;&amp; !readyDeepLink &amp;&amp; &lt;KineticLoader size={24} color=&quot;#00F0FF&quot; /&gt;}
         &lt;Text style={errorMsg ? styles.errorText : styles.statusText}&gt;{errorMsg || statusMsg}&lt;/Text&gt;
-        {showNativeButton &amp;&amp; !errorMsg &amp;&amp; Platform.OS === &#39;web&#39; &amp;&amp; (
+        {Boolean(readyDeepLink) &amp;&amp; !errorMsg &amp;&amp; Platform.OS === &#39;web&#39; &amp;&amp; (
+          &lt;TouchableOpacity
+            testID=&quot;oauth-return-native-btn&quot;
+            style={styles.primaryReturnBtn}
+            onPress={() =&gt; { if (readyDeepLink) window.location.assign(readyDeepLink); }}
+            activeOpacity={0.88}
+          &gt;
+            &lt;Text style={styles.primaryReturnText}&gt;{tx(&#39;CONTINUAR EN KINETIC&#39;, &#39;CONTINUE IN KINETIC&#39;)}&lt;/Text&gt;
+          &lt;/TouchableOpacity&gt;
+        )}
+        {showNativeButton &amp;&amp; !readyDeepLink &amp;&amp; !errorMsg &amp;&amp; Platform.OS === &#39;web&#39; &amp;&amp; (
           &lt;View style={styles.slotWrap}&gt;
             {React.createElement(&#39;div&#39; as unknown as React.ElementType, {
               ref: gisSlotRef,
               style: { display: &#39;flex&#39;, justifyContent: &#39;center&#39;, minHeight: 44 },
             })}
+            {Boolean(directOidcUrl) &amp;&amp; (
+              &lt;TouchableOpacity
+                testID=&quot;oauth-direct-google-btn&quot;
+                style={styles.directOidcBtn}
+                onPress={() =&gt; { if (directOidcUrl) window.location.assign(directOidcUrl); }}
+                activeOpacity={0.85}
+              &gt;
+                &lt;Text style={styles.directOidcText}&gt;{tx(&#39;Continuar con Google (Acceso Directo)&#39;, &#39;Continue with Google (Direct)&#39;)}&lt;/Text&gt;
+              &lt;/TouchableOpacity&gt;
+            )}
           &lt;/View&gt;
         )}
         &lt;TouchableOpacity style={styles.backBtn} onPress={handleBackPress} activeOpacity={0.85}&gt;
@@ -8337,7 +8463,11 @@ const styles = StyleSheet.create({
   domain: { color: &#39;#94A3B8&#39;, fontSize: 12, fontWeight: &#39;600&#39; },
   statusText: { color: &#39;#E2E8F0&#39;, fontSize: 13.5, textAlign: &#39;center&#39;, fontWeight: &#39;600&#39; },
   errorText: { color: &#39;#FCA5A5&#39;, fontSize: 13.5, textAlign: &#39;center&#39;, fontWeight: &#39;700&#39; },
-  slotWrap: { width: &#39;100%&#39;, alignItems: &#39;center&#39;, marginVertical: 6 },
+  slotWrap: { width: &#39;100%&#39;, alignItems: &#39;center&#39;, marginVertical: 6, gap: 12 },
+  primaryReturnBtn: { width: &#39;100%&#39;, paddingVertical: 14, paddingHorizontal: 18, borderRadius: 14, backgroundColor: &#39;#00F0FF&#39;, alignItems: &#39;center&#39; },
+  primaryReturnText: { color: &#39;#050505&#39;, fontSize: 13.5, fontWeight: &#39;900&#39;, letterSpacing: 0.7 },
+  directOidcBtn: { paddingVertical: 10, paddingHorizontal: 16, borderRadius: 999, borderWidth: 1, borderColor: &#39;rgba(0,240,255,0.42)&#39;, backgroundColor: &#39;rgba(0,240,255,0.08)&#39; },
+  directOidcText: { color: &#39;#00F0FF&#39;, fontSize: 12, fontWeight: &#39;800&#39; },
   backBtn: {
     marginTop: 6,
     paddingHorizontal: 18,
@@ -9116,15 +9246,10 @@ export default function RegisterScreen() {
 import { Redirect } from &#39;expo-router&#39;;
 import React from &#39;react&#39;;
 import { ActivityIndicator, Platform, View } from &#39;react-native&#39;;
+import { loadPartnerWebPortalComponent } from &#39;../components/partner-web/partnerWebEntry&#39;;
 
 const LazyKineticPartnerWebPortal =
-  Platform.OS === &#39;web&#39;
-    ? React.lazy(() =&gt;
-        import(&#39;../components/partner-web/KineticPartnerWebPortal&#39;).then((m) =&gt; ({
-          default: m.KineticPartnerWebPortal,
-        }))
-      )
-    : null;
+  Platform.OS === &#39;web&#39; &amp;&amp; loadPartnerWebPortalComponent ? React.lazy(loadPartnerWebPortalComponent) : null;
 
 export default function KineticPartnerWebRoute() {
   if (Platform.OS !== &#39;web&#39; || !LazyKineticPartnerWebPortal) {
@@ -12808,6 +12933,17 @@ const s = StyleSheet.create({
   pillRow: { flexDirection: &#39;row&#39;, flexWrap: &#39;wrap&#39;, gap: 8 },
   rosterRow: { flexDirection: &#39;row&#39;, flexWrap: &#39;wrap&#39;, alignItems: &#39;center&#39;, justifyContent: &#39;space-between&#39;, gap: 10, borderWidth: 1, borderRadius: 12, padding: 12 },
 });
+</code></pre>
+<h2>FILE: src/components/partner-web/partnerWebEntry.ts</h2>
+<pre><code class="language-ts">// === src/components/partner-web/partnerWebEntry.ts === //
+import type React from &#39;react&#39;;
+
+export const loadPartnerWebPortalComponent: (() =&gt; Promise&lt;{ default: React.ComponentType }&gt;) | null = null;
+</code></pre>
+<h2>FILE: src/components/partner-web/partnerWebEntry.web.ts</h2>
+<pre><code class="language-ts">// === src/components/partner-web/partnerWebEntry.web.ts === //
+export const loadPartnerWebPortalComponent = () =&gt;
+  import(&#39;./KineticPartnerWebPortal&#39;).then((m) =&gt; ({ default: m.KineticPartnerWebPortal }));
 </code></pre>
 <h2>FILE: src/components/partner-web/PartnerWebFinanceView.tsx</h2>
 <pre><code class="language-tsx">// === src/components/partner-web/PartnerWebFinanceView.tsx === //
@@ -20850,7 +20986,7 @@ export const I18nContext = KineticPreferencesContext;
 import AsyncStorage from &#39;@react-native-async-storage/async-storage&#39;;
 import * as WebBrowser from &#39;expo-web-browser&#39;;
 import { useCallback, type MutableRefObject } from &#39;react&#39;;
-import { Keyboard, Platform } from &#39;react-native&#39;;
+import { Keyboard, Linking, Platform } from &#39;react-native&#39;;
 import {
   PENDING_OAUTH_MODE_KEY,
   ensureFirstTimeProfile,
@@ -20864,10 +21000,11 @@ import {
   beginNativeOidcFlow,
   buildNativeOidcBridgeStartUrl,
   clearPendingOidcChallenge,
-  consumeCapturedNativeOidcUrl,
   endNativeOidcFlow,
   generateOidcNonceAndState,
   persistPendingOidcChallenge,
+  recordCapturedNativeOidcUrl,
+  resolveNativeOidcAuthSessionCallbackUrl,
   verifyAndExchangeNativeGoogleOidcUrl,
 } from &#39;../../services/kineticGoogleOidcService&#39;;
 import { persistBiometricRefreshTokenIfAllowedAsync } from &#39;../../services/kineticBiometricVaultService&#39;;
@@ -20931,12 +21068,14 @@ export function useKineticGoogleAuthActions(p: GoogleAuthActionsParams) {
       setIsSsoLoading(true);
       triggerHaptic?.(&#39;Light&#39;);
       let nativeFlowId: number | undefined;
+      let nativeChallengeState: string | null = null;
+      let nativeUrlSub: { remove: () =&gt; void } | null = null;
       try {
         await AsyncStorage.setItem(PENDING_OAUTH_MODE_KEY, mode).catch(() =&gt; {});
         const finishOAuthLogin = async (signedUser: KineticAuthUser, activeSess: KineticAuthSession | null) =&gt; {
           if (mountedRef.current) setGate(true);
           const mfaStatus = await evaluateMfaGateOrFailClosed(signedUser, activeSess, String(signedUser.email || &#39;&#39;), mode);
-          if (mfaStatus === &#39;mfa_required&#39;) return true;
+          if (mfaStatus === &#39;mfa_required&#39;) { setOidcReturnTransitionActive(false); return true; }
           if (mountedRef.current) setGate(false);
           AsyncStorage.removeItem(PENDING_OAUTH_MODE_KEY).catch(() =&gt; {});
           const profileData = await raceWithAuthTimeout(ensureFirstTimeProfile(signedUser), PROFILE_RACE_TIMEOUT_MS).catch(
@@ -20953,7 +21092,7 @@ export function useKineticGoogleAuthActions(p: GoogleAuthActionsParams) {
           triggerHaptic?.(&#39;Success&#39;);
           try {
             router.replace(resolveRoleDestination(signedUser, profileData, activeSess?.access_token) as never);
-          } catch {}
+          } catch (err) { void err; }
           setTimeout(() =&gt; setOidcReturnTransitionActive(false), 380);
           return true;
         };
@@ -20971,8 +21110,12 @@ export function useKineticGoogleAuthActions(p: GoogleAuthActionsParams) {
         }
 
         const challenge = generateOidcNonceAndState(&#39;native&#39;, mode);
+        nativeChallengeState = challenge.state;
         await persistPendingOidcChallenge({ ...challenge, mode, createdAtMs: Date.now() });
         nativeFlowId = beginNativeOidcFlow();
+        nativeUrlSub = Linking.addEventListener(&#39;url&#39;, ({ url }) =&gt; {
+          if (url &amp;&amp; url.includes(&#39;id_token=&#39;)) recordCapturedNativeOidcUrl(url);
+        });
         const bridgeUrl = buildNativeOidcBridgeStartUrl({ mode, nonceHash: challenge.nonceHash, state: challenge.state });
         const authSession = await WebBrowser.openAuthSessionAsync(
           bridgeUrl,
@@ -20980,8 +21123,12 @@ export function useKineticGoogleAuthActions(p: GoogleAuthActionsParams) {
           { showInRecents: false, createTask: false }
         );
         oauthPendingRef.current = false;
-        const callbackUrl =
-          authSession.type === &#39;success&#39; &amp;&amp; authSession.url ? authSession.url : consumeCapturedNativeOidcUrl();
+        const callbackUrl = await resolveNativeOidcAuthSessionCallbackUrl({
+          authSession,
+          graceMs: 1500,
+          expectedState: challenge.state,
+          getInitialUrl: () =&gt; Linking.getInitialURL().catch(() =&gt; null),
+        });
         if (
           callbackUrl &amp;&amp;
           callbackUrl.startsWith(KINETIC_NATIVE_OIDC_DEEP_LINK) &amp;&amp;
@@ -21007,10 +21154,15 @@ export function useKineticGoogleAuthActions(p: GoogleAuthActionsParams) {
         }
         return false;
       } finally {
+        try { nativeUrlSub?.remove(); } catch (err) { void err; }
         if (nativeFlowId !== undefined) endNativeOidcFlow(nativeFlowId);
-        void clearPendingOidcChallenge();
+        if (Platform.OS === &#39;web&#39;) {
+          if (mountedRef.current) await clearPendingOidcChallenge();
+        } else if (nativeChallengeState) {
+          await clearPendingOidcChallenge(nativeChallengeState);
+        }
         oauthPopupCleanupRef.current = null;
-        if (!pendingMfaActiveRef.current) {
+        if (!pendingMfaActiveRef.current &amp;&amp; mountedRef.current) {
           setGate(false);
           AsyncStorage.removeItem(PENDING_OAUTH_MODE_KEY).catch(() =&gt; {});
         }
@@ -28139,6 +28291,8 @@ const GOOGLE_ISSUERS = new Set([&#39;https://accounts.google.com&#39;, &#39;acco
 let _nativeOidcFlowSeq = 0;
 let _activeNativeOidcFlowId: number | null = null;
 let _capturedNativeOidcUrl: string | null = null;
+const _capturedUrlListeners = new Set&lt;(url: string) =&gt; void&gt;();
+let _inflightNativeExchange: { url: string; promise: ReturnType&lt;typeof exchangeGoogleIdTokenWithSupabase&gt; } | null = null;
 let _challengeLock: Promise&lt;void&gt; = Promise.resolve();
 
 const withChallengeLock = &lt;T,&gt;(fn: () =&gt; Promise&lt;T&gt;): Promise&lt;T&gt; =&gt; {
@@ -28154,47 +28308,99 @@ export const beginNativeOidcFlow = (): number =&gt; {
   return _activeNativeOidcFlowId;
 };
 export const endNativeOidcFlow = (flowId?: number): void =&gt; {
-  if (flowId === undefined || _activeNativeOidcFlowId === flowId) {
-    _activeNativeOidcFlowId = null;
-  }
+  if (flowId === undefined || _activeNativeOidcFlowId === flowId) _activeNativeOidcFlowId = null;
 };
 export const setNativeOidcFlowInFlight = (active: boolean): void =&gt; {
   if (active) beginNativeOidcFlow();
   else endNativeOidcFlow();
 };
 export const isNativeOidcFlowInFlight = (): boolean =&gt; _activeNativeOidcFlowId !== null;
+const doesCallbackMatchExpectedState = (url: string, expectedState?: string | null): boolean =&gt; {
+  if (!expectedState) return true;
+  const clean = String(expectedState).trim();
+  const qPart = url.includes(&#39;?&#39;) ? url.split(&#39;?&#39;)[1]?.split(&#39;#&#39;)[0] || &#39;&#39; : &#39;&#39;;
+  const hPart = url.includes(&#39;#&#39;) ? url.split(&#39;#&#39;)[1] || &#39;&#39; : &#39;&#39;;
+  for (const part of [hPart, qPart]) {
+    if (!part) continue;
+    try { const s = new URLSearchParams(part).get(&#39;state&#39;); if (s &amp;&amp; s.trim() === clean) return true; }
+    catch (err) { void err; }
+  }
+  return false;
+};
 export const recordCapturedNativeOidcUrl = (url: string): void =&gt; {
-  if (_activeNativeOidcFlowId !== null &amp;&amp; typeof url === &#39;string&#39; &amp;&amp; url.includes(&#39;id_token=&#39;)) {
-    _capturedNativeOidcUrl = url.trim();
+  const clean = typeof url === &#39;string&#39; ? url.trim() : &#39;&#39;;
+  if (!clean || !clean.includes(&#39;id_token=&#39;) || !isAllowedOidcCallbackTarget(clean)) return;
+  _capturedNativeOidcUrl = clean;
+  for (const listener of Array.from(_capturedUrlListeners)) {
+    try { listener(clean); } catch (err) { void err; }
   }
 };
-export const consumeCapturedNativeOidcUrl = (): string | null =&gt; {
+export const consumeCapturedNativeOidcUrl = (expectedState?: string | null): string | null =&gt; {
   const out = _capturedNativeOidcUrl;
+  if (!out || !doesCallbackMatchExpectedState(out, expectedState)) return null;
   _capturedNativeOidcUrl = null;
   return out;
 };
-
-export interface PendingOidcChallenge {
-  rawNonce: string;
-  nonceHash: string;
-  state: string;
-  mode: &#39;b2c&#39; | &#39;b2b&#39;;
-  createdAtMs: number;
+export const waitForCapturedNativeOidcUrl = (
+  timeoutMs = 1500,
+  subscribeUrl?: (cb: (url: string) =&gt; void) =&gt; () =&gt; void,
+  expectedState?: string | null
+): Promise&lt;string | null&gt; =&gt; {
+  const immediate = consumeCapturedNativeOidcUrl(expectedState);
+  if (immediate) return Promise.resolve(immediate);
+  const waitMs = Math.max(0, Math.min(5000, Math.round(timeoutMs)));
+  if (waitMs === 0) return Promise.resolve(null);
+  return new Promise&lt;string | null&gt;((resolve) =&gt; {
+    let settled = false, unsubExternal: (() =&gt; void) | null = null, timer: ReturnType&lt;typeof setTimeout&gt; | null = null;
+    const finish = (url: string | null) =&gt; {
+      if (settled) return;
+      settled = true; if (timer) { clearTimeout(timer); timer = null; } _capturedUrlListeners.delete(onInternal);
+      if (unsubExternal) { try { unsubExternal(); } catch (err) { void err; } }
+      resolve(url);
+    };
+    const onInternal = (url: string) =&gt; {
+      if (!doesCallbackMatchExpectedState(url, expectedState)) return;
+      const next = consumeCapturedNativeOidcUrl(expectedState) || url;
+      if (next) finish(next);
+    };
+    _capturedUrlListeners.add(onInternal);
+    if (subscribeUrl) {
+      unsubExternal = subscribeUrl((raw) =&gt; {
+        if (!doesCallbackMatchExpectedState(raw, expectedState)) return;
+        recordCapturedNativeOidcUrl(raw);
+        const next = consumeCapturedNativeOidcUrl(expectedState);
+        if (next) finish(next);
+      });
+    }
+    if (!settled) timer = setTimeout(() =&gt; finish(consumeCapturedNativeOidcUrl(expectedState)), waitMs);
+  });
+};
+export async function resolveNativeOidcAuthSessionCallbackUrl(params: {
+  authSession: { type: string; url?: string | null };
+  graceMs?: number;
+  expectedState?: string | null;
+  subscribeUrl?: (cb: (url: string) =&gt; void) =&gt; () =&gt; void;
+  getInitialUrl?: () =&gt; Promise&lt;string | null&gt;;
+}): Promise&lt;string | null&gt; {
+  const { authSession, graceMs = 1500, expectedState, subscribeUrl, getInitialUrl } = params;
+  if (authSession.type === &#39;success&#39; &amp;&amp; authSession.url &amp;&amp; doesCallbackMatchExpectedState(authSession.url, expectedState)) return authSession.url;
+  const alreadyCaptured = consumeCapturedNativeOidcUrl(expectedState);
+  if (alreadyCaptured) return alreadyCaptured;
+  if (getInitialUrl) {
+    const initUrl = await getInitialUrl().catch((err: unknown) =&gt; (err ? null : null));
+    if (initUrl &amp;&amp; initUrl.includes(&#39;id_token=&#39;) &amp;&amp; doesCallbackMatchExpectedState(initUrl, expectedState)) {
+      recordCapturedNativeOidcUrl(initUrl);
+      const c = consumeCapturedNativeOidcUrl(expectedState);
+      if (c) return c;
+    }
+  }
+  if (authSession.type === &#39;dismiss&#39; || authSession.type === &#39;cancel&#39;) return waitForCapturedNativeOidcUrl(graceMs, subscribeUrl, expectedState);
+  return null;
 }
 
-export interface ParsedKineticOidcState {
-  valid: boolean;
-  platform: &#39;web&#39; | &#39;native&#39;;
-  mode: &#39;b2c&#39; | &#39;b2b&#39;;
-  csrf: string;
-}
-
-export interface ExtractedGoogleIdToken {
-  idToken: string;
-  state: string;
-  mode: &#39;b2c&#39; | &#39;b2b&#39;;
-  nonce: string | null;
-}
+export interface PendingOidcChallenge { rawNonce: string; nonceHash: string; state: string; mode: &#39;b2c&#39; | &#39;b2b&#39;; createdAtMs: number; }
+export interface ParsedKineticOidcState { valid: boolean; platform: &#39;web&#39; | &#39;native&#39;; mode: &#39;b2c&#39; | &#39;b2b&#39;; csrf: string; }
+export interface ExtractedGoogleIdToken { idToken: string; state: string; mode: &#39;b2c&#39; | &#39;b2b&#39;; nonce: string | null; }
 
 export function resolveGoogleWebClientId(): string {
   try {
@@ -28204,9 +28410,7 @@ export function resolveGoogleWebClientId(): string {
     try {
       const extraRaw = (Constants?.expoConfig?.extra as { googleWebClientId?: unknown } | undefined)?.googleWebClientId;
       fromExtra = typeof extraRaw === &#39;string&#39; ? extraRaw.trim() : &#39;&#39;;
-    } catch {
-      fromExtra = &#39;&#39;;
-    }
+    } catch (err) { void err; fromExtra = &#39;&#39;; }
     const candidate = fromEnv || fromExtra || DEFAULT_GOOGLE_WEB_CLIENT_ID;
     if (
       !/^[0-9]{6,}-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(candidate) ||
@@ -28215,9 +28419,7 @@ export function resolveGoogleWebClientId(): string {
       return DEFAULT_GOOGLE_WEB_CLIENT_ID;
     }
     return candidate;
-  } catch {
-    return DEFAULT_GOOGLE_WEB_CLIENT_ID;
-  }
+  } catch (err) { void err; return DEFAULT_GOOGLE_WEB_CLIENT_ID; }
 }
 
 export const KINETIC_GOOGLE_WEB_CLIENT_ID = DEFAULT_GOOGLE_WEB_CLIENT_ID;
@@ -28243,28 +28445,20 @@ const randomHexBytes = (byteCount: number): string =&gt; {
   return Array.from(bytes, (b) =&gt; b.toString(16).padStart(2, &#39;0&#39;)).join(&#39;&#39;);
 };
 
-export function generateOidcNonceAndState(
-  platform: &#39;web&#39; | &#39;native&#39;,
-  mode: &#39;b2c&#39; | &#39;b2b&#39; = &#39;b2c&#39;
-): { rawNonce: string; nonceHash: string; state: string } {
+export function generateOidcNonceAndState(platform: &#39;web&#39; | &#39;native&#39;, mode: &#39;b2c&#39; | &#39;b2b&#39; = &#39;b2c&#39;): { rawNonce: string; nonceHash: string; state: string } {
   const safePlatform: &#39;web&#39; | &#39;native&#39; = platform === &#39;native&#39; ? &#39;native&#39; : &#39;web&#39;;
   const safeMode: &#39;b2c&#39; | &#39;b2b&#39; = mode === &#39;b2b&#39; ? &#39;b2b&#39; : &#39;b2c&#39;;
   const rawNonce = randomHexBytes(24);
   const nonceHash = sha256HexOidc(rawNonce);
-  const csrf = randomHexBytes(16);
-  return { rawNonce, nonceHash, state: `knt1.${safePlatform}.${safeMode}.${csrf}` };
+  return { rawNonce, nonceHash, state: `knt1.${safePlatform}.${safeMode}.${randomHexBytes(16)}` };
 }
 
-export function parseAndVerifyKineticOidcState(
-  rawState: unknown,
-  expectedState?: string | null
-): ParsedKineticOidcState | null {
+export function parseAndVerifyKineticOidcState(rawState: unknown, expectedState?: string | null): ParsedKineticOidcState | null {
   if (typeof rawState !== &#39;string&#39;) return null;
   const clean = rawState.trim();
   if (!clean || clean.length &gt; 96 || POISONED_KEYS.has(clean.toLowerCase())) return null;
   const match = OIDC_STATE_RE.exec(clean);
-  if (!match) return null;
-  if (expectedState != null &amp;&amp; clean !== String(expectedState).trim()) return null;
+  if (!match || (expectedState != null &amp;&amp; clean !== String(expectedState).trim())) return null;
   return { valid: true, platform: match[1] as &#39;web&#39; | &#39;native&#39;, mode: match[2] as &#39;b2c&#39; | &#39;b2b&#39;, csrf: match[3] };
 }
 
@@ -28274,39 +28468,19 @@ export function isAllowedCanonicalOidcRedirectUri(candidate: unknown): boolean {
   if (!clean || clean.length &gt; 512 || /[\u0000-\u001F\u007F\s]/.test(clean) || clean.includes(&#39;..&#39;)) return false;
   try {
     const parsed = new URL(clean);
-    return (
-      parsed.protocol === &#39;https:&#39; &amp;&amp;
-      parsed.hostname.toLowerCase() === &#39;kineticapp.com.mx&#39; &amp;&amp;
-      !parsed.username &amp;&amp;
-      !parsed.password
-    );
-  } catch {
-    return false;
-  }
+    return parsed.protocol === &#39;https:&#39; &amp;&amp; parsed.hostname.toLowerCase() === &#39;kineticapp.com.mx&#39; &amp;&amp; !parsed.username &amp;&amp; !parsed.password;
+  } catch (err) { void err; return false; }
 }
 
-export function buildGoogleOidcAuthorizeUrl(params: {
-  clientId?: string;
-  redirectUri?: string;
-  nonceHash: string;
-  state: string;
-}): string {
+export function buildGoogleOidcAuthorizeUrl(params: { clientId?: string; redirectUri?: string; nonceHash: string; state: string }): string {
   const clientId = String(params?.clientId || resolveGoogleWebClientId()).trim();
   const redirectUri = String(params?.redirectUri || KINETIC_OIDC_REDIRECT_URI).trim();
   const nonceHash = String(params?.nonceHash || &#39;&#39;).trim().toLowerCase();
   const parsedState = parseAndVerifyKineticOidcState(params?.state);
-  if (!/^[0-9]{6,}-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(clientId) || /supabase\.co/i.test(clientId)) {
-    throw new Error(&#39;OIDC_CLIENT_ID_INVALID&#39;);
-  }
-  if (!isAllowedCanonicalOidcRedirectUri(redirectUri)) {
-    throw new Error(&#39;OIDC_REDIRECT_URI_FORBIDDEN&#39;);
-  }
-  if (!SHA256_HEX_RE.test(nonceHash)) {
-    throw new Error(&#39;OIDC_NONCE_INVALID&#39;);
-  }
-  if (!parsedState) {
-    throw new Error(&#39;OIDC_STATE_INVALID&#39;);
-  }
+  if (!/^[0-9]{6,}-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i.test(clientId) || /supabase\.co/i.test(clientId)) throw new Error(&#39;OIDC_CLIENT_ID_INVALID&#39;);
+  if (!isAllowedCanonicalOidcRedirectUri(redirectUri)) throw new Error(&#39;OIDC_REDIRECT_URI_FORBIDDEN&#39;);
+  if (!SHA256_HEX_RE.test(nonceHash)) throw new Error(&#39;OIDC_NONCE_INVALID&#39;);
+  if (!parsedState) throw new Error(&#39;OIDC_STATE_INVALID&#39;);
   const url = new URL(&#39;https://accounts.google.com/o/oauth2/v2/auth&#39;);
   url.searchParams.set(&#39;client_id&#39;, clientId);
   url.searchParams.set(&#39;redirect_uri&#39;, redirectUri);
@@ -28318,17 +28492,11 @@ export function buildGoogleOidcAuthorizeUrl(params: {
   return url.toString();
 }
 
-export function buildNativeOidcBridgeStartUrl(params: {
-  mode: &#39;b2c&#39; | &#39;b2b&#39;;
-  nonceHash: string;
-  state: string;
-}): string {
+export function buildNativeOidcBridgeStartUrl(params: { mode: &#39;b2c&#39; | &#39;b2b&#39;; nonceHash: string; state: string }): string {
   const safeMode: &#39;b2c&#39; | &#39;b2b&#39; = params?.mode === &#39;b2b&#39; ? &#39;b2b&#39; : &#39;b2c&#39;;
   const nonceHash = String(params?.nonceHash || &#39;&#39;).trim().toLowerCase();
   const parsedState = parseAndVerifyKineticOidcState(params?.state);
-  if (!SHA256_HEX_RE.test(nonceHash) || !parsedState || parsedState.platform !== &#39;native&#39;) {
-    throw new Error(&#39;OIDC_BRIDGE_PARAMS_INVALID&#39;);
-  }
+  if (!SHA256_HEX_RE.test(nonceHash) || !parsedState || parsedState.platform !== &#39;native&#39;) throw new Error(&#39;OIDC_BRIDGE_PARAMS_INVALID&#39;);
   const url = new URL(KINETIC_OIDC_REDIRECT_URI);
   url.searchParams.set(&#39;platform&#39;, &#39;native&#39;);
   url.searchParams.set(&#39;mode&#39;, safeMode);
@@ -28375,9 +28543,7 @@ const decodeBase64UrlJsonSafe = (segment: string): Record&lt;string, unknown&gt;
       if (POISONED_KEYS.has(key)) return null;
     }
     return parsed as Record&lt;string, unknown&gt;;
-  } catch {
-    return null;
-  }
+  } catch (err) { void err; return null; }
 };
 
 export function validateGoogleIdTokenClaims(
@@ -28427,9 +28593,7 @@ const isAllowedOidcCallbackTarget = (candidateUrl: string): boolean =&gt; {
       !parsed.username &amp;&amp;
       !parsed.password
     );
-  } catch {
-    return false;
-  }
+  } catch (err) { void err; return false; }
 };
 
 export function extractGoogleIdTokenFromCallbackUrl(
@@ -28450,9 +28614,7 @@ export function extractGoogleIdTokenFromCallbackUrl(
       if (p.get(&#39;error&#39;) || p.get(&#39;error_description&#39;)) return null;
       if (!idToken &amp;&amp; p.get(&#39;id_token&#39;)) idToken = String(p.get(&#39;id_token&#39;) || &#39;&#39;).trim();
       if (!rawState &amp;&amp; p.get(&#39;state&#39;)) rawState = String(p.get(&#39;state&#39;) || &#39;&#39;).trim();
-    } catch {
-      return null;
-    }
+    } catch (err) { void err; return null; }
   }
   if (!idToken || !rawState) return null;
   const parsedState = parseAndVerifyKineticOidcState(rawState, options?.expectedState);
@@ -28480,88 +28642,63 @@ export function buildNativeKineticIdTokenDeepLink(idToken: string, state: string
 export async function persistPendingOidcChallenge(challenge: PendingOidcChallenge): Promise&lt;void&gt; {
   await withChallengeLock(() =&gt; AsyncStorage.setItem(PENDING_OIDC_CHALLENGE_KEY, JSON.stringify(challenge)));
 }
-
-export async function clearPendingOidcChallenge(): Promise&lt;void&gt; {
-  await withChallengeLock(() =&gt; AsyncStorage.removeItem(PENDING_OIDC_CHALLENGE_KEY).catch(() =&gt; {}));
+export async function clearPendingOidcChallenge(expectedState?: string | null): Promise&lt;void&gt; {
+  if (_inflightNativeExchange) { try { await _inflightNativeExchange.promise; } catch (err) { void err; } }
+  await withChallengeLock(async () =&gt; {
+    if (expectedState) {
+      const current = parsePendingOidcChallengeJson(await AsyncStorage.getItem(PENDING_OIDC_CHALLENGE_KEY).catch(() =&gt; null));
+      if (current &amp;&amp; current.state !== String(expectedState).trim()) return;
+    }
+    await AsyncStorage.removeItem(PENDING_OIDC_CHALLENGE_KEY).catch(() =&gt; {});
+  });
 }
-
 const parsePendingOidcChallengeJson = (raw: string | null): PendingOidcChallenge | null =&gt; {
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as Partial&lt;PendingOidcChallenge&gt;;
-    if (
-      !parsed ||
-      typeof parsed.rawNonce !== &#39;string&#39; ||
-      typeof parsed.nonceHash !== &#39;string&#39; ||
-      typeof parsed.state !== &#39;string&#39; ||
-      typeof parsed.createdAtMs !== &#39;number&#39;
-    ) {
-      return null;
-    }
-    if (Date.now() - parsed.createdAtMs &gt; PENDING_OIDC_CHALLENGE_TTL_MS) return null;
-    if (sha256HexOidc(parsed.rawNonce) !== parsed.nonceHash.toLowerCase()) return null;
+    if (!parsed || typeof parsed.rawNonce !== &#39;string&#39; || typeof parsed.nonceHash !== &#39;string&#39; || typeof parsed.state !== &#39;string&#39; || typeof parsed.createdAtMs !== &#39;number&#39;) return null;
+    if (Date.now() - parsed.createdAtMs &gt; PENDING_OIDC_CHALLENGE_TTL_MS || sha256HexOidc(parsed.rawNonce) !== parsed.nonceHash.toLowerCase()) return null;
     const parsedState = parseAndVerifyKineticOidcState(parsed.state);
     if (!parsedState) return null;
-    return {
-      rawNonce: parsed.rawNonce,
-      nonceHash: parsed.nonceHash.toLowerCase(),
-      state: parsed.state,
-      mode: parsedState.mode,
-      createdAtMs: parsed.createdAtMs,
-    };
-  } catch {
-    return null;
-  }
+    return { rawNonce: parsed.rawNonce, nonceHash: parsed.nonceHash.toLowerCase(), state: parsed.state, mode: parsedState.mode, createdAtMs: parsed.createdAtMs };
+  } catch (err) { void err; return null; }
 };
-
 export async function peekPendingOidcChallenge(): Promise&lt;PendingOidcChallenge | null&gt; {
   return withChallengeLock(async () =&gt; {
-    try {
-      const raw = await AsyncStorage.getItem(PENDING_OIDC_CHALLENGE_KEY);
-      return parsePendingOidcChallengeJson(raw);
-    } catch {
-      return null;
-    }
+    try { return parsePendingOidcChallengeJson(await AsyncStorage.getItem(PENDING_OIDC_CHALLENGE_KEY)); }
+    catch (err) { void err; return null; }
   });
 }
-
 export async function consumePendingOidcChallenge(): Promise&lt;PendingOidcChallenge | null&gt; {
   return withChallengeLock(async () =&gt; {
     try {
       const raw = await AsyncStorage.getItem(PENDING_OIDC_CHALLENGE_KEY);
       await AsyncStorage.removeItem(PENDING_OIDC_CHALLENGE_KEY).catch(() =&gt; {});
       return parsePendingOidcChallengeJson(raw);
-    } catch {
-      return null;
-    }
+    } catch (err) { void err; return null; }
   });
 }
-
 export async function exchangeGoogleIdTokenWithSupabase(idToken: string, rawNonce: string) {
-  return supabase.auth.signInWithIdToken({
-    provider: &#39;google&#39;,
-    token: String(idToken || &#39;&#39;).trim(),
-    nonce: String(rawNonce || &#39;&#39;).trim(),
-  });
+  return supabase.auth.signInWithIdToken({ provider: &#39;google&#39;, token: String(idToken || &#39;&#39;).trim(), nonce: String(rawNonce || &#39;&#39;).trim() });
 }
-
 export async function verifyAndExchangeNativeGoogleOidcUrl(callbackUrl: string) {
-  if (typeof callbackUrl !== &#39;string&#39; || !isAllowedOidcCallbackTarget(callbackUrl.trim())) {
-    throw new Error(&#39;OIDC_CALLBACK_INVALID&#39;);
-  }
-  const peeked = await peekPendingOidcChallenge();
-  if (!peeked) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
-  const extracted = extractGoogleIdTokenFromCallbackUrl(callbackUrl, {
-    expectedState: peeked.state,
-    expectedNonceHash: peeked.nonceHash,
-    expectedClientId: resolveGoogleWebClientId(),
-  });
-  if (!extracted) throw new Error(&#39;OIDC_CALLBACK_INVALID&#39;);
-  const consumed = await consumePendingOidcChallenge();
-  if (!consumed || consumed.state !== peeked.state) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
-  const authRes = await exchangeGoogleIdTokenWithSupabase(extracted.idToken, consumed.rawNonce);
-  if (authRes.error) throw authRes.error;
-  return authRes;
+  const cleanUrl = typeof callbackUrl === &#39;string&#39; ? callbackUrl.trim() : &#39;&#39;;
+  if (!cleanUrl || !isAllowedOidcCallbackTarget(cleanUrl)) throw new Error(&#39;OIDC_CALLBACK_INVALID&#39;);
+  if (_inflightNativeExchange?.url === cleanUrl) return _inflightNativeExchange.promise;
+  const runPromise = (async () =&gt; {
+    const peeked = await peekPendingOidcChallenge();
+    if (!peeked) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
+    const extracted = extractGoogleIdTokenFromCallbackUrl(cleanUrl, { expectedState: peeked.state, expectedNonceHash: peeked.nonceHash, expectedClientId: resolveGoogleWebClientId() });
+    if (!extracted) throw new Error(&#39;OIDC_CALLBACK_INVALID&#39;);
+    const consumed = await consumePendingOidcChallenge();
+    if (!consumed || consumed.state !== peeked.state) throw new Error(&#39;OIDC_CHALLENGE_EXPIRED&#39;);
+    const authRes = await exchangeGoogleIdTokenWithSupabase(extracted.idToken, consumed.rawNonce);
+    if (authRes.error) throw authRes.error;
+    return authRes;
+  })();
+  _inflightNativeExchange = { url: cleanUrl, promise: runPromise };
+  try { return await runPromise; }
+  finally { if (_inflightNativeExchange?.promise === runPromise) _inflightNativeExchange = null; }
 }
 </code></pre>
 <h2>FILE: src/services/kineticLoginAccountsSanitizer.ts</h2>
@@ -41843,7 +41980,7 @@ export function buildKineticReservaIcsPayload(input: IKineticCalendarEventInput)
   const lines: string[] = [
     &#39;BEGIN:VCALENDAR&#39;,
     &#39;VERSION:2.0&#39;,
-    &#39;PRODID:-//KineticApp S.A.S.//KINETIC OS v2.8.3//ES&#39;,
+    &#39;PRODID:-//KineticApp S.A.S.//KINETIC OS v2.8.5//ES&#39;,
     &#39;CALSCALE:GREGORIAN&#39;,
     `METHOD:${isCancel ? &#39;CANCEL&#39; : &#39;PUBLISH&#39;}`,
     &#39;BEGIN:VEVENT&#39;,

@@ -5,7 +5,8 @@
       {
         "appIDs": ["<TEAM_ID>.com.kineticapp.mx"],
         "components": [
-          { "/": "/oauth/*" },
+          { "/": "/oauth*", "exclude": true },
+          { "/": "/socios*", "exclude": true },
           { "/": "/boveda*" },
           { "/": "/events*" },
           { "/": "/eventos*" },
