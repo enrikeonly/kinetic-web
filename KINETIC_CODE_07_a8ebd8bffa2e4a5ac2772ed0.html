@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 07: KINETICLUB RPG, COFRE 3D, HISTORIAS 24H, CONCIERGE Y SQL</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-22T21:14:31.058Z | Total archivos en este módulo: 91</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-23T09:13:12.251Z | Total archivos en este módulo: 92</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`sql/migration_v25_audit_17videos.sql`</li>
 <li>`sql/migration_v264_kineticlub_cloud_sync.sql`</li>
@@ -96,6 +96,7 @@
 <li>`supabase/migrations/20261121190000_migration_v282_ola2_account_deletion_clean.sql`</li>
 <li>`supabase/migrations/20261121230000_migration_v282_ola4_wallet_companion_and_store_ready.sql`</li>
 <li>`supabase/migrations/20261122100000_migration_v283_ola1_ugc_purge_and_feed_guard.sql`</li>
+<li>`supabase/migrations/20261123010000_migration_v284_topup_min100_and_monthly_shield.sql`</li>
 <li>`supabase/migrations/migration_v275_omnicanal_purge_and_seal.sql`</li>
 <li>`supabase/migrations/migration_v276_finops_ai_and_geo.sql`</li>
 <li>`supabase/migrations/migration_v277_owasp_top10_and_gcp_zk.sql`</li>
@@ -5057,7 +5058,7 @@ describe(&#39;KINETIC OS v2.7.0 — Física 3D de Trompo, Escultura 360°, Blind
           else expectEq(res.allowed, true, &#39;JWT válido + AAL correcto permitido&#39;);
 
           const normPlan = fuzzPlanId.trim().toLowerCase();
-          const isOfficial = [&#39;50&#39;, &#39;100&#39;, &#39;250&#39;, &#39;500&#39;, &#39;1000&#39;, &#39;topup_50&#39;, &#39;topup_100&#39;, &#39;topup_250&#39;, &#39;topup_500&#39;, &#39;topup_1000&#39;].includes(normPlan);
+          const isOfficial = [&#39;100&#39;, &#39;250&#39;, &#39;500&#39;, &#39;1000&#39;, &#39;topup_100&#39;, &#39;topup_250&#39;, &#39;topup_500&#39;, &#39;topup_1000&#39;].includes(normPlan);
           let threw = false;
           try {
             const p = resolveCanonicalCheckoutPlan({ tipo: &#39;topup&#39;, planId: fuzzPlanId, currentLevel: &#39;Gold&#39; });
@@ -13330,7 +13331,7 @@ export const baseSq = StyleSheet.create({
 <pre><code class="language-tsx">// === src/components/kineticlub/StreakModal.tsx === //
 import { Feather } from &#39;@expo/vector-icons&#39;;
 import React, { useEffect, useMemo, useRef, useState } from &#39;react&#39;;
-import { Animated, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from &#39;react-native&#39;;
+import { Animated, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, type ViewStyle } from &#39;react-native&#39;;
 import ReactNativeModal from &#39;react-native-modal&#39;;
 import { useSafeAreaInsets } from &#39;react-native-safe-area-context&#39;;
 import { useAuth } from &#39;../../context/AuthContext&#39;;
@@ -13342,18 +13343,34 @@ import { KineticLoader, triggerArcadeHaptic } from &#39;../SharedUI&#39;;
 import { WeeklySteelContractCard } from &#39;../shared/KineticDisruptiveWidgets&#39;;
 import { KINETIC_TOP_SHEET_METRICS, KineticSwipeCloseHeader } from &#39;../shared/KineticModalHeader3D&#39;;
 
-const NO_SEL = Platform.OS === &#39;web&#39; ? ({ userSelect: &#39;none&#39;, WebkitUserSelect: &#39;none&#39; } as any) : null;
+const NO_SEL = Platform.OS === &#39;web&#39; ? ({ userSelect: &#39;none&#39;, WebkitUserSelect: &#39;none&#39; } as unknown as ViewStyle) : null;
+
+export interface IStreakModalBodyProps {
+  rachaDias?: number;
+  completedSessionsCount?: number;
+  isStreakFrozenToday?: boolean;
+  onCongelarRacha?: () =&gt; Promise&lt;{ ok: boolean; errorMsg?: string } | void&gt; | void;
+  isFreezing?: boolean;
+  prestigeInfo?: ReturnType&lt;typeof computeLevel99State&gt; | null;
+}
+
+export interface IStreakModalProps extends IStreakModalBodyProps {
+  showStreakModal?: boolean;
+  onClose?: () =&gt; void;
+}
 
 export const StreakModalBody = React.memo(
-  ({ rachaDias = 1, completedSessionsCount = 0, isStreakFrozenToday = false, onCongelarRacha, isFreezing = false, prestigeInfo }: any) =&gt; {
+  ({ rachaDias = 1, completedSessionsCount = 0, isStreakFrozenToday = false, onCongelarRacha, isFreezing = false, prestigeInfo }: IStreakModalBodyProps) =&gt; {
     const { user, profile } = useAuth();
     const { resolvedTheme, isLightMode, language, tx } = useKineticPreferences();
     const shieldScaleAnim = useRef(new Animated.Value(1)).current;
+    const mountedRef = useRef(true);
     const [shieldFeedback, setShieldFeedback] = useState&lt;string | null&gt;(null);
+    useEffect(() =&gt; () =&gt; { mountedRef.current = false; }, []);
     const totalKcLive = (Number(profile?.kc_membresia) || 0) + (Number(profile?.kc_topup) || 0);
     const lvlState = useMemo(
-      () =&gt; prestigeInfo || computeLevel99State(Number(profile?.xp_total) || 0, language, Number((profile as any)?.prestigio_nivel) || 0),
-      [prestigeInfo, profile?.xp_total, (profile as any)?.prestigio_nivel, language]
+      () =&gt; prestigeInfo || computeLevel99State(Number(profile?.xp_total) || 0, language, Number(profile?.prestigio_nivel) || 0),
+      [prestigeInfo, profile?.xp_total, profile?.prestigio_nivel, language]
     );
 
     useEffect(() =&gt; {
@@ -13370,10 +13387,10 @@ export const StreakModalBody = React.memo(
     const streakSteps = [1, 2, 3, 4, 5, 6, 7].map((day) =&gt; ({ day, xp: &#39;+25 XP&#39; }));
 
     const handleActivateShield = async () =&gt; {
-      setShieldFeedback(null);
+      if (mountedRef.current) setShieldFeedback(null);
       triggerArcadeHaptic(&#39;reward&#39;);
       const res = await onCongelarRacha?.();
-      if (res &amp;&amp; res.ok === false &amp;&amp; res.errorMsg) setShieldFeedback(String(res.errorMsg));
+      if (mountedRef.current &amp;&amp; res &amp;&amp; res.ok === false &amp;&amp; res.errorMsg) setShieldFeedback(String(res.errorMsg));
     };
 
     return (
@@ -13443,8 +13460,8 @@ export const StreakModalBody = React.memo(
           &lt;/View&gt;
           &lt;Text style={[stStyles.shieldDesc, isLightMode &amp;&amp; { color: &#39;#334155&#39; }]}&gt;
             {tx(
-              &#39;Congela tu racha durante 24 horas en días de descanso sin perder tus días acumulados. Incluye 1 escudo gratis por semana ISO; escudos adicionales en la misma semana cuestan 25 KC.&#39;,
-              &#39;Freeze your streak for 24 hours on rest days without losing accumulated days. Includes 1 free shield per ISO week; extra shields in the same week cost 25 KC.&#39;
+              &#39;Congela tu racha durante 24 horas en días de descanso sin perder tus días acumulados. Incluye 1 escudo gratis al mes; escudos adicionales en el mismo mes cuestan 25 KC.&#39;,
+              &#39;Freeze your streak for 24 hours on rest days without losing accumulated days. Includes 1 free shield per month; extra shields in the same month cost 25 KC.&#39;
             )}
           &lt;/Text&gt;
           {shieldFeedback ? (
@@ -13453,7 +13470,7 @@ export const StreakModalBody = React.memo(
             &lt;/View&gt;
           ) : null}
           &lt;TouchableOpacity
-            {...(!isStreakFrozenToday ? ({ dataSet: { kineticInk: &#39;light&#39; } } as any) : {})}
+            {...(!isStreakFrozenToday ? ({ dataSet: { kineticInk: &#39;light&#39; } } as Record&lt;string, unknown&gt;) : {})}
             style={[
               stStyles.shieldActionBtn,
               NO_SEL,
@@ -13472,7 +13489,7 @@ export const StreakModalBody = React.memo(
               &gt;
                 {isStreakFrozenToday
                   ? tx(&#39;RACHA BLINDADA HOY (24H) ✓&#39;, &#39;STREAK SHIELDED TODAY (24H) ✓&#39;)
-                  : tx(&#39;ACTIVAR ESCUDO 24H (1 GRATIS/SEM • 25 KC)&#39;, &#39;ACTIVATE 24H SHIELD (1 FREE/WK • 25 KC)&#39;)}
+                  : tx(&#39;ACTIVAR ESCUDO 24H (1 GRATIS/MES • 25 KC)&#39;, &#39;ACTIVATE 24H SHIELD (1 FREE/MO • 25 KC)&#39;)}
               &lt;/Text&gt;
             )}
           &lt;/TouchableOpacity&gt;
@@ -13482,7 +13499,7 @@ export const StreakModalBody = React.memo(
   }
 );
 
-export const StreakModal = React.memo((props: any) =&gt; {
+export const StreakModal = React.memo((props: IStreakModalProps) =&gt; {
   const insets = useSafeAreaInsets();
   const { isLightMode } = useKineticPreferences();
   return (
@@ -15928,10 +15945,58 @@ export async function persistBoxRewardStorage(uid: string, opened: number, xp: n
   ]);
 }
 
-export function buildClaimedProfilePatch(
-  prevProfile: Record&lt;string, unknown&gt;,
+export type RewardHapticFn = (type?: string) =&gt; void;
+export type TacticalAlertCallback = (title: string, msg: string, type?: string) =&gt; void;
+
+export function toRewardErrMsg(err: unknown, fallback: string): string {
+  if (err &amp;&amp; typeof err === &#39;object&#39; &amp;&amp; &#39;message&#39; in err) {
+    const m = String((err as { message?: unknown }).message || &#39;&#39;).trim();
+    if (m) return m;
+  }
+  return fallback;
+}
+
+export function resolveShieldErrorMessage(
+  payload: Record&lt;string, unknown&gt; | null,
+  error: { message?: string } | null,
+  tx: (es: string, en: string) =&gt; string
+): string {
+  const rawErr = String(payload?.error || payload?.message || error?.message || &#39;&#39;);
+  if (/kc|saldo|balance|insufic/i.test(rawErr)) {
+    return tx(
+      &#39;Ya usaste tu escudo mensual gratis. Necesitas 25 KC en tu Bóveda para activar un escudo adicional.&#39;,
+      &#39;You already used your free monthly shield. You need 25 KC in your Wallet for an extra shield.&#39;
+    );
+  }
+  return rawErr || tx(&#39;No se pudo activar el escudo de racha. Intenta de nuevo.&#39;, &#39;Could not activate streak shield. Please try again.&#39;);
+}
+
+export function buildShieldActivatedProfilePatch&lt;T extends Record&lt;string, unknown&gt;&gt;(
+  prevProfile: T,
+  payload: Record&lt;string, unknown&gt; | null,
+  claimedKeys: string[]
+): T {
+  const activeUntil =
+    typeof payload?.activo_hasta === &#39;string&#39; ? payload.activo_hasta : (prevProfile.escudo_activo_hasta as string | undefined);
+  return {
+    ...prevProfile,
+    is_streak_frozen: true,
+    escudo_activo_hasta: activeUntil,
+    escudo_racha_activo_hasta: activeUntil,
+    escudo_mes_iso: typeof payload?.escudo_mes_iso === &#39;string&#39; ? payload.escudo_mes_iso : prevProfile.escudo_mes_iso,
+    escudos_usados_mes:
+      payload?.escudos_usados_mes !== undefined ? Number(payload.escudos_usados_mes) : prevProfile.escudos_usados_mes,
+    kc_membresia: payload?.kc_membresia !== undefined ? Number(payload.kc_membresia) : prevProfile.kc_membresia,
+    kc_topup: payload?.kc_topup !== undefined ? Number(payload.kc_topup) : prevProfile.kc_topup,
+    saldo_kc: payload?.saldo_kc !== undefined ? Number(payload.saldo_kc) : prevProfile.saldo_kc,
+    recompensas_reclamadas: claimedKeys,
+  };
+}
+
+export function buildClaimedProfilePatch&lt;T extends Record&lt;string, unknown&gt;&gt;(
+  prevProfile: T,
   opts: { kcDelta?: number; kcTopupOverride?: number; xpTotal: number; claimedKeys: string[]; freezeStreak?: boolean }
-) {
+): T {
   return {
     ...prevProfile,
     kc_topup:
@@ -16223,28 +16288,49 @@ import { triggerArcadeHaptic, triggerHaptic } from &#39;../../components/SharedU
 import { useAuth } from &#39;../../context/AuthContext&#39;;
 import { supabase } from &#39;../../lib/supabase&#39;;
 import { invalidateAdminDashboardFetcherCache } from &#39;../../services/adminDashboardFetcher&#39;;
+import type { KineticAuthProfile, KineticAuthUser } from &#39;../../services/kineticAuthContextHelpers&#39;;
 import { patchKinetiClubTabAlertState } from &#39;../../services/kineticlubTabAlertStore&#39;;
+import { getMazatlanNowParts } from &#39;../../services/kineticVenueCanonicalGeoAndHours&#39;;
 import {
   STREAK_SHIELD_KEY_PREFIX,
-  getTodayISO,
   pickLevelBoxRewardKc,
   resolveMysteryBoxTierConfig,
   sumClaimedChallengesXp,
 } from &#39;../../services/kineticlubHelpers&#39;;
 import {
   buildClaimedProfilePatch,
+  buildShieldActivatedProfilePatch,
   extractClaimedLevelBoxNumbers,
   findNextUnclaimedLevelBoxNum,
   mergeClaimKeys,
   persistBoxRewardStorage,
   persistDailyRewardStorage,
   persistTrophyRewardStorage,
+  resolveShieldErrorMessage,
   runRewardRpcWithRetry,
+  toRewardErrMsg,
+  type RewardHapticFn,
+  type TacticalAlertCallback,
 } from &#39;./kineticClubRewardsCloudHelper&#39;;
 
+export interface IRewardsUserLike {
+  id?: string | null;
+  email?: string | null;
+}
+
+export interface IRewardsProfileLike {
+  id?: string | null;
+  nivel?: string | null;
+  prestigio_nivel?: number | null;
+  prestigio_grado?: number | null;
+  xp_total?: number | null;
+  recompensas_reclamadas?: unknown;
+  [k: string]: unknown;
+}
+
 interface IUseKinetiClubRewardsParams {
-  user: any;
-  profile?: any;
+  user?: IRewardsUserLike | null;
+  profile?: IRewardsProfileLike | null;
   userLevelRank?: string | number | null;
   isGhostMode: boolean;
   setIsGhostMode: (val: boolean) =&gt; void;
@@ -16270,15 +16356,7 @@ interface IUseKinetiClubRewardsParams {
   tx: (es: string, en: string) =&gt; string;
 }
 
-export type TacticalAlertCallback = (title: string, msg: string, type?: string) =&gt; void;
-
-const toErrMsg = (err: unknown, fallback: string): string =&gt; {
-  if (err &amp;&amp; typeof err === &#39;object&#39; &amp;&amp; &#39;message&#39; in err) {
-    const m = String((err as { message?: unknown }).message || &#39;&#39;).trim();
-    if (m) return m;
-  }
-  return fallback;
-};
+export type { TacticalAlertCallback };
 
 export function useKinetiClubRewards({
   user,
@@ -16308,7 +16386,15 @@ export function useKinetiClubRewards({
   tx,
 }: IUseKinetiClubRewardsParams) {
   const { profile: authProfile, activateResilientSession } = useAuth();
-  const effectiveProfile = profile || authProfile;
+  const effectiveProfile = (profile || authProfile || null) as IRewardsProfileLike | null;
+  const uid = String(user?.id || &#39;&#39;).trim();
+  const authUser = uid ? (user as unknown as KineticAuthUser) : null;
+  const syncSession = useCallback(
+    (nextProf: Record&lt;string, unknown&gt;) =&gt; {
+      if (authUser) activateResilientSession(authUser, nextProf as unknown as KineticAuthProfile);
+    },
+    [authUser, activateResilientSession]
+  );
   const tierXp = resolveMysteryBoxTierConfig(effectiveProfile?.nivel || userLevelRank).xpReward;
   const isClaimingRef = useRef(false);
   const isFreezingRef = useRef(false);
@@ -16316,87 +16402,60 @@ export function useKinetiClubRewards({
   totalBoxesEarnedRef.current = totalBoxesEarned;
 
   const toggleGhostMode = useCallback(
-    async (hapticFn?: any, alertFn?: any) =&gt; {
+    async (hapticFn?: RewardHapticFn, alertFn?: TacticalAlertCallback) =&gt; {
       (hapticFn || triggerHaptic)(&#39;Medium&#39;);
       const nextGhost = !isGhostMode;
       setIsGhostMode(nextGhost);
-      if (user?.id) {
+      if (uid) {
         try {
-          await supabase
-            .from(&#39;perfiles&#39;)
-            .update({ radar_publico: !nextGhost })
-            .eq(&#39;id&#39;, user.id);
-        } catch {
-          // Silencioso si no hay red temporal
-        }
+          await supabase.from(&#39;perfiles&#39;).update({ radar_publico: !nextGhost }).eq(&#39;id&#39;, uid);
+        } catch {}
       }
       alertFn?.(
+        nextGhost ? tx(&#39;PERFIL EN MODO PRIVADO&#39;, &#39;PRIVATE MODE ENABLED&#39;) : tx(&#39;PERFIL PÚBLICO EN RADAR&#39;, &#39;PUBLIC PROFILE ON RADAR&#39;),
         nextGhost
-          ? tx(&#39;PERFIL EN MODO PRIVADO&#39;, &#39;PRIVATE MODE ENABLED&#39;)
-          : tx(&#39;PERFIL PÚBLICO EN RADAR&#39;, &#39;PUBLIC PROFILE ON RADAR&#39;),
-        nextGhost
-          ? tx(
-              &#39;Tu actividad ha quedado oculta del ranking público.&#39;,
-              &#39;Your activity is now hidden from the public leaderboard.&#39;
-            )
-          : tx(
-              &#39;Tu perfil ahora es visible en el Ranking de KinetiClub.&#39;,
-              &#39;Your profile is now visible on the KinetiClub Leaderboard.&#39;
-            ),
+          ? tx(&#39;Tu actividad ha quedado oculta del ranking público.&#39;, &#39;Your activity is now hidden from the public leaderboard.&#39;)
+          : tx(&#39;Tu perfil ahora es visible en el Ranking de KinetiClub.&#39;, &#39;Your profile is now visible on the KinetiClub Leaderboard.&#39;),
         &#39;success&#39;
       );
     },
-    [isGhostMode, setIsGhostMode, user?.id, tx]
+    [isGhostMode, setIsGhostMode, uid, tx]
   );
 
   const congelarRacha = useCallback(
-    async (_hapticFn?: any, alertFn?: any): Promise&lt;{ ok: boolean; errorMsg?: string }&gt; =&gt; {
-      if (!user?.id || isFreezing || isFreezingRef.current || isStreakFrozenToday) return { ok: false };
+    async (_hapticFn?: RewardHapticFn, alertFn?: TacticalAlertCallback): Promise&lt;{ ok: boolean; errorMsg?: string }&gt; =&gt; {
+      if (!uid || isFreezing || isFreezingRef.current || isStreakFrozenToday) return { ok: false };
       isFreezingRef.current = true;
       setIsFreezing(true);
-      const today = getTodayISO();
+      const today = getMazatlanNowParts().isoDate;
       try {
-        const { data, error } = await runRewardRpcWithRetry(&#39;congelar_racha_kineti&#39;, { p_user_id: user.id });
-        const payload = data as Record&lt;string, any&gt; | null;
-        if (error || (payload &amp;&amp; payload.ok === false)) {
-          const rawErr = String(payload?.error || payload?.message || error?.message || &#39;&#39;);
-          const isInsufficient = /kc|saldo|balance|insufic/i.test(rawErr);
-          const msg = isInsufficient
-            ? tx(&#39;Ya usaste tu escudo semanal gratis. Necesitas 25 KC en tu Bóveda para activar un escudo adicional.&#39;, &#39;You already used your free weekly shield. You need 25 KC in your Wallet for an extra shield.&#39;)
-            : rawErr || tx(&#39;No se pudo activar el escudo de racha. Intenta de nuevo.&#39;, &#39;Could not activate streak shield. Please try again.&#39;);
+        const { data, error } = await supabase.rpc(&#39;congelar_racha_kineti&#39;, { p_user_id: uid });
+        const payload = (data &amp;&amp; typeof data === &#39;object&#39; ? data : null) as Record&lt;string, unknown&gt; | null;
+        if (error || !payload || payload.ok === false) {
+          const msg = resolveShieldErrorMessage(payload, error, tx);
           triggerHaptic(&#39;Warning&#39;);
           alertFn?.(tx(&#39;ESCUDO NO DISPONIBLE&#39;, &#39;SHIELD UNAVAILABLE&#39;), msg, &#39;warning&#39;);
           return { ok: false, errorMsg: msg };
         }
-        setIsStreakFrozenToday(true);
+        if (isMountedRef.current) setIsStreakFrozenToday(true);
         const nextClaimedArr = Array.isArray(payload?.recompensas_reclamadas)
           ? payload.recompensas_reclamadas.map(String)
           : mergeClaimKeys(effectiveProfile?.recompensas_reclamadas, [`escudo_racha_${today}`]);
-        if (effectiveProfile) {
-          activateResilientSession(user, {
-            ...effectiveProfile,
-            is_streak_frozen: true,
-            escudo_activo_hasta: payload?.activo_hasta ?? effectiveProfile.escudo_activo_hasta,
-            escudo_racha_activo_hasta: payload?.escudo_activo_hasta ?? effectiveProfile.escudo_racha_activo_hasta,
-            kc_membresia: payload?.kc_membresia ?? effectiveProfile.kc_membresia,
-            kc_topup: payload?.kc_topup ?? effectiveProfile.kc_topup,
-            recompensas_reclamadas: nextClaimedArr,
-          });
-        }
-        await AsyncStorage.setItem(`${STREAK_SHIELD_KEY_PREFIX}${user.id}`, today).catch(() =&gt; {});
+        if (effectiveProfile) syncSession(buildShieldActivatedProfilePatch(effectiveProfile, payload, nextClaimedArr));
+        await AsyncStorage.setItem(`${STREAK_SHIELD_KEY_PREFIX}${uid}`, today).catch(() =&gt; {});
         await refreshProfile?.();
         triggerArcadeHaptic(&#39;reward&#39;);
         const wasFree = Boolean(payload?.gratis ?? payload?.free ?? false);
         alertFn?.(
           tx(&#39;ESCUDO DE RACHA ACTIVADO&#39;, &#39;STREAK SHIELD ACTIVATED&#39;),
           wasFree
-            ? tx(`Escudo semanal gratuito activado. Tu racha de ${rachaActual} ${rachaActual === 1 ? &#39;día&#39; : &#39;días&#39;} está blindada 24h.`, `Free weekly shield activated. Your ${rachaActual}-day streak is shielded for 24h.`)
+            ? tx(`Escudo mensual gratuito activado. Tu racha de ${rachaActual} ${rachaActual === 1 ? &#39;día&#39; : &#39;días&#39;} está blindada 24h.`, `Free monthly shield activated. Your ${rachaActual}-day streak is shielded for 24h.`)
             : tx(`Escudo adicional (25 KC) activado. Tu racha de ${rachaActual} ${rachaActual === 1 ? &#39;día&#39; : &#39;días&#39;} está blindada 24h.`, `Extra shield (25 KC) activated. Your ${rachaActual}-day streak is shielded for 24h.`),
           &#39;success&#39;
         );
         return { ok: true };
-      } catch (err: any) {
-        const msg = String(err?.message || tx(&#39;Error de red al activar escudo.&#39;, &#39;Network error activating shield.&#39;));
+      } catch (err: unknown) {
+        const msg = toRewardErrMsg(err, tx(&#39;Error de red al activar escudo.&#39;, &#39;Network error activating shield.&#39;));
         triggerHaptic(&#39;Warning&#39;);
         alertFn?.(tx(&#39;ERROR DE ESCUDO&#39;, &#39;SHIELD ERROR&#39;), msg, &#39;error&#39;);
         return { ok: false, errorMsg: msg };
@@ -16405,16 +16464,16 @@ export function useKinetiClubRewards({
         if (isMountedRef.current) setIsFreezing(false);
       }
     },
-    [user, effectiveProfile, activateResilientSession, isFreezing, isStreakFrozenToday, rachaActual, refreshProfile, setIsFreezing, setIsStreakFrozenToday, isMountedRef, tx]
+    [uid, effectiveProfile, syncSession, isFreezing, isStreakFrozenToday, rachaActual, refreshProfile, setIsFreezing, setIsStreakFrozenToday, isMountedRef, tx]
   );
 
   const ascenderPrestigioNivel99 = useCallback(
-    async (alertFn?: any): Promise&lt;boolean&gt; =&gt; {
-      if (!user?.id || isClaimingRef.current) return false;
+    async (alertFn?: TacticalAlertCallback): Promise&lt;boolean&gt; =&gt; {
+      if (!uid || isClaimingRef.current) return false;
       isClaimingRef.current = true;
       try {
-        const { data, error } = await runRewardRpcWithRetry(&#39;ascender_prestigio_kineti&#39;, { p_user_id: user.id });
-        const payload = data as Record&lt;string, any&gt; | null;
+        const { data, error } = await runRewardRpcWithRetry(&#39;ascender_prestigio_kineti&#39;, { p_user_id: uid });
+        const payload = (data &amp;&amp; typeof data === &#39;object&#39; ? data : null) as Record&lt;string, unknown&gt; | null;
         if (error || (payload &amp;&amp; payload.ok === false)) {
           const msg = String(payload?.error || payload?.message || error?.message || tx(&#39;Aún no alcanzas Nivel 99 para ascender.&#39;, &#39;Reach Level 99 to unlock Prestige ascension.&#39;));
           triggerHaptic(&#39;Warning&#39;);
@@ -16422,7 +16481,7 @@ export function useKinetiClubRewards({
           return false;
         }
         if (effectiveProfile &amp;&amp; payload) {
-          activateResilientSession(user, {
+          syncSession({
             ...effectiveProfile,
             prestigio_nivel: Number(payload.prestigio_nivel) || (Number(effectiveProfile.prestigio_nivel) || 0) + 1,
             prestigio_grado: Number(payload.prestigio_grado) || (Number(effectiveProfile.prestigio_grado) || 0) + 1,
@@ -16432,15 +16491,15 @@ export function useKinetiClubRewards({
         await refreshProfile?.();
         triggerArcadeHaptic(&#39;levelUp&#39;);
         return true;
-      } catch (err: any) {
+      } catch (err: unknown) {
         triggerHaptic(&#39;Warning&#39;);
-        alertFn?.(tx(&#39;ERROR AL ASCENDER&#39;, &#39;ASCENSION ERROR&#39;), String(err?.message || tx(&#39;Intenta de nuevo.&#39;, &#39;Please try again.&#39;)), &#39;error&#39;);
+        alertFn?.(tx(&#39;ERROR AL ASCENDER&#39;, &#39;ASCENSION ERROR&#39;), toRewardErrMsg(err, tx(&#39;Intenta de nuevo.&#39;, &#39;Please try again.&#39;)), &#39;error&#39;);
         return false;
       } finally {
         isClaimingRef.current = false;
       }
     },
-    [user, effectiveProfile, activateResilientSession, refreshProfile, tx]
+    [uid, effectiveProfile, syncSession, refreshProfile, tx]
   );
 
   const reclamarRecompensa = useCallback(
@@ -16449,10 +16508,10 @@ export function useKinetiClubRewards({
       _kc: number,
       xp: number,
       isUnlocked: boolean,
-      hapticFn?: any,
-      alertFn?: any
+      hapticFn?: RewardHapticFn,
+      alertFn?: TacticalAlertCallback
     ): Promise&lt;boolean&gt; =&gt; {
-      if (!user?.id || isClaimingRef.current) return false;
+      if (!uid || isClaimingRef.current) return false;
       if (!isUnlocked) {
         (hapticFn || triggerHaptic)(&#39;Warning&#39;);
         alertFn?.(
@@ -16478,7 +16537,7 @@ export function useKinetiClubRewards({
       const prevClaimed = [...claimedIdsRef.current];
 
       if (isDaily) {
-        const today = getTodayISO();
+        const today = getMazatlanNowParts().isoDate;
         const dailyBoxXp = id === &#39;misteriosa_diaria&#39; ? xpGain || tierXp : tierXp;
         const awardedXp = id === &#39;misteriosa_diaria&#39; ? dailyBoxXp : xpGain;
         const formulaDailyXp = completedSessionsCount * 50 + rachaActual * 25 + sumClaimedChallengesXp(prevClaimed) + dailyBoxXp + openedBoxesRef.current * 30;
@@ -16486,30 +16545,30 @@ export function useKinetiClubRewards({
         const dailyKey = id === &#39;misteriosa_diaria&#39; ? `recompensa_diaria_${today}` : `${id}_${today}`;
         const optClaimedArr = mergeClaimKeys(prevProfile?.recompensas_reclamadas, [dailyKey, `escudo_racha_${today}`]);
         setDailyClaimedToday(true); setIsStreakFrozenToday(true); bonusXpRef.current = resolvedXp; setBonusXp(resolvedXp);
-        if (availableBoxesCount &lt;= 0) patchKinetiClubTabAlertState({ hasUnclaimedReadyReward: false }, user.id);
-        if (prevProfile) activateResilientSession(user, buildClaimedProfilePatch(prevProfile, { kcDelta: kcReward, xpTotal: resolvedXp, claimedKeys: optClaimedArr, freezeStreak: true }));
+        if (availableBoxesCount &lt;= 0) patchKinetiClubTabAlertState({ hasUnclaimedReadyReward: false }, uid);
+        if (prevProfile) syncSession(buildClaimedProfilePatch(prevProfile, { kcDelta: kcReward, xpTotal: resolvedXp, claimedKeys: optClaimedArr, freezeStreak: true }));
         triggerArcadeHaptic(&#39;reward&#39;);
         try {
           const { data: rpcDailyData, error: rpcDailyErr } = await runRewardRpcWithRetry(&#39;reclamar_recompensa_kineti&#39;, {
-            p_user_id: user.id, p_reto_id: dailyKey, p_kc_reward: kcReward, p_xp_reward: awardedXp,
+            p_user_id: uid, p_reto_id: dailyKey, p_kc_reward: kcReward, p_xp_reward: awardedXp,
           });
           if (rpcDailyErr) throw rpcDailyErr;
-          const dPay = rpcDailyData as Record&lt;string, any&gt; | null;
+          const dPay = (rpcDailyData &amp;&amp; typeof rpcDailyData === &#39;object&#39; ? rpcDailyData : null) as Record&lt;string, unknown&gt; | null;
           const mergedServer = Array.isArray(dPay?.recompensas_reclamadas) ? mergeClaimKeys(dPay.recompensas_reclamadas, optClaimedArr) : optClaimedArr;
           const serverXp = Math.max(Number(dPay?.xp_total) || 0, resolvedXp);
           bonusXpRef.current = serverXp;
           if (isMountedRef.current) setBonusXp(serverXp);
-          if (prevProfile) activateResilientSession(user, buildClaimedProfilePatch(prevProfile, { kcTopupOverride: dPay?.kc_topup !== undefined ? Number(dPay.kc_topup) : undefined, kcDelta: kcReward, xpTotal: serverXp, claimedKeys: mergedServer, freezeStreak: true }));
-          await persistDailyRewardStorage(user.id, today, serverXp);
+          if (prevProfile) syncSession(buildClaimedProfilePatch(prevProfile, { kcTopupOverride: dPay?.kc_topup !== undefined ? Number(dPay.kc_topup) : undefined, kcDelta: kcReward, xpTotal: serverXp, claimedKeys: mergedServer, freezeStreak: true }));
+          await persistDailyRewardStorage(uid, today, serverXp);
           if (kcReward &gt; 0 || awardedXp &gt; 0) await refreshProfile?.();
           return true;
         } catch (err: unknown) {
           bonusXpRef.current = prevBonus;
           if (isMountedRef.current) { setDailyClaimedToday(prevDaily); setIsStreakFrozenToday(prevFrozen); setBonusXp(prevBonus); }
-          if (prevProfile) activateResilientSession(user, prevProfile);
-          patchKinetiClubTabAlertState({ hasUnclaimedReadyReward: true }, user.id);
+          if (prevProfile) syncSession(prevProfile);
+          patchKinetiClubTabAlertState({ hasUnclaimedReadyReward: true }, uid);
           triggerHaptic(&#39;Warning&#39;);
-          alertFn?.(tx(&#39;NO SE PUDO RECLAMAR&#39;, &#39;CLAIM FAILED&#39;), toErrMsg(err, tx(&#39;No se pudo guardar en la nube. Intenta de nuevo.&#39;, &#39;Could not save to cloud. Please try again.&#39;)), &#39;error&#39;);
+          alertFn?.(tx(&#39;NO SE PUDO RECLAMAR&#39;, &#39;CLAIM FAILED&#39;), toRewardErrMsg(err, tx(&#39;No se pudo guardar en la nube. Intenta de nuevo.&#39;, &#39;Could not save to cloud. Please try again.&#39;)), &#39;error&#39;);
           return false;
         } finally { isClaimingRef.current = false; }
       } else {
@@ -16519,79 +16578,47 @@ export function useKinetiClubRewards({
         const nextTotalXp = Math.max(prevBonus + xpGain, formulaTrophyXp);
         bonusXpRef.current = nextTotalXp; setBonusXp(nextTotalXp);
         const optClaimedArr = mergeClaimKeys(prevProfile?.recompensas_reclamadas, [id]);
-        if (prevProfile) activateResilientSession(user, buildClaimedProfilePatch(prevProfile, { kcDelta: kcReward, xpTotal: nextTotalXp, claimedKeys: optClaimedArr }));
+        if (prevProfile) syncSession(buildClaimedProfilePatch(prevProfile, { kcDelta: kcReward, xpTotal: nextTotalXp, claimedKeys: optClaimedArr }));
         triggerArcadeHaptic(&#39;levelUp&#39;);
         try {
           const { data: rpcTrophyData, error: rpcTrophyErr } = await runRewardRpcWithRetry(&#39;reclamar_recompensa_kineti&#39;, {
-            p_user_id: user.id, p_reto_id: id, p_kc_reward: kcReward, p_xp_reward: xpGain,
+            p_user_id: uid, p_reto_id: id, p_kc_reward: kcReward, p_xp_reward: xpGain,
           });
           if (rpcTrophyErr) throw rpcTrophyErr;
-          const tPay = rpcTrophyData as Record&lt;string, unknown&gt; | null;
+          const tPay = (rpcTrophyData &amp;&amp; typeof rpcTrophyData === &#39;object&#39; ? rpcTrophyData : null) as Record&lt;string, unknown&gt; | null;
           const mergedServer = Array.isArray(tPay?.recompensas_reclamadas) ? mergeClaimKeys(tPay.recompensas_reclamadas, nextClaimed) : optClaimedArr;
           const serverXp = Math.max(Number(tPay?.xp_total) || 0, nextTotalXp);
           bonusXpRef.current = serverXp;
           if (isMountedRef.current) setBonusXp(serverXp);
-          if (prevProfile) activateResilientSession(user, buildClaimedProfilePatch(prevProfile, { kcTopupOverride: tPay?.kc_topup !== undefined ? Number(tPay.kc_topup) : undefined, kcDelta: kcReward, xpTotal: serverXp, claimedKeys: mergedServer }));
-          await persistTrophyRewardStorage(user.id, nextClaimed, serverXp);
+          if (prevProfile) syncSession(buildClaimedProfilePatch(prevProfile, { kcTopupOverride: tPay?.kc_topup !== undefined ? Number(tPay.kc_topup) : undefined, kcDelta: kcReward, xpTotal: serverXp, claimedKeys: mergedServer }));
+          await persistTrophyRewardStorage(uid, nextClaimed, serverXp);
           if (kcReward &gt; 0 || xpGain &gt; 0) await refreshProfile?.();
           return true;
         } catch (err: unknown) {
           claimedIdsRef.current = prevClaimed; bonusXpRef.current = prevBonus;
           if (isMountedRef.current) { setClaimedChallengeIds(prevClaimed); setBonusXp(prevBonus); }
-          if (prevProfile) activateResilientSession(user, prevProfile);
-          await persistTrophyRewardStorage(user.id, prevClaimed, prevBonus).catch(() =&gt; {});
-          patchKinetiClubTabAlertState({ hasUnclaimedReadyReward: true }, user.id);
+          if (prevProfile) syncSession(prevProfile);
+          await persistTrophyRewardStorage(uid, prevClaimed, prevBonus).catch(() =&gt; {});
+          patchKinetiClubTabAlertState({ hasUnclaimedReadyReward: true }, uid);
           triggerHaptic(&#39;Warning&#39;);
-          alertFn?.(tx(&#39;NO SE PUDO RECLAMAR&#39;, &#39;CLAIM FAILED&#39;), toErrMsg(err, tx(&#39;No se pudo guardar el trofeo en la nube.&#39;, &#39;Could not save trophy in cloud.&#39;)), &#39;error&#39;);
+          alertFn?.(tx(&#39;NO SE PUDO RECLAMAR&#39;, &#39;CLAIM FAILED&#39;), toRewardErrMsg(err, tx(&#39;No se pudo guardar el trofeo en la nube.&#39;, &#39;Could not save trophy in cloud.&#39;)), &#39;error&#39;);
           return false;
         } finally { isClaimingRef.current = false; }
       }
     },
-    [
-      user,
-      effectiveProfile,
-      activateResilientSession,
-      availableBoxesCount,
-      dailyClaimedToday,
-      isStreakFrozenToday,
-      completedSessionsCount,
-      rachaActual,
-      tierXp,
-      refreshProfile,
-      bonusXpRef,
-      claimedIdsRef,
-      openedBoxesRef,
-      isMountedRef,
-      setBonusXp,
-      setClaimedChallengeIds,
-      setDailyClaimedToday,
-      setIsStreakFrozenToday,
-      tx,
-    ]
+    [uid, effectiveProfile, syncSession, availableBoxesCount, dailyClaimedToday, isStreakFrozenToday, completedSessionsCount, rachaActual, tierXp, refreshProfile, bonusXpRef, claimedIdsRef, openedBoxesRef, isMountedRef, setBonusXp, setClaimedChallengeIds, setDailyClaimedToday, setIsStreakFrozenToday, tx]
   );
 
-  // Apertura sincronizada en la nube de Caja de Nivel (10 o 20 KC determinados server-side)
   const abrirCajaRetoNivel = useCallback(
     async (alertFn?: TacticalAlertCallback): Promise&lt;number&gt; =&gt; {
-      if (
-        !user?.id ||
-        isClaimingRef.current ||
-        availableBoxesCount &lt;= 0 ||
-        openedBoxesRef.current &gt;= totalBoxesEarnedRef.current
-      ) {
-        return 0;
-      }
+      if (!uid || isClaimingRef.current || availableBoxesCount &lt;= 0 || openedBoxesRef.current &gt;= totalBoxesEarnedRef.current) return 0;
       isClaimingRef.current = true;
       const randomKc = pickLevelBoxRewardKc();
       const prevOpened = openedBoxesRef.current;
       const prevBonus = bonusXpRef.current;
       const prevProfile = effectiveProfile ? { ...effectiveProfile } : null;
-
       const nextCrateNum = findNextUnclaimedLevelBoxNum(effectiveProfile?.recompensas_reclamadas, totalBoxesEarnedRef.current);
-      if (!nextCrateNum) {
-        isClaimingRef.current = false;
-        return 0;
-      }
+      if (!nextCrateNum) { isClaimingRef.current = false; return 0; }
       const crateKey = `caja_nivel_${nextCrateNum}`;
       const claimedSetNow = extractClaimedLevelBoxNumbers(effectiveProfile?.recompensas_reclamadas);
       claimedSetNow.add(nextCrateNum);
@@ -16599,40 +16626,28 @@ export function useKinetiClubRewards({
 
       try {
         const { data: crateData, error: crateErr } = await runRewardRpcWithRetry(&#39;reclamar_recompensa_kineti&#39;, {
-          p_user_id: user.id, p_reto_id: crateKey, p_kc_reward: randomKc, p_xp_reward: 30,
+          p_user_id: uid, p_reto_id: crateKey, p_kc_reward: randomKc, p_xp_reward: 30,
         });
         if (crateErr) throw crateErr;
-        const cPay = crateData as Record&lt;string, any&gt; | null;
+        const cPay = (crateData &amp;&amp; typeof crateData === &#39;object&#39; ? crateData : null) as Record&lt;string, unknown&gt; | null;
         const isDuplicate = Boolean(cPay?.duplicate);
         const rawGranted = Number(cPay?.kc_granted);
         const safeServerKc = isDuplicate ? 0 : rawGranted === 10 || rawGranted === 20 ? rawGranted : randomKc;
         const mergedServer = Array.isArray(cPay?.recompensas_reclamadas) ? mergeClaimKeys(cPay.recompensas_reclamadas, [crateKey]) : mergeClaimKeys(prevProfile?.recompensas_reclamadas, [crateKey]);
-        const exactBoxCount = Math.max(
-          extractClaimedLevelBoxNumbers(mergedServer).size,
-          Number(cPay?.cajas_nivel_reclamadas) || 0,
-          isDuplicate ? prevOpened : nextOpened
-        );
+        const exactBoxCount = Math.max(extractClaimedLevelBoxNumbers(mergedServer).size, Number(cPay?.cajas_nivel_reclamadas) || 0, isDuplicate ? prevOpened : nextOpened);
         const formulaBoxXp = completedSessionsCount * 50 + rachaActual * 25 + sumClaimedChallengesXp(claimedIdsRef.current) + (dailyClaimedToday ? tierXp : 0) + exactBoxCount * 30;
         const serverXp = Math.max(Number(cPay?.xp_total) || 0, isDuplicate ? prevBonus : Math.max(prevBonus + 30, formulaBoxXp));
 
         openedBoxesRef.current = exactBoxCount;
         bonusXpRef.current = serverXp;
-        if (isMountedRef.current) {
-          setOpenedBoxesCount(exactBoxCount);
-          setBonusXp(serverXp);
-        }
+        if (isMountedRef.current) { setOpenedBoxesCount(exactBoxCount); setBonusXp(serverXp); }
         if (prevProfile) {
-          activateResilientSession(user, {
-            ...buildClaimedProfilePatch(prevProfile, {
-              kcTopupOverride: cPay?.kc_topup !== undefined ? Number(cPay.kc_topup) : undefined,
-              kcDelta: safeServerKc,
-              xpTotal: serverXp,
-              claimedKeys: mergedServer,
-            }),
+          syncSession({
+            ...buildClaimedProfilePatch(prevProfile, { kcTopupOverride: cPay?.kc_topup !== undefined ? Number(cPay.kc_topup) : undefined, kcDelta: safeServerKc, xpTotal: serverXp, claimedKeys: mergedServer }),
             cajas_nivel_reclamadas: exactBoxCount,
           });
         }
-        await persistBoxRewardStorage(user.id, exactBoxCount, serverXp);
+        await persistBoxRewardStorage(uid, exactBoxCount, serverXp);
         invalidateAdminDashboardFetcherCache();
         if (typeof window !== &#39;undefined&#39; &amp;&amp; typeof window.dispatchEvent === &#39;function&#39;) {
           window.dispatchEvent(new CustomEvent(&#39;kinetic:boveda-updated&#39;));
@@ -16640,11 +16655,7 @@ export function useKinetiClubRewards({
         await refreshProfile?.();
         if (isDuplicate) {
           triggerHaptic(&#39;Warning&#39;);
-          alertFn?.(
-            tx(&#39;COFRE YA RECLAMADO&#39;, &#39;CHEST ALREADY CLAIMED&#39;),
-            tx(&#39;Este cofre de nivel ya estaba acreditado en tu cuenta.&#39;, &#39;This level chest was already credited to your account.&#39;),
-            &#39;alert&#39;
-          );
+          alertFn?.(tx(&#39;COFRE YA RECLAMADO&#39;, &#39;CHEST ALREADY CLAIMED&#39;), tx(&#39;Este cofre de nivel ya estaba acreditado en tu cuenta.&#39;, &#39;This level chest was already credited to your account.&#39;), &#39;alert&#39;);
           return -1;
         }
         triggerArcadeHaptic(&#39;levelUp&#39;);
@@ -16652,33 +16663,14 @@ export function useKinetiClubRewards({
       } catch (err: unknown) {
         openedBoxesRef.current = prevOpened; bonusXpRef.current = prevBonus;
         if (isMountedRef.current) { setOpenedBoxesCount(prevOpened); setBonusXp(prevBonus); }
-        if (prevProfile) activateResilientSession(user, prevProfile);
-        await persistBoxRewardStorage(user.id, prevOpened, prevBonus).catch(() =&gt; {});
+        if (prevProfile) syncSession(prevProfile);
+        await persistBoxRewardStorage(uid, prevOpened, prevBonus).catch(() =&gt; {});
         triggerHaptic(&#39;Warning&#39;);
-        alertFn?.(tx(&#39;NO SE PUDO ABRIR COFRE&#39;, &#39;BOX CLAIM FAILED&#39;), toErrMsg(err, tx(&#39;No se pudo guardar tu cofre en la nube.&#39;, &#39;Could not save your chest in the cloud.&#39;)), &#39;error&#39;);
+        alertFn?.(tx(&#39;NO SE PUDO ABRIR COFRE&#39;, &#39;BOX CLAIM FAILED&#39;), toRewardErrMsg(err, tx(&#39;No se pudo guardar tu cofre en la nube.&#39;, &#39;Could not save your chest in the cloud.&#39;)), &#39;error&#39;);
         return 0;
-      } finally {
-        isClaimingRef.current = false;
-      }
+      } finally { isClaimingRef.current = false; }
     },
-    [
-      user,
-      effectiveProfile,
-      activateResilientSession,
-      availableBoxesCount,
-      completedSessionsCount,
-      rachaActual,
-      dailyClaimedToday,
-      tierXp,
-      refreshProfile,
-      bonusXpRef,
-      claimedIdsRef,
-      openedBoxesRef,
-      isMountedRef,
-      setBonusXp,
-      setOpenedBoxesCount,
-      tx,
-    ]
+    [uid, effectiveProfile, syncSession, availableBoxesCount, completedSessionsCount, rachaActual, dailyClaimedToday, tierXp, refreshProfile, bonusXpRef, claimedIdsRef, openedBoxesRef, isMountedRef, setBonusXp, setOpenedBoxesCount, tx]
   );
 
   return {
@@ -25405,6 +25397,489 @@ BEGIN
   END IF;
 END
 $$;
+
+COMMIT;
+</code></pre>
+<h2>FILE: supabase/migrations/20261123010000_migration_v284_topup_min100_and_monthly_shield.sql</h2>
+<pre><code class="language-sql">-- ============================================================================
+-- MIGRACIÓN v284 — PISO MÍNIMO TOP-UP 100 KC + ESCUDO DE RACHA MENSUAL (1 GRATIS/MES + 25 KC)
+-- Idempotente, SECURITY DEFINER, SET search_path = pg_catalog, public
+-- ============================================================================
+
+BEGIN;
+
+-- 1. Columnas mensuales idempotentes para Escudo de Racha 24h en public.perfiles
+ALTER TABLE public.perfiles
+  ADD COLUMN IF NOT EXISTS escudo_mes_iso TEXT,
+  ADD COLUMN IF NOT EXISTS escudos_usados_mes INTEGER NOT NULL DEFAULT 0;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = &#39;chk_perfiles_escudos_usados_mes_nonneg&#39;
+      AND conrelid = &#39;public.perfiles&#39;::regclass
+  ) THEN
+    ALTER TABLE public.perfiles
+      ADD CONSTRAINT chk_perfiles_escudos_usados_mes_nonneg
+      CHECK (escudos_usados_mes &gt;= 0);
+  END IF;
+END $$;
+
+-- 2. Blindaje de triggers en public.perfiles incluyendo escudo_mes_iso y escudos_usados_mes
+CREATE OR REPLACE FUNCTION public.proteger_columnas_sensibles_perfiles()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+  v_vault_ok BOOLEAN := (
+    COALESCE(current_setting(&#39;kinetic.vault_rpc_authorized&#39;, true), &#39;false&#39;) = &#39;true&#39;
+    OR COALESCE(current_setting(&#39;kinetic.rpc_authorized&#39;, true), &#39;false&#39;) = &#39;true&#39;
+  );
+  v_jwt_role TEXT := COALESCE(NULLIF(current_setting(&#39;request.jwt.claim.role&#39;, true), &#39;&#39;), &#39;&#39;);
+BEGIN
+  IF v_vault_ok THEN
+    RETURN NEW;
+  END IF;
+  IF current_user IN (&#39;postgres&#39;, &#39;service_role&#39;, &#39;supabase_admin&#39;)
+     AND v_jwt_role IS DISTINCT FROM &#39;authenticated&#39; THEN
+    RETURN NEW;
+  END IF;
+  IF COALESCE((SELECT public.is_kinetic_master_admin()), FALSE) THEN
+    RETURN NEW;
+  END IF;
+
+  IF (NEW.kc_membresia IS DISTINCT FROM OLD.kc_membresia)
+     OR (NEW.kc_topup IS DISTINCT FROM OLD.kc_topup)
+     OR (NEW.saldo_kc IS DISTINCT FROM OLD.saldo_kc)
+     OR (LOWER(TRIM(COALESCE(NEW.rol, &#39;&#39;))) IS DISTINCT FROM LOWER(TRIM(COALESCE(OLD.rol, &#39;&#39;))))
+     OR (LOWER(TRIM(COALESCE(NEW.tipo_cuenta, &#39;&#39;))) IS DISTINCT FROM LOWER(TRIM(COALESCE(OLD.tipo_cuenta, &#39;&#39;))))
+     OR (COALESCE(NEW.nivel, &#39;&#39;) IS DISTINCT FROM COALESCE(OLD.nivel, &#39;&#39;))
+     OR (COALESCE(NEW.xp_total, 0) IS DISTINCT FROM COALESCE(OLD.xp_total, 0))
+     OR (COALESCE(NEW.perdones_mensuales_usados, 0) IS DISTINCT FROM COALESCE(OLD.perdones_mensuales_usados, 0))
+     OR (COALESCE(NEW.es_cuenta_sandbox, FALSE) IS DISTINCT FROM COALESCE(OLD.es_cuenta_sandbox, FALSE))
+     OR (COALESCE(NEW.racha_dias, 0) IS DISTINCT FROM COALESCE(OLD.racha_dias, 0))
+     OR (COALESCE(NEW.racha, 0) IS DISTINCT FROM COALESCE(OLD.racha, 0))
+     OR (COALESCE(NEW.racha_semanal_dias, 0) IS DISTINCT FROM COALESCE(OLD.racha_semanal_dias, 0))
+     OR (NEW.ultima_fecha_racha IS DISTINCT FROM OLD.ultima_fecha_racha)
+     OR (COALESCE(NEW.is_streak_frozen, FALSE) IS DISTINCT FROM COALESCE(OLD.is_streak_frozen, FALSE))
+     OR (NEW.escudo_activo_hasta IS DISTINCT FROM OLD.escudo_activo_hasta)
+     OR (NEW.escudo_racha_activo_hasta IS DISTINCT FROM OLD.escudo_racha_activo_hasta)
+     OR (NEW.escudo_semana_iso IS DISTINCT FROM OLD.escudo_semana_iso)
+     OR (COALESCE(NEW.escudos_usados_semana, 0) IS DISTINCT FROM COALESCE(OLD.escudos_usados_semana, 0))
+     OR (NEW.escudo_mes_iso IS DISTINCT FROM OLD.escudo_mes_iso)
+     OR (COALESCE(NEW.escudos_usados_mes, 0) IS DISTINCT FROM COALESCE(OLD.escudos_usados_mes, 0))
+     OR (COALESCE(NEW.prestigio_nivel, 0) IS DISTINCT FROM COALESCE(OLD.prestigio_nivel, 0))
+     OR (COALESCE(NEW.prestigio_grado, 0) IS DISTINCT FROM COALESCE(OLD.prestigio_grado, 0))
+     OR (COALESCE(NEW.cajas_nivel_reclamadas, 0) IS DISTINCT FROM COALESCE(OLD.cajas_nivel_reclamadas, 0))
+     OR (COALESCE(NEW.kc_ganados_cajas, 0) IS DISTINCT FROM COALESCE(OLD.kc_ganados_cajas, 0))
+     OR (NEW.recompensas_reclamadas IS DISTINCT FROM OLD.recompensas_reclamadas)
+     OR (NEW.codigo_referido IS DISTINCT FROM OLD.codigo_referido)
+     OR (NEW.referido_por IS DISTINCT FROM OLD.referido_por)
+     OR (NEW.referido_por_id IS DISTINCT FROM OLD.referido_por_id)
+     OR (NEW.referido_por_codigo IS DISTINCT FROM OLD.referido_por_codigo)
+     OR (COALESCE(NEW.bono_referido_otorgado, FALSE) IS DISTINCT FROM COALESCE(OLD.bono_referido_otorgado, FALSE))
+     OR (COALESCE(NEW.referidos_count, 0) IS DISTINCT FROM COALESCE(OLD.referidos_count, 0))
+     OR (COALESCE(NEW.kc_ganados_referidos, 0) IS DISTINCT FROM COALESCE(OLD.kc_ganados_referidos, 0)) THEN
+    RAISE EXCEPTION &#39;SEGURIDAD KINETIC: Operacion bloqueada. Columnas protegidas solo pueden modificarse mediante RPC autorizado.&#39;
+      USING ERRCODE = &#39;42501&#39;;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.fn_guard_perfiles_privilegios_y_boveda()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+  v_jwt_role TEXT := COALESCE(NULLIF(current_setting(&#39;request.jwt.claim.role&#39;, true), &#39;&#39;), auth.jwt() -&gt;&gt; &#39;role&#39;, &#39;&#39;);
+  v_ok BOOLEAN := (
+    COALESCE(current_setting(&#39;kinetic.vault_rpc_authorized&#39;, true), &#39;false&#39;) = &#39;true&#39;
+    OR COALESCE(current_setting(&#39;kinetic.rpc_authorized&#39;, true), &#39;false&#39;) = &#39;true&#39;
+    OR (
+      ((SELECT auth.uid()) IS NULL AND current_user IN (&#39;postgres&#39;, &#39;supabase_admin&#39;, &#39;service_role&#39;))
+      AND v_jwt_role IS DISTINCT FROM &#39;authenticated&#39;
+    )
+    OR v_jwt_role = &#39;service_role&#39;
+    OR COALESCE((SELECT public.is_kinetic_master_admin()), FALSE)
+  );
+BEGIN
+  NEW.kc_membresia := GREATEST(0, COALESCE(NEW.kc_membresia, 0));
+  NEW.kc_topup := GREATEST(0, COALESCE(NEW.kc_topup, 0));
+  NEW.saldo_kc := NEW.kc_membresia + NEW.kc_topup;
+
+  IF v_ok THEN
+    RETURN NEW;
+  END IF;
+
+  IF TG_OP = &#39;INSERT&#39; THEN
+    IF NEW.id IS DISTINCT FROM (SELECT auth.uid())
+       OR LOWER(TRIM(COALESCE(NEW.rol, &#39;&#39;))) IN (&#39;admin&#39;, &#39;fundador&#39;)
+       OR NEW.kc_membresia &gt; 0
+       OR NEW.kc_topup &gt; 0
+       OR COALESCE(NEW.es_cuenta_sandbox, FALSE) = TRUE
+       OR COALESCE(NEW.bono_referido_otorgado, FALSE) = TRUE
+       OR COALESCE(NEW.prestigio_nivel, 0) &gt; 0
+       OR COALESCE(NEW.cajas_nivel_reclamadas, 0) &gt; 0
+       OR COALESCE(NEW.escudos_usados_mes, 0) &gt; 0 THEN
+      RAISE EXCEPTION &#39;Operacion bloqueada en registro.&#39; USING ERRCODE = &#39;42501&#39;;
+    END IF;
+    NEW.rol := CASE WHEN LOWER(TRIM(COALESCE(NEW.rol, &#39;&#39;))) IN (&#39;afiliado&#39;, &#39;club&#39;, &#39;especialista&#39;) THEN LOWER(TRIM(NEW.rol)) ELSE &#39;atleta&#39; END;
+    NEW.tipo_cuenta := CASE WHEN LOWER(TRIM(COALESCE(NEW.tipo_cuenta, &#39;&#39;))) IN (&#39;afiliado&#39;, &#39;club&#39;, &#39;especialista&#39;, &#39;b2b&#39;) THEN LOWER(TRIM(NEW.tipo_cuenta)) ELSE &#39;atleta&#39; END;
+    NEW.nivel := CASE WHEN NEW.rol IN (&#39;afiliado&#39;, &#39;club&#39;, &#39;especialista&#39;) THEN &#39;Partner B2B&#39; ELSE &#39;Acceso Base&#39; END;
+    NEW.xp_total := 0;
+    NEW.racha_dias := 0;
+    NEW.racha := 0;
+    NEW.racha_semanal_dias := 0;
+    NEW.ultima_fecha_racha := NULL;
+    NEW.is_streak_frozen := FALSE;
+    NEW.escudo_activo_hasta := NULL;
+    NEW.escudo_racha_activo_hasta := NULL;
+    NEW.escudo_semana_iso := NULL;
+    NEW.escudos_usados_semana := 0;
+    NEW.escudo_mes_iso := NULL;
+    NEW.escudos_usados_mes := 0;
+    NEW.prestigio_nivel := 0;
+    NEW.prestigio_grado := 0;
+    NEW.cajas_nivel_reclamadas := 0;
+    NEW.kc_ganados_cajas := 0;
+    NEW.recompensas_reclamadas := ARRAY[]::TEXT[];
+    NEW.perdones_mensuales_usados := 0;
+    NEW.codigo_referido := NULL;
+    NEW.referido_por := NULL;
+    NEW.referido_por_id := NULL;
+    NEW.referido_por_codigo := NULL;
+    NEW.bono_referido_otorgado := FALSE;
+    NEW.referidos_count := 0;
+    NEW.kc_ganados_referidos := 0;
+    NEW.es_cuenta_sandbox := FALSE;
+    RETURN NEW;
+  END IF;
+
+  IF TG_OP = &#39;UPDATE&#39; AND (
+    NEW.id IS DISTINCT FROM OLD.id
+    OR LOWER(TRIM(COALESCE(NEW.rol, &#39;&#39;))) IS DISTINCT FROM LOWER(TRIM(COALESCE(OLD.rol, &#39;&#39;)))
+    OR LOWER(TRIM(COALESCE(NEW.tipo_cuenta, &#39;&#39;))) IS DISTINCT FROM LOWER(TRIM(COALESCE(OLD.tipo_cuenta, &#39;&#39;)))
+    OR COALESCE(NEW.nivel, &#39;&#39;) IS DISTINCT FROM COALESCE(OLD.nivel, &#39;&#39;)
+    OR COALESCE(NEW.kc_membresia, 0) IS DISTINCT FROM COALESCE(OLD.kc_membresia, 0)
+    OR COALESCE(NEW.kc_topup, 0) IS DISTINCT FROM COALESCE(OLD.kc_topup, 0)
+    OR COALESCE(NEW.saldo_kc, 0) IS DISTINCT FROM COALESCE(OLD.saldo_kc, 0)
+    OR COALESCE(NEW.xp_total, 0) IS DISTINCT FROM COALESCE(OLD.xp_total, 0)
+    OR COALESCE(NEW.perdones_mensuales_usados, 0) IS DISTINCT FROM COALESCE(OLD.perdones_mensuales_usados, 0)
+    OR COALESCE(NEW.es_cuenta_sandbox, FALSE) IS DISTINCT FROM COALESCE(OLD.es_cuenta_sandbox, FALSE)
+    OR COALESCE(NEW.racha_dias, 0) IS DISTINCT FROM COALESCE(OLD.racha_dias, 0)
+    OR COALESCE(NEW.racha, 0) IS DISTINCT FROM COALESCE(OLD.racha, 0)
+    OR COALESCE(NEW.racha_semanal_dias, 0) IS DISTINCT FROM COALESCE(OLD.racha_semanal_dias, 0)
+    OR NEW.ultima_fecha_racha IS DISTINCT FROM OLD.ultima_fecha_racha
+    OR COALESCE(NEW.is_streak_frozen, FALSE) IS DISTINCT FROM COALESCE(OLD.is_streak_frozen, FALSE)
+    OR NEW.escudo_activo_hasta IS DISTINCT FROM OLD.escudo_activo_hasta
+    OR NEW.escudo_racha_activo_hasta IS DISTINCT FROM OLD.escudo_racha_activo_hasta
+    OR NEW.escudo_semana_iso IS DISTINCT FROM OLD.escudo_semana_iso
+    OR COALESCE(NEW.escudos_usados_semana, 0) IS DISTINCT FROM COALESCE(OLD.escudos_usados_semana, 0)
+    OR NEW.escudo_mes_iso IS DISTINCT FROM OLD.escudo_mes_iso
+    OR COALESCE(NEW.escudos_usados_mes, 0) IS DISTINCT FROM COALESCE(OLD.escudos_usados_mes, 0)
+    OR COALESCE(NEW.prestigio_nivel, 0) IS DISTINCT FROM COALESCE(OLD.prestigio_nivel, 0)
+    OR COALESCE(NEW.prestigio_grado, 0) IS DISTINCT FROM COALESCE(OLD.prestigio_grado, 0)
+    OR COALESCE(NEW.cajas_nivel_reclamadas, 0) IS DISTINCT FROM COALESCE(OLD.cajas_nivel_reclamadas, 0)
+    OR COALESCE(NEW.kc_ganados_cajas, 0) IS DISTINCT FROM COALESCE(OLD.kc_ganados_cajas, 0)
+    OR NEW.recompensas_reclamadas IS DISTINCT FROM OLD.recompensas_reclamadas
+    OR NEW.codigo_referido IS DISTINCT FROM OLD.codigo_referido
+    OR NEW.referido_por IS DISTINCT FROM OLD.referido_por
+    OR NEW.referido_por_id IS DISTINCT FROM OLD.referido_por_id
+    OR NEW.referido_por_codigo IS DISTINCT FROM OLD.referido_por_codigo
+    OR COALESCE(NEW.bono_referido_otorgado, FALSE) IS DISTINCT FROM COALESCE(OLD.bono_referido_otorgado, FALSE)
+    OR COALESCE(NEW.referidos_count, 0) IS DISTINCT FROM COALESCE(OLD.referidos_count, 0)
+    OR COALESCE(NEW.kc_ganados_referidos, 0) IS DISTINCT FROM COALESCE(OLD.kc_ganados_referidos, 0)
+  ) THEN
+    RAISE EXCEPTION &#39;Modificacion directa bloqueada fuera de RPC autorizado.&#39; USING ERRCODE = &#39;42501&#39;;
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+-- 3. Piso mínimo Top-Up 100 KC en public.procesar_compra_boveda_sandbox (retira 50 KC)
+CREATE OR REPLACE FUNCTION public.procesar_compra_boveda_sandbox(p_plan_id TEXT, p_tipo TEXT DEFAULT &#39;topup&#39;)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+  v_uid UUID := (SELECT auth.uid());
+  v_sandbox_ok BOOLEAN := FALSE;
+  v_plan TEXT := LOWER(TRIM(COALESCE(p_plan_id, &#39;&#39;)));
+  v_tipo TEXT := LOWER(TRIM(COALESCE(p_tipo, &#39;topup&#39;)));
+  v_kc NUMERIC := 0;
+  v_mxn NUMERIC := 0;
+  v_tier TEXT := NULL;
+  v_mem NUMERIC := 0;
+  v_top NUMERIC := 0;
+  v_curr_nivel TEXT := &#39;Acceso Base&#39;;
+  v_curr_weight INT := 0;
+  v_next_weight INT := 0;
+  v_curr_base_kc NUMERIC := 0;
+  v_curr_base_mxn NUMERIC := 0;
+BEGIN
+  IF v_uid IS NULL THEN
+    RAISE EXCEPTION &#39;Sesion requerida para operar Boveda.&#39; USING ERRCODE = &#39;42501&#39;;
+  END IF;
+  IF COALESCE((SELECT public.is_kinetic_b2b_account(v_uid)), FALSE) THEN
+    RAISE EXCEPTION &#39;B2B_ACCOUNT_WALLET_PURCHASE_FORBIDDEN: Las cuentas B2B no pueden comprar membresias ni Kineticoins.&#39; USING ERRCODE = &#39;42501&#39;;
+  END IF;
+
+  SELECT COALESCE(enabled, FALSE) INTO v_sandbox_ok
+  FROM public.kinetic_system_flags
+  WHERE flag_key = &#39;allow_pre_stripe_sandbox&#39;
+  LIMIT 1;
+
+  IF NOT COALESCE(v_sandbox_ok, FALSE) AND NOT COALESCE((SELECT public.is_kinetic_master_admin()), FALSE) THEN
+    RAISE EXCEPTION &#39;SANDBOX_DESHABILITADO: Modo pre-Stripe desactivado en servidor.&#39; USING ERRCODE = &#39;42501&#39;;
+  END IF;
+
+  CASE
+    WHEN v_plan IN (&#39;free&#39;, &#39;acceso_base&#39;, &#39;acceso base&#39;, &#39;base&#39;) THEN v_kc := 0; v_mxn := 0; v_tier := &#39;Acceso Base&#39;; v_next_weight := 0;
+    WHEN v_plan IN (&#39;bronze&#39;, &#39;memb_bronze&#39;, &#39;membresia_bronze&#39;, &#39;plan_bronze&#39;) THEN v_kc := 600; v_mxn := 699; v_tier := &#39;Bronze&#39;; v_next_weight := 1;
+    WHEN v_plan IN (&#39;silver&#39;, &#39;memb_silver&#39;, &#39;membresia_silver&#39;, &#39;plan_silver&#39;) THEN v_kc := 1500; v_mxn := 1549; v_tier := &#39;Silver&#39;; v_next_weight := 2;
+    WHEN v_plan IN (&#39;gold&#39;, &#39;memb_gold&#39;, &#39;membresia_gold&#39;, &#39;plan_gold&#39;) THEN v_kc := 2500; v_mxn := 2529; v_tier := &#39;Gold&#39;; v_next_weight := 3;
+    WHEN v_plan IN (&#39;platinum&#39;, &#39;memb_platinum&#39;, &#39;membresia_platinum&#39;, &#39;plan_platinum&#39;) THEN v_kc := 3600; v_mxn := 3600; v_tier := &#39;Platinum&#39;; v_next_weight := 4;
+    WHEN v_plan IN (&#39;topup_100&#39;, &#39;100&#39;, &#39;pkg_100&#39;) THEN v_kc := 100; v_mxn := 100;
+    WHEN v_plan IN (&#39;topup_250&#39;, &#39;250&#39;, &#39;pkg_250&#39;) THEN v_kc := 250; v_mxn := 250;
+    WHEN v_plan IN (&#39;topup_500&#39;, &#39;500&#39;, &#39;pkg_500&#39;) THEN v_kc := 500; v_mxn := 500;
+    WHEN v_plan IN (&#39;topup_1000&#39;, &#39;1000&#39;, &#39;pkg_1000&#39;) THEN v_kc := 1000; v_mxn := 1000;
+    ELSE
+      RAISE EXCEPTION &#39;Paquete Top-Up no reconocido en catalogo oficial (minimo 100 KC): %&#39;, p_plan_id USING ERRCODE = &#39;22023&#39;;
+  END CASE;
+
+  PERFORM pg_catalog.set_config(&#39;kinetic.vault_rpc_authorized&#39;, &#39;true&#39;, true);
+  PERFORM pg_catalog.set_config(&#39;kinetic.rpc_authorized&#39;, &#39;true&#39;, true);
+
+  SELECT COALESCE(kc_membresia, 0), COALESCE(kc_topup, 0), COALESCE(nivel, &#39;Acceso Base&#39;)
+    INTO v_mem, v_top, v_curr_nivel
+  FROM public.perfiles
+  WHERE id = v_uid
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION &#39;Perfil de atleta no encontrado.&#39;;
+  END IF;
+
+  v_curr_weight := CASE
+    WHEN LOWER(v_curr_nivel) LIKE &#39;%plat%&#39; OR LOWER(v_curr_nivel) LIKE &#39;%leyenda%&#39; OR LOWER(v_curr_nivel) LIKE &#39;%black%&#39; THEN 4
+    WHEN LOWER(v_curr_nivel) LIKE &#39;%gold%&#39; OR LOWER(v_curr_nivel) LIKE &#39;%oro%&#39; THEN 3
+    WHEN LOWER(v_curr_nivel) LIKE &#39;%silver%&#39; OR LOWER(v_curr_nivel) LIKE &#39;%plata%&#39; THEN 2
+    WHEN LOWER(v_curr_nivel) LIKE &#39;%bronze%&#39; OR LOWER(v_curr_nivel) LIKE &#39;%bronce%&#39; THEN 1
+    ELSE 0
+  END;
+  v_curr_base_kc := CASE v_curr_weight WHEN 1 THEN 600 WHEN 2 THEN 1500 WHEN 3 THEN 2500 WHEN 4 THEN 3600 ELSE 0 END;
+  v_curr_base_mxn := CASE v_curr_weight WHEN 1 THEN 699 WHEN 2 THEN 1549 WHEN 3 THEN 2529 WHEN 4 THEN 3600 ELSE 0 END;
+
+  IF v_tier IS NOT NULL OR v_tipo IN (&#39;membresia&#39;, &#39;membership&#39;) THEN
+    IF v_next_weight &lt;= v_curr_weight THEN
+      RAISE EXCEPTION &#39;MEMBERSHIP_DOWNGRADE_OR_SAME_TIER_FORBIDDEN&#39; USING ERRCODE = &#39;22023&#39;;
+    END IF;
+    IF v_curr_weight &gt;= 1 THEN
+      v_kc := GREATEST(0, v_kc - v_curr_base_kc);
+      v_mxn := GREATEST(0, v_mxn - v_curr_base_mxn);
+    END IF;
+    v_mem := v_mem + v_kc;
+    UPDATE public.perfiles
+       SET kc_membresia = v_mem,
+           saldo_kc = v_mem + v_top,
+           nivel = COALESCE(v_tier, v_curr_nivel),
+           fecha_activacion_membresia = NOW()
+     WHERE id = v_uid;
+  ELSE
+    v_mxn := CASE WHEN v_curr_weight = 0 THEN ROUND(v_kc * 1.20, 2) ELSE v_kc END;
+    v_top := v_top + v_kc;
+    UPDATE public.perfiles
+       SET kc_topup = v_top,
+           saldo_kc = v_mem + v_top
+     WHERE id = v_uid;
+  END IF;
+
+  INSERT INTO public.transacciones_pagos (
+    usuario_id, tipo_operacion, paquete_id, monto_mxn, kc_inyectados, stripe_payment_intent_id, estado
+  ) VALUES (
+    v_uid,
+    CASE WHEN v_tier IS NOT NULL THEN &#39;membresia&#39; ELSE &#39;topup&#39; END,
+    v_plan,
+    v_mxn,
+    v_kc,
+    &#39;sandbox_&#39; || replace(gen_random_uuid()::text, &#39;-&#39;, &#39;&#39;),
+    &#39;sandbox_completado&#39;
+  );
+
+  RETURN jsonb_build_object(
+    &#39;ok&#39;, TRUE,
+    &#39;plan_id&#39;, v_plan,
+    &#39;monto_mxn&#39;, v_mxn,
+    &#39;kc_inyectados&#39;, v_kc,
+    &#39;kc_membresia&#39;, v_mem,
+    &#39;kc_topup&#39;, v_top,
+    &#39;saldo_kc&#39;, v_mem + v_top,
+    &#39;nivel&#39;, COALESCE(v_tier, v_curr_nivel)
+  );
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.procesar_compra_boveda_sandbox(TEXT, TEXT) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.procesar_compra_boveda_sandbox(TEXT, TEXT) TO authenticated;
+
+-- 4. Escudo de Racha 24h Mensual (1 gratis/mes calendario Mazatlan + 25 KC adicionales)
+CREATE OR REPLACE FUNCTION public.congelar_racha_kineti(p_user_id UUID DEFAULT NULL)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+  v_caller UUID := (SELECT auth.uid());
+  v_target UUID := COALESCE(p_user_id, v_caller);
+  v_is_admin BOOLEAN := COALESCE((SELECT public.is_kinetic_master_admin()), FALSE);
+  v_month_key TEXT := pg_catalog.to_char(NOW() AT TIME ZONE &#39;America/Mazatlan&#39;, &#39;YYYY-MM&#39;);
+  v_iso_week TEXT := pg_catalog.to_char(NOW() AT TIME ZONE &#39;America/Mazatlan&#39;, &#39;IYYY-IW&#39;);
+  v_day_mzt TEXT := pg_catalog.to_char(NOW() AT TIME ZONE &#39;America/Mazatlan&#39;, &#39;YYYY-MM-DD&#39;);
+  v_key TEXT := &#39;escudo_racha_&#39; || v_day_mzt;
+  v_shield_day_key TEXT := &#39;escudo_activado_&#39; || v_day_mzt;
+  v_claimed TEXT[];
+  v_mem NUMERIC := 0;
+  v_top NUMERIC := 0;
+  v_prev_month TEXT;
+  v_prev_week TEXT;
+  v_used INTEGER := 0;
+  v_week_used INTEGER := 0;
+  v_until TIMESTAMPTZ;
+  v_cost NUMERIC := 0;
+  v_use_mem NUMERIC := 0;
+  v_use_top NUMERIC := 0;
+BEGIN
+  IF v_caller IS NULL OR (v_target IS DISTINCT FROM v_caller AND NOT v_is_admin) THEN
+    RAISE EXCEPTION &#39;Sesion requerida para activar Escudo Protector.&#39; USING ERRCODE = &#39;42501&#39;;
+  END IF;
+
+  PERFORM pg_catalog.set_config(&#39;kinetic.vault_rpc_authorized&#39;, &#39;true&#39;, true);
+  PERFORM pg_catalog.set_config(&#39;kinetic.rpc_authorized&#39;, &#39;true&#39;, true);
+
+  SELECT
+    COALESCE(kc_membresia, 0),
+    COALESCE(kc_topup, 0),
+    escudo_mes_iso,
+    COALESCE(escudos_usados_mes, 0),
+    escudo_semana_iso,
+    COALESCE(escudos_usados_semana, 0),
+    GREATEST(escudo_activo_hasta, escudo_racha_activo_hasta)
+  INTO v_mem, v_top, v_prev_month, v_used, v_prev_week, v_week_used, v_until
+  FROM public.perfiles
+  WHERE id = v_target
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION &#39;Perfil no encontrado.&#39; USING ERRCODE = &#39;P0002&#39;;
+  END IF;
+
+  v_claimed := public.fn_read_claimed_rewards_text_arr(v_target);
+  IF v_shield_day_key = ANY(v_claimed) THEN
+    RETURN jsonb_build_object(
+      &#39;ok&#39;, TRUE,
+      &#39;duplicate&#39;, TRUE,
+      &#39;escudo_mes_iso&#39;, COALESCE(v_prev_month, v_month_key),
+      &#39;escudos_usados_mes&#39;, v_used,
+      &#39;escudos_usados_semana&#39;, v_week_used,
+      &#39;gratis&#39;, TRUE,
+      &#39;free&#39;, TRUE,
+      &#39;es_gratuito&#39;, TRUE,
+      &#39;costo_kc&#39;, 0,
+      &#39;kc_membresia&#39;, v_mem,
+      &#39;kc_topup&#39;, v_top,
+      &#39;saldo_kc&#39;, v_mem + v_top,
+      &#39;activo_hasta&#39;, COALESCE(v_until, NOW() + INTERVAL &#39;24 hours&#39;),
+      &#39;escudo_activo_hasta&#39;, COALESCE(v_until, NOW() + INTERVAL &#39;24 hours&#39;),
+      &#39;is_streak_frozen&#39;, TRUE,
+      &#39;recompensas_reclamadas&#39;, to_jsonb(v_claimed)
+    );
+  END IF;
+
+  IF COALESCE(v_prev_month, &#39;&#39;) &lt;&gt; v_month_key THEN
+    v_used := 0;
+  END IF;
+  IF COALESCE(v_prev_week, &#39;&#39;) &lt;&gt; v_iso_week THEN
+    v_week_used := 0;
+  END IF;
+
+  IF v_used = 0 THEN
+    v_cost := 0;
+  ELSE
+    v_cost := 25;
+    IF (v_mem + v_top) &lt; v_cost THEN
+      RAISE EXCEPTION &#39;SALDO_INSUFICIENTE_ESCUDO: Ya usaste tu Escudo gratuito mensual. Necesitas 25 KC para activar uno adicional.&#39; USING ERRCODE = &#39;P0001&#39;;
+    END IF;
+    v_use_mem := LEAST(v_mem, v_cost);
+    v_use_top := v_cost - v_use_mem;
+    v_mem := v_mem - v_use_mem;
+    v_top := v_top - v_use_top;
+  END IF;
+
+  v_used := v_used + 1;
+  v_week_used := v_week_used + 1;
+  v_until := GREATEST(COALESCE(v_until, NOW()), NOW()) + INTERVAL &#39;24 hours&#39;;
+  v_claimed := public.fn_write_claimed_rewards_safe(v_target, ARRAY[v_key, v_shield_day_key]);
+
+  UPDATE public.perfiles
+     SET kc_membresia = v_mem,
+         kc_topup = v_top,
+         saldo_kc = v_mem + v_top,
+         is_streak_frozen = TRUE,
+         escudo_mes_iso = v_month_key,
+         escudos_usados_mes = v_used,
+         escudo_semana_iso = v_iso_week,
+         escudos_usados_semana = v_week_used,
+         escudo_activo_hasta = v_until,
+         escudo_racha_activo_hasta = v_until
+   WHERE id = v_target;
+
+  RETURN jsonb_build_object(
+    &#39;ok&#39;, TRUE,
+    &#39;escudo_mes_iso&#39;, v_month_key,
+    &#39;escudos_usados_mes&#39;, v_used,
+    &#39;escudos_usados_semana&#39;, v_week_used,
+    &#39;gratis&#39;, (v_cost = 0),
+    &#39;free&#39;, (v_cost = 0),
+    &#39;es_gratuito&#39;, (v_cost = 0),
+    &#39;costo_kc&#39;, v_cost,
+    &#39;kc_membresia&#39;, v_mem,
+    &#39;kc_topup&#39;, v_top,
+    &#39;saldo_kc&#39;, v_mem + v_top,
+    &#39;activo_hasta&#39;, v_until,
+    &#39;escudo_activo_hasta&#39;, v_until,
+    &#39;is_streak_frozen&#39;, TRUE,
+    &#39;recompensas_reclamadas&#39;, to_jsonb(v_claimed)
+  );
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.activar_escudo_racha_24h()
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+BEGIN
+  RETURN public.congelar_racha_kineti((SELECT auth.uid()));
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.congelar_racha_kineti(UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.congelar_racha_kineti(UUID) TO authenticated;
+
+REVOKE ALL ON FUNCTION public.activar_escudo_racha_24h() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.activar_escudo_racha_24h() TO authenticated;
 
 COMMIT;
 </code></pre>

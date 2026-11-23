@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 01: CORE, CONFIG, AUTH, LOGIN/REGISTRO, MOTOR 3D Y LANDING WEB</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-22T21:14:31.058Z | Total archivos en este módulo: 160</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-23T09:13:12.251Z | Total archivos en este módulo: 160</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`app.config.js`</li>
 <li>`eas.json`</li>
@@ -2690,7 +2690,7 @@ describeSuite(&#39;KINETIC OS v2.8.2 — Ola 1 Blindaje P0 + Escrow 10 KC + Maza
         fc.constantFrom(&#39;svg&#39;, &#39;svgz&#39;, &#39;html&#39;, &#39;htm&#39;, &#39;xhtml&#39;, &#39;xml&#39;, &#39;js&#39;, &#39;mjs&#39;, &#39;cjs&#39;, &#39;php&#39;, &#39;exe&#39;, &#39;sh&#39;),
         fc.boolean(),
         fc.integer({ min: 1, max: 4_000_000 }),
-        fc.constantFrom(&#39;topup_50&#39;, &#39;topup_100&#39;, &#39;topup_250&#39;, &#39;topup_500&#39;, &#39;topup_1000&#39;),
+        fc.constantFrom(&#39;topup_100&#39;, &#39;topup_250&#39;, &#39;topup_500&#39;, &#39;topup_1000&#39;),
         fc.uuid(),
         (badExt, doubleExt, extraBytes, topupId, piSuffix) =&gt; {
           const badName = doubleExt ? `${uid}/evil.${badExt}.jpg` : `${uid}/evil.${badExt}`;
@@ -2730,6 +2730,7 @@ describeSuite(&#39;KINETIC OS v2.8.2 — Ola 1 Blindaje P0 + Escrow 10 KC + Maza
           const topVip = simulateBovedaSandboxPurchase({ planId: topupId, tipo: &#39;topup&#39;, currentLevel: &#39;Bronze&#39; });
           assertEq(topBase.montoMxn, Number((topBase.kcInyectados * 1.2).toFixed(2)), &#39;Base topup must include +20% fee&#39;);
           assertEq(topVip.montoMxn, topVip.kcInyectados, &#39;VIP topup must maintain 1:1 parity&#39;);
+          assertEq(simulateBovedaSandboxPurchase({ planId: &#39;topup_50&#39;, tipo: &#39;topup&#39;, currentLevel: &#39;Acceso Base&#39; }).ok, false, &#39;Legacy topup_50 must be rejected&#39;);
 
           const pi = `pi_${piSuffix.replace(/-/g, &#39;&#39;)}`;
           const ledger = simulateStripeWebhookReceiptLedger([
@@ -4497,7 +4498,7 @@ describe(&#39;OWASP API Top 10 + OAuth/FCM + Zero-Knowledge GCP v2.7.7 (fast-che
         fc.string({ minLength: 2, maxLength: 120 }),
         fc.integer({ min: 1_700_000_000, max: 1_900_000_000 }),
         fc.integer({ min: -290, max: 290 }),
-        fc.constantFrom(50, 100, 250, 500, 1000),
+        fc.constantFrom(100, 250, 500, 1000),
         (secret, msgSeed, nowSec, deltaSec, kcPack) =&gt; {
           const whSecret = [&#39;whsec&#39;, secret].join(&#39;_&#39;);
           const rawBody = JSON.stringify({ id: `evt_${nowSec}`, type: &#39;payment_intent.succeeded&#39;, note: msgSeed });
@@ -24658,7 +24659,6 @@ export const subscribeGlobalPendingMfaChallenge = (
 };
 
 export const CANONICAL_TOPUP_KC_BY_ID: Record&lt;string, number&gt; = {
-  topup_50: 50,
   topup_100: 100,
   topup_250: 250,
   topup_500: 500,
@@ -24685,7 +24685,7 @@ export const resolveCanonicalCheckoutPlan = (input: {
       ? CANONICAL_TOPUP_KC_BY_ID[`topup_${rawId}`]
       : 0;
     if (!pkgKc || typeof pkgKc !== &#39;number&#39; || !Number.isFinite(pkgKc)) {
-      throw new Error(&#39;Paquete Top-Up no reconocido en catálogo oficial.&#39;);
+      throw new Error(&#39;Paquete Top-Up no reconocido en catálogo oficial (mínimo 100 KC).&#39;);
     }
     const isVip = getLevelNumericWeight(input.currentLevel) &gt;= 1;
     return {
@@ -24762,7 +24762,10 @@ export const simulateBovedaSandboxPurchase = (input: ISandboxPurchaseSimInput): 
   const top = Math.max(0, Math.round(Number(input.kcTopup) || 0));
   const currW = getLevelNumericWeight(input.currentLevel);
   const currTierName = getMembershipByLevel(input.currentLevel).nivel || &#39;Acceso Base&#39;;
-  const currBase = SANDBOX_MEMBERSHIP_PLANS[currTierName.toLowerCase()] || { kc: 0, mxn: 0, tier: &#39;Acceso Base&#39;, weight: 0 };
+  const currTierKey = currTierName.toLowerCase();
+  const currBase = Object.prototype.hasOwnProperty.call(SANDBOX_MEMBERSHIP_PLANS, currTierKey)
+    ? SANDBOX_MEMBERSHIP_PLANS[currTierKey]
+    : { kc: 0, mxn: 0, tier: &#39;Acceso Base&#39;, weight: 0 };
 
   if (
     input.isStrictB2B ||
@@ -24776,7 +24779,9 @@ export const simulateBovedaSandboxPurchase = (input: ISandboxPurchaseSimInput): 
   }
 
   const rawPlan = String(input.planId || &#39;&#39;).trim().toLowerCase();
-  const memPlan = SANDBOX_MEMBERSHIP_PLANS[rawPlan];
+  const memPlan = Object.prototype.hasOwnProperty.call(SANDBOX_MEMBERSHIP_PLANS, rawPlan)
+    ? SANDBOX_MEMBERSHIP_PLANS[rawPlan]
+    : undefined;
   if (memPlan || input.tipo === &#39;membresia&#39;) {
     if (!memPlan || memPlan.weight &lt;= currW) {
       return { ok: false, errorCode: &#39;MEMBERSHIP_DOWNGRADE_OR_SAME_TIER_FORBIDDEN&#39;, kcInyectados: 0, montoMxn: 0, kcMembresia: mem, kcTopup: top, saldoKc: mem + top, nivel: currTierName };
@@ -24787,13 +24792,56 @@ export const simulateBovedaSandboxPurchase = (input: ISandboxPurchaseSimInput): 
     return { ok: true, kcInyectados: kcDelta, montoMxn: mxnDelta, kcMembresia: nextMem, kcTopup: top, saldoKc: nextMem + top, nivel: memPlan.tier };
   }
 
-  const topKc = CANONICAL_TOPUP_KC_BY_ID[rawPlan] ?? CANONICAL_TOPUP_KC_BY_ID[`topup_${rawPlan}`] ?? 0;
+  const normalizedTopupId = rawPlan.startsWith(&#39;pkg_&#39;) ? `topup_${rawPlan.slice(4)}` : rawPlan;
+  const topKc = Object.prototype.hasOwnProperty.call(CANONICAL_TOPUP_KC_BY_ID, normalizedTopupId)
+    ? CANONICAL_TOPUP_KC_BY_ID[normalizedTopupId]
+    : Object.prototype.hasOwnProperty.call(CANONICAL_TOPUP_KC_BY_ID, `topup_${normalizedTopupId}`)
+    ? CANONICAL_TOPUP_KC_BY_ID[`topup_${normalizedTopupId}`]
+    : 0;
   if (!topKc) {
     return { ok: false, errorCode: &#39;UNKNOWN_SANDBOX_PLAN&#39;, kcInyectados: 0, montoMxn: 0, kcMembresia: mem, kcTopup: top, saldoKc: mem + top, nivel: currTierName };
   }
   const mxn = currW === 0 ? Number((topKc * 1.2).toFixed(2)) : topKc;
   const nextTop = top + topKc;
   return { ok: true, kcInyectados: topKc, montoMxn: mxn, kcMembresia: mem, kcTopup: nextTop, saldoKc: mem + nextTop, nivel: currTierName };
+};
+
+export interface IMonthlyStreakShieldInput {
+  currentMonthKey: string;
+  escudoMesIso?: string | null;
+  escudosUsadosMes?: number;
+  kcMembresia?: number;
+  kcTopup?: number;
+}
+export interface IMonthlyStreakShieldResult {
+  ok: boolean;
+  errorCode?: &#39;SALDO_INSUFICIENTE_ESCUDO&#39;;
+  gratis: boolean;
+  costoKc: number;
+  escudoMesIso: string;
+  escudosUsadosMes: number;
+  kcMembresia: number;
+  kcTopup: number;
+  saldoKc: number;
+}
+export const STREAK_SHIELD_EXTRA_KC_COST = 25;
+
+export const simulateMonthlyStreakShieldActivation = (input: IMonthlyStreakShieldInput): IMonthlyStreakShieldResult =&gt; {
+  const monthKey = String(input.currentMonthKey || &#39;&#39;).trim();
+  const prevMonth = String(input.escudoMesIso || &#39;&#39;).trim();
+  const usedInWindow = prevMonth === monthKey ? Math.max(0, Math.floor(Number(input.escudosUsadosMes) || 0)) : 0;
+  let mem = Math.max(0, Math.round(Number(input.kcMembresia) || 0));
+  let top = Math.max(0, Math.round(Number(input.kcTopup) || 0));
+  if (usedInWindow === 0) {
+    return { ok: true, gratis: true, costoKc: 0, escudoMesIso: monthKey, escudosUsadosMes: 1, kcMembresia: mem, kcTopup: top, saldoKc: mem + top };
+  }
+  if (mem + top &lt; STREAK_SHIELD_EXTRA_KC_COST) {
+    return { ok: false, errorCode: &#39;SALDO_INSUFICIENTE_ESCUDO&#39;, gratis: false, costoKc: STREAK_SHIELD_EXTRA_KC_COST, escudoMesIso: monthKey, escudosUsadosMes: usedInWindow, kcMembresia: mem, kcTopup: top, saldoKc: mem + top };
+  }
+  const useMem = Math.min(mem, STREAK_SHIELD_EXTRA_KC_COST);
+  mem -= useMem;
+  top -= STREAK_SHIELD_EXTRA_KC_COST - useMem;
+  return { ok: true, gratis: false, costoKc: STREAK_SHIELD_EXTRA_KC_COST, escudoMesIso: monthKey, escudosUsadosMes: usedInWindow + 1, kcMembresia: mem, kcTopup: top, saldoKc: mem + top };
 };
 
 export interface IWebhookLedgerReceipt {

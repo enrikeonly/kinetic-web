@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 05: BÓVEDA, ESCROW 40/60, STRIPE, MEMBRESÍAS Y LEGAL/CFDI</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-22T21:14:31.058Z | Total archivos en este módulo: 56</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-23T09:13:12.251Z | Total archivos en este módulo: 56</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`sql/blindaje_total_seguridad_rls_triggers_stripe.sql`</li>
 <li>`src/__tests__/adversarial/bovedaSecurity2FA.adversarial.test.ts`</li>
@@ -8696,7 +8696,7 @@ export const topUpSectionBaseStyles = StyleSheet.create({
 <h2>FILE: src/components/boveda/TopUpPackagesSection.tsx</h2>
 <pre><code class="language-tsx">import { Feather } from &#39;@expo/vector-icons&#39;;
 import React, { memo, useEffect, useMemo, useRef, useState } from &#39;react&#39;;
-import { Platform, ScrollView, Text, TouchableOpacity, View } from &#39;react-native&#39;;
+import { Platform, ScrollView, Text, TouchableOpacity, View, type ViewStyle } from &#39;react-native&#39;;
 import { getLevelNumericWeight } from &#39;../../constants/memberships&#39;;
 import { useKineticPreferences } from &#39;../../context/KineticPreferencesContext&#39;;
 import { localizeVipTierName } from &#39;../../services/bovedaRatingService&#39;;
@@ -8704,7 +8704,7 @@ import { adaptStyleSheetForTheme } from &#39;../../utils/kineticContrastAnd3DEng
 import { KineticLoader, triggerHaptic } from &#39;../SharedUI&#39;;
 import { topUpSectionBaseStyles as baseStyles } from &#39;./TopUpPackagesSection.styles&#39;;
 
-const NO_SEL = Platform.OS === &#39;web&#39; ? ({ userSelect: &#39;none&#39;, WebkitUserSelect: &#39;none&#39; } as any) : null;
+const NO_SEL = Platform.OS === &#39;web&#39; ? ({ userSelect: &#39;none&#39;, WebkitUserSelect: &#39;none&#39; } as unknown as ViewStyle) : null;
 
 export const TOPUP_NON_MEMBER_SURCHARGE_RATE = 0.2;
 
@@ -8718,15 +8718,6 @@ export const formatMxnCurrency = (amount: unknown, includeSuffix = true): string
 };
 
 export const TOPUP_PACKAGES = [
-  {
-    id: &#39;topup_50&#39;,
-    kc: 50,
-    precio_mxn: 50,
-    etiqueta: &#39;Recargar Kineticoins&#39;,
-    etiquetaEn: &#39;Top Up Kineticoins&#39;,
-    desc: &#39;Ideal para completar el 40% Apartado de tu próxima reserva (Pago único • Rollover permanente).&#39;,
-    descEn: &#39;Ideal to complete the 40% Escrow of your next booking (One-time payment • Permanent Rollover).&#39;,
-  },
   {
     id: &#39;topup_100&#39;,
     kc: 100,
@@ -8764,6 +8755,8 @@ export const TOPUP_PACKAGES = [
     descEn: &#39;Maximum Kineticoins reserve in a one-time payment with permanent validity (Rollover).&#39;,
   },
 ];
+
+export type TopUpPackageItem = (typeof TOPUP_PACKAGES)[number];
 
 export const resolveCleanVipLevel = (
   rawLevel?: string | null,
@@ -8826,7 +8819,7 @@ export const TopUpPackagesSection = memo(
     processingPlanId?: string | null;
     isBusy: boolean;
     scrollViewRef?: React.RefObject&lt;ScrollView | null&gt;;
-    onSelectPackage: (pkg: any) =&gt; void;
+    onSelectPackage: (pkg: TopUpPackageItem) =&gt; void;
   }) =&gt; {
     const { resolvedTheme, themeColors, language, tx } = useKineticPreferences();
     const styles = useMemo(
@@ -8949,7 +8942,7 @@ export const TopUpPackagesSection = memo(
                   &lt;View style={{ flexDirection: &#39;row&#39;, alignItems: &#39;center&#39;, gap: 8, marginBottom: 4 }}&gt;
                     &lt;View
                       style={[styles.topupKcPill, NO_SEL]}
-                      {...({ dataSet: { kineticInk: &#39;light&#39;, kineticOnMedia: &#39;true&#39; } } as any)}
+                      {...({ dataSet: { kineticInk: &#39;light&#39;, kineticOnMedia: &#39;true&#39; } } as Record&lt;string, unknown&gt;)}
                     &gt;
                       &lt;Text selectable={false} style={styles.topupKcPillTxt}&gt;+{pkg.kc} KC&lt;/Text&gt;
                     &lt;/View&gt;
@@ -9021,7 +9014,7 @@ export const TopUpPackagesSection = memo(
                       });
                     });
                   }}
-                  {...({ dataSet: { kineticInk: &#39;light&#39;, kineticOnMedia: &#39;true&#39; } } as any)}
+                  {...({ dataSet: { kineticInk: &#39;light&#39;, kineticOnMedia: &#39;true&#39; } } as Record&lt;string, unknown&gt;)}
                 &gt;
                   {isThisTopupLoading ? (
                     &lt;KineticLoader size={16} color=&quot;#FFFFFF&quot; /&gt;

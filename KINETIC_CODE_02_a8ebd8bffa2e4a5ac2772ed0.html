@@ -8,11 +8,12 @@
 </head>
 <body>
 <h1>PAQUETE 02: ADMIN HUB, CORTES SPEI, DIRECTORIOS Y PLANTILLAS PDF</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-22T21:14:31.058Z | Total archivos en este módulo: 47</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-23T09:13:12.251Z | Total archivos en este módulo: 49</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`sql/cirugia1_limpieza_y_admin_oficial.sql`</li>
 <li>`src/__tests__/adversarial/adminHubStage7.adversarial.test.ts`</li>
 <li>`src/__tests__/adversarial/sprint4AdminClubLootV275.adversarial.test.ts`</li>
+<li>`src/__tests__/adversarial/v284FintechTopupMonthlyShieldSpeiCsv.adversarial.test.ts`</li>
 <li>`src/app/(tabs)/admin.tsx`</li>
 <li>`src/components/admin/AdminAffiliateDirectoryCard.tsx`</li>
 <li>`src/components/admin/AdminAffiliatesDirectoryView.tsx`</li>
@@ -45,6 +46,7 @@
 <li>`src/services/admin/adminPdfAthleteReceipt.ts`</li>
 <li>`src/services/admin/adminScreenHelpers.ts`</li>
 <li>`src/services/admin/adminSecurityAndSpeiHelpers.ts`</li>
+<li>`src/services/admin/adminSpeiBatchCsvHelper.ts`</li>
 <li>`src/services/admin/adminUgcModerationHelpers.ts`</li>
 <li>`src/services/admin/adminWaitlistService.ts`</li>
 <li>`src/services/adminB2BCutEngine.ts`</li>
@@ -896,6 +898,341 @@ describeSuite(&#39;KINETIC OS v2.7.5 Sprint 4 — Admin, KinetiClub, Purga &amp;
       );
     }
   );
+});
+</code></pre>
+<h2>FILE: src/__tests__/adversarial/v284FintechTopupMonthlyShieldSpeiCsv.adversarial.test.ts</h2>
+<pre><code class="language-ts">// === src/__tests__/adversarial/v284FintechTopupMonthlyShieldSpeiCsv.adversarial.test.ts === //
+import fc from &#39;fast-check&#39;;
+import ts from &#39;typescript&#39;;
+import { TOPUP_PACKAGES } from &#39;../../components/boveda/TopUpPackagesSection&#39;;
+import { buildAdminSpeiBatchCsvPayload, sanitizeSpeiCsvCell } from &#39;../../services/admin/adminSpeiBatchCsvHelper&#39;;
+import {
+  CANONICAL_TOPUP_KC_BY_ID,
+  STREAK_SHIELD_EXTRA_KC_COST,
+  resolveCanonicalCheckoutPlan,
+  simulateBovedaSandboxPurchase,
+  simulateMonthlyStreakShieldActivation,
+} from &#39;../../services/kineticFintechSecurityGuards&#39;;
+import type { ICorteSemanalAfiliado, IReporteMaestroSemanalCEO } from &#39;../../types&#39;;
+
+interface NodeFs { existsSync(p: string): boolean; statSync(p: string): { isFile(): boolean; size: number }; readdirSync(p: string, o: { withFileTypes: true }): { name: string; isDirectory(): boolean }[]; readFileSync(p: string, e: &#39;utf8&#39;): string; }
+interface NodePath { resolve(...a: string[]): string; join(...a: string[]): string; dirname(p: string): string; relative(a: string, b: string): string; }
+declare const require: (id: string) =&gt; unknown;
+declare const __dirname: string;
+const fs = require(&#39;node:fs&#39;) as NodeFs;
+const path = require(&#39;node:path&#39;) as NodePath;
+
+const g = globalThis as Record&lt;string, unknown&gt;;
+const describeSuite = typeof g.describe === &#39;function&#39; ? (g.describe as (n: string, fn: () =&gt; void) =&gt; void) : (_n: string, fn: () =&gt; void) =&gt; fn();
+const itCase = typeof g.it === &#39;function&#39; ? (g.it as (n: string, fn: () =&gt; unknown) =&gt; void) : (_n: string, fn: () =&gt; unknown) =&gt; fn();
+const assertTrue = (cond: boolean, msg: string): void =&gt; { if (!cond) throw new Error(msg); };
+const assertEq = &lt;T&gt;(actual: T, expected: T, msg: string): void =&gt; {
+  if (actual !== expected) throw new Error(`${msg} (expected=${String(expected)}, actual=${String(actual)})`);
+};
+
+const ROOT = path.resolve(__dirname, &#39;..&#39;, &#39;..&#39;, &#39;..&#39;);
+const SRC_ROOT = path.join(ROOT, &#39;src&#39;);
+const NUM_RUNS = 500;
+const PLATFORM_EXTS = [&#39;&#39;, &#39;.ts&#39;, &#39;.tsx&#39;, &#39;.js&#39;, &#39;.jsx&#39;, &#39;.web.ts&#39;, &#39;.web.tsx&#39;, &#39;.native.ts&#39;, &#39;.native.tsx&#39;, &#39;.ios.ts&#39;, &#39;.ios.tsx&#39;, &#39;.android.ts&#39;, &#39;.android.tsx&#39;];
+const V284_TOUCHED_FILES = [
+  &#39;src/components/boveda/TopUpPackagesSection.tsx&#39;,
+  &#39;src/services/kineticFintechSecurityGuards.ts&#39;,
+  &#39;src/components/kineticlub/StreakModal.tsx&#39;,
+  &#39;src/hooks/kineticlub/kineticClubRewardsCloudHelper.ts&#39;,
+  &#39;src/hooks/kineticlub/useKinetiClubRewards.ts&#39;,
+  &#39;src/services/admin/adminSpeiBatchCsvHelper.ts&#39;,
+  &#39;src/components/AdminOperationsViews.styles.ts&#39;,
+  &#39;src/components/admin/AdminDispersionSpeiView.tsx&#39;,
+  &#39;supabase/functions/stripe-create-payment/index.ts&#39;,
+  &#39;supabase/functions/stripe-webhook/index.ts&#39;,
+];
+
+function walkFiles(dir: string, exts: RegExp, skipTests = false): string[] {
+  if (!fs.existsSync(dir)) return [];
+  const out: string[] = [];
+  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, ent.name);
+    if (ent.isDirectory()) {
+      if (ent.name === &#39;node_modules&#39; || (skipTests &amp;&amp; ent.name === &#39;__tests__&#39;)) continue;
+      out.push(...walkFiles(full, exts, skipTests));
+    } else if (exts.test(ent.name) &amp;&amp; !ent.name.endsWith(&#39;.d.ts&#39;)) {
+      out.push(path.resolve(full));
+    }
+  }
+  return out;
+}
+
+function resolveMatches(fromFile: string, spec: string): string[] {
+  if (!spec || (!spec.startsWith(&#39;.&#39;) &amp;&amp; !spec.startsWith(&#39;@/&#39;))) return [];
+  const base = spec.startsWith(&#39;@/&#39;) ? path.join(SRC_ROOT, spec.slice(2)) : path.resolve(path.dirname(fromFile), spec);
+  const out: string[] = [];
+  for (const ext of PLATFORM_EXTS) {
+    const cand = ext ? `${base}${ext}` : base;
+    if (fs.existsSync(cand) &amp;&amp; fs.statSync(cand).isFile()) out.push(path.resolve(cand));
+  }
+  for (const idx of [&#39;.ts&#39;, &#39;.tsx&#39;, &#39;.js&#39;, &#39;.jsx&#39;, &#39;.web.ts&#39;, &#39;.web.tsx&#39;]) {
+    const cand = path.join(base, `index${idx}`);
+    if (fs.existsSync(cand) &amp;&amp; fs.statSync(cand).isFile()) out.push(path.resolve(cand));
+  }
+  return [...new Set(out)];
+}
+
+function extractSpecs(filePath: string, content: string, includeTypes: boolean): string[] {
+  const kind = filePath.endsWith(&#39;.tsx&#39;) || filePath.endsWith(&#39;.jsx&#39;) ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+  const sf = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true, kind);
+  const specs: string[] = [];
+  const visit = (node: ts.Node) =&gt; {
+    if (ts.isImportDeclaration(node) &amp;&amp; ts.isStringLiteral(node.moduleSpecifier)) {
+      const cl = node.importClause;
+      if (!includeTypes &amp;&amp; cl &amp;&amp; (cl.isTypeOnly || (!cl.name &amp;&amp; cl.namedBindings &amp;&amp; ts.isNamedImports(cl.namedBindings) &amp;&amp; !cl.namedBindings.elements.some((e) =&gt; !e.isTypeOnly)))) return;
+      specs.push(node.moduleSpecifier.text);
+    } else if (ts.isExportDeclaration(node) &amp;&amp; node.moduleSpecifier &amp;&amp; ts.isStringLiteral(node.moduleSpecifier)) {
+      if (!includeTypes &amp;&amp; (node.isTypeOnly || (node.exportClause &amp;&amp; ts.isNamedExports(node.exportClause) &amp;&amp; node.exportClause.elements.every((e) =&gt; e.isTypeOnly)))) return;
+      specs.push(node.moduleSpecifier.text);
+    } else if (ts.isCallExpression(node) &amp;&amp; node.arguments.length &gt;= 1 &amp;&amp; ts.isStringLiteral(node.arguments[0]) &amp;&amp; ((ts.isIdentifier(node.expression) &amp;&amp; node.expression.text === &#39;require&#39;) || node.expression.kind === ts.SyntaxKind.ImportKeyword)) {
+      specs.push(node.arguments[0].text);
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return specs;
+}
+
+function scanGraph() {
+  const srcFiles = walkFiles(SRC_ROOT, /\.(ts|tsx|js|jsx)$/, true);
+  const astAdj = new Map&lt;string, string[]&gt;(), rtAdj = new Map&lt;string, string[]&gt;(), fullAdj = new Map&lt;string, string[]&gt;();
+  for (const f of srcFiles) {
+    const content = fs.readFileSync(f, &#39;utf8&#39;);
+    const astDeps = new Set&lt;string&gt;(), fullDeps = new Set&lt;string&gt;(), rtDeps = new Set&lt;string&gt;();
+    for (const s of extractSpecs(f, content, false)) { const m = resolveMatches(f, s); if (m[0]) astDeps.add(m[0]); }
+    for (const s of extractSpecs(f, content, true)) for (const m of resolveMatches(f, s)) fullDeps.add(m);
+    const cjs = ts.transpileModule(content, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, jsx: ts.JsxEmit.React, esModuleInterop: true }, fileName: f }).outputText;
+    for (const s of extractSpecs(`${f}.js`, cjs, true)) { const m = resolveMatches(f, s); if (m[0]) rtDeps.add(m[0]); }
+    astAdj.set(f, [...astDeps]); fullAdj.set(f, [...fullDeps]); rtAdj.set(f, [...rtDeps]);
+  }
+  const findSccs = (adj: Map&lt;string, string[]&gt;): string[][] =&gt; {
+    let idx = 0;
+    const ind = new Map&lt;string, number&gt;(), low = new Map&lt;string, number&gt;(), st: string[] = [], on = new Set&lt;string&gt;(), sccs: string[][] = [];
+    const sc = (v: string) =&gt; {
+      ind.set(v, idx); low.set(v, idx); idx += 1; st.push(v); on.add(v);
+      for (const w of adj.get(v) || []) {
+        if (!ind.has(w)) { sc(w); low.set(v, Math.min(low.get(v)!, low.get(w)!)); }
+        else if (on.has(w)) low.set(v, Math.min(low.get(v)!, ind.get(w)!));
+      }
+      if (low.get(v) === ind.get(v)) {
+        const comp: string[] = [];
+        while (true) { const w = st.pop()!; on.delete(w); comp.push(w); if (w === v) break; }
+        if (comp.length &gt; 1 || (adj.get(v) || []).includes(v)) sccs.push(comp.map((p) =&gt; path.relative(SRC_ROOT, p)));
+      }
+    };
+    for (const v of adj.keys()) if (!ind.has(v)) sc(v);
+    return sccs;
+  };
+  const testsRoot = path.join(SRC_ROOT, &#39;__tests__&#39;);
+  const seeds = [...walkFiles(path.join(SRC_ROOT, &#39;app&#39;), /\.(ts|tsx|js|jsx)$/, false), ...walkFiles(testsRoot, /\.(ts|tsx|js|jsx)$/, false), ...walkFiles(path.join(ROOT, &#39;scripts&#39;), /\.(ts|tsx|js|jsx|mjs|cjs)$/, false), ...walkFiles(path.join(ROOT, &#39;supabase&#39;, &#39;functions&#39;), /\.(ts|tsx|js|jsx)$/, false)];
+  const visited = new Set&lt;string&gt;(), q: string[] = [];
+  for (const s of seeds) {
+    const abs = path.resolve(s);
+    if (abs.startsWith(SRC_ROOT) &amp;&amp; !abs.startsWith(testsRoot)) { if (!visited.has(abs)) { visited.add(abs); q.push(abs); } }
+    else if (fs.existsSync(abs)) for (const sp of extractSpecs(abs, fs.readFileSync(abs, &#39;utf8&#39;), true)) for (const m of resolveMatches(abs, sp)) if (!visited.has(m)) { visited.add(m); q.push(m); }
+  }
+  while (q.length &gt; 0) for (const nxt of fullAdj.get(q.shift()!) || []) if (!visited.has(nxt)) { visited.add(nxt); q.push(nxt); }
+  return { astCycles: findSccs(astAdj), rtCycles: findSccs(rtAdj), orphans: srcFiles.filter((f) =&gt; !visited.has(f)).map((f) =&gt; path.relative(SRC_ROOT, f)) };
+}
+
+function parseRfc4180CsvRows(csvWithoutBom: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [], cell = &#39;&#39;, inQuotes = false;
+  for (let i = 0; i &lt; csvWithoutBom.length; i += 1) {
+    const ch = csvWithoutBom[i], next = csvWithoutBom[i + 1];
+    if (inQuotes) {
+      if (ch === &#39;&quot;&#39; &amp;&amp; next === &#39;&quot;&#39;) { cell += &#39;&quot;&#39;; i += 1; }
+      else if (ch === &#39;&quot;&#39;) inQuotes = false;
+      else cell += ch;
+    } else if (ch === &#39;&quot;&#39;) inQuotes = true;
+    else if (ch === &#39;,&#39;) { row.push(cell); cell = &#39;&#39;; }
+    else if (ch === &#39;\r&#39; &amp;&amp; next === &#39;\n&#39;) { row.push(cell); rows.push(row); row = []; cell = &#39;&#39;; i += 1; }
+    else if (ch === &#39;\n&#39;) { row.push(cell); rows.push(row); row = []; cell = &#39;&#39;; }
+    else cell += ch;
+  }
+  if (cell.length &gt; 0 || row.length &gt; 0) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+describeSuite(&#39;KINETIC OS v2.8.4 — Piso Top-Up 100 KC, Escudo Mensual &amp; Layout Bancario SPEI .CSV (500x)&#39;, () =&gt; {
+  itCase(&#39;G1: 0 ciclos AST/RT, 0 huerfanos, &lt;450L, 0 any, .env.example 887B, topup_50 purgado y &gt;=33 suites&#39;, () =&gt; {
+    const { astCycles, rtCycles, orphans } = scanGraph();
+    assertEq(astCycles.length, 0, `AST cycles detected: ${JSON.stringify(astCycles)}`);
+    assertEq(rtCycles.length, 0, `RT cycles detected: ${JSON.stringify(rtCycles)}`);
+    assertEq(orphans.length, 0, `Orphans detected: ${JSON.stringify(orphans)}`);
+    for (const f of [...walkFiles(SRC_ROOT, /\.(ts|tsx|js|jsx)$/, true), ...walkFiles(path.join(ROOT, &#39;supabase&#39;, &#39;functions&#39;), /\.(ts|tsx|js|jsx)$/, false)]) {
+      assertTrue(fs.readFileSync(f, &#39;utf8&#39;).split(/\r?\n/).length &lt; 500, `Global &lt;500L violated in ${path.relative(ROOT, f)}`);
+    }
+    assertEq(walkFiles(path.join(SRC_ROOT, &#39;app&#39;), /\.styles\.(ts|tsx|js)$/, false).length, 0, &#39;Styles forbidden in src/app&#39;);
+    const anyRe = new RegExp([&#39;:\\s*an&#39; + &#39;y\\b&#39;, &#39;\\bas\\s+an&#39; + &#39;y\\b&#39;, &#39;&lt;an&#39; + &#39;y&gt;&#39;].join(&#39;|&#39;));
+    for (const rel of V284_TOUCHED_FILES) {
+      const txt = fs.readFileSync(path.join(ROOT, rel), &#39;utf8&#39;);
+      const lines = txt.split(/\r?\n/).length;
+      assertTrue(lines &lt; 450, `&lt;450L violated in ${rel} (${lines})`);
+      assertTrue(!anyRe.test(txt), `Forbidden any in ${rel}`);
+      assertTrue(!/@ts-(ignore|expect-error)|\bconsole\.log\s*\(|\beval\s*\(/.test(txt), `Hygiene violation in ${rel}`);
+    }
+    const envFiles = fs.readdirSync(ROOT, { withFileTypes: true }).map((e) =&gt; e.name).filter((n) =&gt; n.startsWith(&#39;.env&#39;));
+    assertEq(envFiles.join(&#39;,&#39;), &#39;.env.example&#39;, &#39;Only .env.example allowed in root&#39;);
+    assertEq(fs.statSync(path.join(ROOT, &#39;.env.example&#39;)).size, 887, &#39;.env.example must remain 887B&#39;);
+
+    assertEq(TOPUP_PACKAGES.map((p) =&gt; p.id).join(&#39;,&#39;), &#39;topup_100,topup_250,topup_500,topup_1000&#39;, &#39;TOPUP_PACKAGES must start at 100 KC&#39;);
+    assertEq(Object.keys(CANONICAL_TOPUP_KC_BY_ID).join(&#39;,&#39;), &#39;topup_100,topup_250,topup_500,topup_1000&#39;, &#39;CANONICAL_TOPUP_KC_BY_ID must omit topup_50&#39;);
+
+    const sqlRel = &#39;supabase/migrations/20261123010000_migration_v284_topup_min100_and_monthly_shield.sql&#39;;
+    const sqlTxt = fs.readFileSync(path.join(ROOT, sqlRel), &#39;utf8&#39;);
+    assertTrue(!/\b(?:topup_50|pkg_50)\b/i.test(sqlTxt), &#39;v2.8.4 SQL migration must not include topup_50&#39;);
+    assertTrue(sqlTxt.includes(&#39;BEGIN;&#39;) &amp;&amp; sqlTxt.includes(&#39;COMMIT;&#39;), &#39;SQL migration must be transactional&#39;);
+    assertTrue(sqlTxt.includes(&#39;SET search_path = pg_catalog, public&#39;), &#39;SQL RPCs must pin search_path = pg_catalog, public&#39;);
+    assertTrue(sqlTxt.includes(&#39;COALESCE(v_sandbox_ok, FALSE)&#39;) &amp;&amp; sqlTxt.includes(&#39;fn_read_claimed_rewards_text_arr&#39;), &#39;SQL must fail closed on missing sandbox flag and enforce daily shield idempotency&#39;);
+    assertTrue(sqlTxt.includes(&#39;escudos_usados_mes&#39;) &amp;&amp; sqlTxt.includes(&#39;escudo_mes_iso&#39;), &#39;SQL migration must add &amp; protect monthly shield columns&#39;);
+    for (const edgeRel of [&#39;supabase/functions/stripe-create-payment/index.ts&#39;, &#39;supabase/functions/stripe-webhook/index.ts&#39;]) {
+      assertTrue(!/\btopup_50\b/.test(fs.readFileSync(path.join(ROOT, edgeRel), &#39;utf8&#39;)), `${edgeRel} must not accept topup_50`);
+    }
+    const streakTxt = fs.readFileSync(path.join(ROOT, &#39;src/components/kineticlub/StreakModal.tsx&#39;), &#39;utf8&#39;);
+    const rewardsTxt = fs.readFileSync(path.join(ROOT, &#39;src/hooks/kineticlub/useKinetiClubRewards.ts&#39;), &#39;utf8&#39;);
+    assertTrue(streakTxt.includes(&#39;1 GRATIS/MES&#39;) &amp;&amp; streakTxt.includes(&#39;1 FREE/MO&#39;), &#39;StreakModal CTA must reflect monthly shield&#39;);
+    assertTrue(!/GRATIS\/SEM|FREE\/WK|semanal/i.test(streakTxt) &amp;&amp; !/semanal|weekly shield/i.test(rewardsTxt), &#39;Weekly shield copy must be replaced with monthly&#39;);
+    assertTrue(fs.readdirSync(path.join(SRC_ROOT, &#39;__tests__&#39;, &#39;adversarial&#39;), { withFileTypes: true }).filter((e) =&gt; e.name.endsWith(&#39;.adversarial.test.ts&#39;)).length &gt;= 33, &#39;At least 33 adversarial suites required&#39;);
+  });
+
+  itCase(&#39;P1 (500x): Rechazo topup_50/50/pkg_50/prototipos y paridad exacta 1.0x VIP vs 1.2x Base para [100,250,500,1000]&#39;, () =&gt; {
+    fc.assert(
+      fc.property(
+        fc.constantFrom(&#39;topup_50&#39;, &#39;50&#39;, &#39;pkg_50&#39;, &#39;__proto__&#39;, &#39;constructor&#39;, &#39;toString&#39;, &#39;&#39;, &#39;topup_999&#39;),
+        fc.constantFrom(100, 250, 500, 1000),
+        fc.constantFrom&lt;&#39;prefix&#39; | &#39;bare&#39; | &#39;pkg&#39;&gt;(&#39;prefix&#39;, &#39;bare&#39;, &#39;pkg&#39;),
+        fc.constantFrom(&#39;Acceso Base&#39;, &#39;Bronze&#39;, &#39;Silver&#39;, &#39;Gold&#39;, &#39;Platinum&#39;),
+        (badPlan, validKc, fmt, lvl) =&gt; {
+          let checkoutThrew = false;
+          try { resolveCanonicalCheckoutPlan({ tipo: &#39;topup&#39;, planId: badPlan, currentLevel: lvl }); } catch { checkoutThrew = true; }
+          assertTrue(checkoutThrew, `resolveCanonicalCheckoutPlan must reject ${badPlan}`);
+          const badSim = simulateBovedaSandboxPurchase({ planId: badPlan, tipo: &#39;topup&#39;, currentLevel: lvl, kcTopup: 200 });
+          assertEq(badSim.ok, false, `Sandbox must reject ${badPlan}`);
+          assertEq(badSim.kcInyectados, 0, &#39;Rejected purchase must inject 0 KC&#39;);
+          assertEq(badSim.kcTopup, 200, &#39;Rejected purchase must not mutate balance&#39;);
+
+          const validId = fmt === &#39;prefix&#39; ? `topup_${validKc}` : fmt === &#39;bare&#39; ? String(validKc) : `pkg_${validKc}`;
+          const sim = simulateBovedaSandboxPurchase({ planId: validId, tipo: &#39;topup&#39;, currentLevel: lvl, kcMembresia: 500, kcTopup: 100 });
+          assertTrue(sim.ok, `Valid topup ${validId} must succeed`);
+          assertEq(sim.kcInyectados, validKc, &#39;Injected KC must match package&#39;);
+          assertEq(sim.kcTopup, 100 + validKc, &#39;Topup wallet must increment&#39;);
+          const expectedMxn = lvl === &#39;Acceso Base&#39; ? Number((validKc * 1.2).toFixed(2)) : validKc;
+          assertEq(sim.montoMxn, expectedMxn, &#39;VIP 1.0x vs Base 1.2x pricing invariant violated&#39;);
+          if (fmt !== &#39;pkg&#39;) {
+            const plan = resolveCanonicalCheckoutPlan({ tipo: &#39;topup&#39;, planId: validId, currentLevel: lvl });
+            assertEq(plan.precioMxn, expectedMxn, &#39;Canonical checkout price must match 1.0x vs 1.2x&#39;);
+          }
+        }
+      ),
+      { numRuns: NUM_RUNS }
+    );
+  });
+
+  itCase(&#39;P2 (500x): Escudo de Racha mensual (1 gratis/mes = 0 KC, 2do+ = 25 KC mem-&gt;topup, rechazo sin saldo y reset mensual)&#39;, () =&gt; {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 0, max: 60 }),
+        fc.integer({ min: 0, max: 60 }),
+        fc.integer({ min: 1, max: 12 }),
+        fc.integer({ min: 2026, max: 2028 }),
+        (initMem, initTop, monthNum, yearNum) =&gt; {
+          const m1 = `${yearNum}-${String(monthNum).padStart(2, &#39;0&#39;)}`;
+          const m2 = monthNum === 12 ? `${yearNum + 1}-01` : `${yearNum}-${String(monthNum + 1).padStart(2, &#39;0&#39;)}`;
+          const first = simulateMonthlyStreakShieldActivation({ currentMonthKey: m1, escudoMesIso: null, escudosUsadosMes: 0, kcMembresia: initMem, kcTopup: initTop });
+          assertTrue(first.ok &amp;&amp; first.gratis &amp;&amp; first.costoKc === 0 &amp;&amp; first.escudosUsadosMes === 1, &#39;1st monthly shield must be free&#39;);
+          assertEq(first.kcMembresia, initMem, &#39;Free shield must not touch kc_membresia&#39;);
+          assertEq(first.kcTopup, initTop, &#39;Free shield must not touch kc_topup&#39;);
+
+          const second = simulateMonthlyStreakShieldActivation({ currentMonthKey: m1, escudoMesIso: first.escudoMesIso, escudosUsadosMes: first.escudosUsadosMes, kcMembresia: first.kcMembresia, kcTopup: first.kcTopup });
+          if (initMem + initTop &lt; STREAK_SHIELD_EXTRA_KC_COST) {
+            assertTrue(!second.ok &amp;&amp; second.errorCode === &#39;SALDO_INSUFICIENTE_ESCUDO&#39;, &#39;Must reject 2nd shield when balance &lt; 25&#39;);
+            assertEq(second.kcMembresia, initMem, &#39;Rejected shield must keep kcMembresia unchanged&#39;);
+            assertEq(second.kcTopup, initTop, &#39;Rejected shield must keep kcTopup unchanged&#39;);
+            assertEq(second.escudosUsadosMes, 1, &#39;Rejected shield must not increment monthly counter&#39;);
+          } else {
+            assertTrue(second.ok &amp;&amp; !second.gratis &amp;&amp; second.costoKc === 25 &amp;&amp; second.escudosUsadosMes === 2, &#39;2nd shield in same month must cost 25 KC&#39;);
+            const expectedUseMem = Math.min(initMem, 25);
+            assertEq(second.kcMembresia, initMem - expectedUseMem, &#39;Priority 1 must deduct kcMembresia first&#39;);
+            assertEq(second.kcTopup, initTop - (25 - expectedUseMem), &#39;Priority 2 must deduct remainder from kcTopup&#39;);
+            assertTrue(second.kcMembresia &gt;= 0 &amp;&amp; second.kcTopup &gt;= 0, &#39;Wallets can never go negative&#39;);
+          }
+
+          const nextMonth = simulateMonthlyStreakShieldActivation({ currentMonthKey: m2, escudoMesIso: second.escudoMesIso, escudosUsadosMes: second.escudosUsadosMes, kcMembresia: second.kcMembresia, kcTopup: second.kcTopup });
+          assertTrue(nextMonth.ok &amp;&amp; nextMonth.gratis &amp;&amp; nextMonth.costoKc === 0 &amp;&amp; nextMonth.escudosUsadosMes === 1, &#39;New calendar month must reset free shield quota&#39;);
+        }
+      ),
+      { numRuns: NUM_RUNS }
+    );
+  });
+
+  itCase(&#39;P3 (500x): Layout SPEI Masivo .CSV excluye sin CLABE/neto&lt;=0, suma exacta al centavo y neutraliza CSV Injection&#39;, () =&gt; {
+    const validClabeArb = fc.array(fc.integer({ min: 0, max: 9 }), { minLength: 18, maxLength: 18 }).map((a) =&gt; a.join(&#39;&#39;));
+    const formulaPrefixArb = fc.constantFrom(&#39;=CMD|&quot;/C calc&quot;!A0&#39;, &#39;+2+3&#39;, &#39;-10&#39;, &#39;@SUM(A1:A2)&#39;, &#39;\t=1+1&#39;, &#39;\r=2+2&#39;, &#39;Club &quot;Pro&quot;, Elite&#39;);
+    fc.assert(
+      fc.property(
+        fc.array(
+          fc.record({
+            id: fc.uuid(),
+            nombre: fc.oneof(formulaPrefixArb, fc.string({ minLength: 1, maxLength: 35 })),
+            clabeValid: fc.boolean(),
+            clabe: validClabeArb,
+            netoCents: fc.integer({ min: 0, max: 500_000 }),
+          }),
+          { minLength: 1, maxLength: 12 }
+        ),
+        (items) =&gt; {
+          const cortes = items.map((it) =&gt; ({
+            afiliado_id: it.id, afiliado_nombre: it.nombre, disciplina: &#39;Pilates&#39;, clabe_bancaria: it.clabeValid ? it.clabe : &#39;12345&#39;,
+            rfc: &#39;KIN250101AB1&#39;, regimen_fiscal: &#39;persona_moral&#39;, categoria_operador: &#39;club&#39;,
+            periodo_inicio: &#39;2026-11-16&#39;, periodo_fin: &#39;2026-11-22&#39;, sesiones_completadas: 5,
+            volumen_bruto_mxn: Number((it.netoCents / 80).toFixed(2)), comision_kinetic_total_mxn: Number((it.netoCents / 400).toFixed(2)),
+            comision_kinetic_base_mxn: 0, comision_kinetic_iva_mxn: 0, subtotal_socio_80_mxn: Number((it.netoCents / 100).toFixed(2)),
+            tasa_retencion_isr_pct: 0, tasa_retencion_iva_pct: 0, retencion_isr_mxn: 0, retencion_iva_mxn: 0, total_retenciones_sat_mxn: 0,
+            neto_dispersar_spei_mxn: Number((it.netoCents / 100).toFixed(2)), en_custodia_escrow_kc: 0,
+          })) as unknown as ICorteSemanalAfiliado[];
+          const reporte: Partial&lt;IReporteMaestroSemanalCEO&gt; = { periodo_inicio: &#39;2026-11-16&#39;, periodo_fin: &#39;2026-11-22&#39;, cortes_por_afiliado: cortes };
+          const payload = buildAdminSpeiBatchCsvPayload(reporte, { referenceDateIso: &#39;2026-11-22&#39; });
+
+          const expectedReady = items.filter((it) =&gt; it.netoCents &gt; 0 &amp;&amp; it.clabeValid);
+          const expectedSkipped = items.filter((it) =&gt; it.netoCents &gt; 0 &amp;&amp; !it.clabeValid);
+          assertEq(payload.fileName, &#39;Kinetic_Layout_SPEI_Masivo_2026-11-22.csv&#39;, &#39;Clean deterministic CSV filename required&#39;);
+          assertEq(payload.readyCount, expectedReady.length, &#39;Ready row count mismatch&#39;);
+          assertEq(payload.skippedCount, expectedSkipped.length, &#39;Skipped invalid CLABE count mismatch&#39;);
+          assertTrue(payload.csvContent.startsWith(&#39;\uFEFF&#39;), &#39;UTF-8 BOM required&#39;);
+
+          const parsed = parseRfc4180CsvRows(payload.csvContent.slice(1));
+          assertEq(parsed.length, 1 + expectedReady.length, &#39;CSV line count mismatch&#39;);
+          assertEq(parsed[0].length, 12, &#39;CSV header must have 12 columns&#39;);
+          let parsedNetCents = 0;
+          for (let r = 1; r &lt; parsed.length; r += 1) {
+            const cols = parsed[r];
+            assertEq(cols.length, 12, `Row ${r} must have exactly 12 RFC-4180 columns`);
+            assertTrue(/^\d{18}$/.test(cols[1]), &#39;CLABE_18_DIGITOS must be 18 digits&#39;);
+            assertTrue(/^\d{7}$/.test(cols[4]), &#39;REFERENCIA_NUMERICA must be 7 digits&#39;);
+            assertTrue(cols[3].length &lt;= 40, &#39;CONCEPTO_SPEI max 40 chars&#39;);
+            assertTrue(!/^[=+\-@\t\r]/.test(cols[0]), `CSV formula injection leaked in BENEFICIARIO: ${cols[0]}`);
+            parsedNetCents += Math.round(Number(cols[2]) * 100);
+          }
+          const expectedTotalCents = expectedReady.reduce((acc, it) =&gt; acc + it.netoCents, 0);
+          assertEq(parsedNetCents, expectedTotalCents, &#39;CSV total neto must match to exact centavo&#39;);
+          assertEq(Math.round(payload.totalNetoSpeiMxn * 100), expectedTotalCents, &#39;Payload totalNetoSpeiMxn centavo precision mismatch&#39;);
+          assertTrue(!/^[=+\-@\t\r]/.test(sanitizeSpeiCsvCell(&#39;=1+1&#39;).replace(/^&quot;/, &#39;&#39;)), &#39;sanitizeSpeiCsvCell must neutralize leading =&#39;);
+          const infRep = buildAdminSpeiBatchCsvPayload({
+            periodo_fin: &#39;2026-11-22&#39;,
+            cortes_por_afiliado: [{ afiliado_id: &#39;a1&#39;, afiliado_nombre: &#39;Club Inf&#39;, disciplina: &#39;Box&#39;, clabe_bancaria: &#39;012345678901234567&#39;, rfc: &#39;KIN250101AB1&#39;, regimen_fiscal: &#39;persona_moral&#39;, categoria_operador: &#39;club&#39;, periodo_inicio: &#39;2026-11-16&#39;, periodo_fin: &#39;2026-11-22&#39;, sesiones_completadas: 1, volumen_bruto_mxn: Infinity, comision_kinetic_total_mxn: NaN, comision_kinetic_base_mxn: 0, comision_kinetic_iva_mxn: 0, subtotal_socio_80_mxn: 100, tasa_retencion_isr_pct: 0, tasa_retencion_iva_pct: 0, retencion_isr_mxn: -5, retencion_iva_mxn: Infinity, total_retenciones_sat_mxn: 0, neto_dispersar_spei_mxn: 100, en_custodia_escrow_kc: 0 }],
+          });
+          assertTrue(!/Infinity|NaN/i.test(infRep.csvContent), &#39;CSV must never emit Infinity or NaN&#39;);
+        }
+      ),
+      { numRuns: NUM_RUNS }
+    );
+  });
 });
 </code></pre>
 <h2>FILE: src/app/(tabs)/admin.tsx</h2>
@@ -4200,14 +4537,16 @@ import {
   buildSpeiTransferClipboardPayload,
   fetchResumenPasesMaestrosRpc,
 } from &#39;../../services/admin/adminSecurityAndSpeiHelpers&#39;;
+import { buildSpeiBatchToastSummary, exportarLayoutSpeiMasivoCsv } from &#39;../../services/admin/adminSpeiBatchCsvHelper&#39;;
 import { calcularCorteSemanalB2B, type IReporteMaestroConPases, normalizeAffiliateKey } from &#39;../../services/adminB2BCutEngine&#39;;
 import { formatMxn } from &#39;../../services/adminService&#39;;
 import { COLORS } from &#39;../../styles/globalStyles&#39;;
 import { ICorteSemanalAfiliado, IReporteMaestroSemanalCEO, RegimenFiscalSAT } from &#39;../../types&#39;;
 import { adaptStyleSheetForTheme } from &#39;../../utils/kineticContrastAnd3DEngine&#39;;
+import { yieldNextUiFrame } from &#39;../../utils/kineticVolumetric3dPureLeaf&#39;;
 import { styles as baseStyles } from &#39;../AdminOperationsViews.styles&#39;;
 import { KineticListFilterSortBar } from &#39;../shared/KineticListFilterSortBar&#39;;
-import { triggerHaptic } from &#39;../SharedUI&#39;;
+import { KineticLoader, triggerHaptic } from &#39;../SharedUI&#39;;
 import {
   buildAdminSpeiPeriodOptions,
   SpeiAffiliateCorteCard,
@@ -4250,6 +4589,7 @@ export const AdminDispersionSpeiView = memo(({
     const [selectedPeriodKey, setSelectedPeriodKey] = useState&lt;string&gt;(&#39;week_0&#39;);
     const [isPeriodMenuOpen, setIsPeriodMenuOpen] = useState&lt;boolean&gt;(false);
     const [speiToastMsg, setSpeiToastMsg] = useState&lt;string | null&gt;(null);
+    const [isExportingSpeiCsv, setIsExportingSpeiCsv] = useState(false);
     const [revealedClabeIds, setRevealedClabeIds] = useState&lt;Record&lt;string, boolean&gt;&gt;({});
     const [rpcMasterPasses, setRpcMasterPasses] = useState&lt;{ dia: number; semana: number; mes: number }&gt;({
       dia: 0,
@@ -4257,6 +4597,8 @@ export const AdminDispersionSpeiView = memo(({
       mes: 0,
     });
     const mountedRef = useRef(true);
+    const speiCsvBusyRef = useRef(false);
+    const exportLockRef = useRef(false);
     const toastTimerRef = useRef&lt;ReturnType&lt;typeof setTimeout&gt; | null&gt;(null);
 
     useEffect(() =&gt; {
@@ -4283,7 +4625,7 @@ export const AdminDispersionSpeiView = memo(({
 
     const { resolvedTheme, isLightMode, themeColors, language, tx, td, fmtDate } = useKineticPreferences();
     const isEn = language === &#39;en&#39;;
-    const styles = useMemo(() =&gt; adaptStyleSheetForTheme(baseStyles, resolvedTheme), [resolvedTheme]);
+    const styles = useMemo(() =&gt; adaptStyleSheetForTheme(baseStyles, resolvedTheme, [&#39;masterPdfBtnText&#39;, &#39;speiBatchCsvBtnText&#39;]), [resolvedTheme]);
     const pStyles = useMemo(() =&gt; adaptStyleSheetForTheme(speiPeriodStyles, resolvedTheme), [resolvedTheme]);
 
     const showSpeiToast = useCallback((msg: string) =&gt; {
@@ -4405,51 +4747,61 @@ export const AdminDispersionSpeiView = memo(({
 
     const handleExportPartnerPdf = useCallback(
       (partnerCorte: SpeiCorteItem) =&gt; {
-        exportarEstadoCuentaSocioPDF?.(partnerCorte as ICorteSemanalAfiliado, {
-          dia: Number(partnerCorte?.pases_maestros_dia) || 0,
-          semana: Number(partnerCorte?.pases_maestros_semana) || 0,
-          mes: Number(partnerCorte?.pases_maestros_mes) || 0,
-        });
+        if (exportLockRef.current || speiCsvBusyRef.current || isExportingPDF || isExportingSpeiCsv) return;
+        exportLockRef.current = true;
+        Promise.resolve(
+          exportarEstadoCuentaSocioPDF?.(partnerCorte as ICorteSemanalAfiliado, {
+            dia: Number(partnerCorte?.pases_maestros_dia) || 0,
+            semana: Number(partnerCorte?.pases_maestros_semana) || 0,
+            mes: Number(partnerCorte?.pases_maestros_mes) || 0,
+          })
+        ).finally(() =&gt; { exportLockRef.current = false; });
       },
-      [exportarEstadoCuentaSocioPDF]
+      [exportarEstadoCuentaSocioPDF, isExportingPDF, isExportingSpeiCsv]
     );
 
     const cyanInk = isLightMode ? &#39;#006B82&#39; : COLORS.cyan;
     const isCurrentPeriod = selectedPeriodKey === &#39;week_0&#39;;
-    const globalDia = isCurrentPeriod
-      ? Math.max(rpcMasterPasses.dia, Number(activeReport?.total_pases_maestros_dia) || 0)
-      : Number(activeReport?.total_pases_maestros_dia) || 0;
-    const globalSemana = isCurrentPeriod
-      ? Math.max(rpcMasterPasses.semana, Number(activeReport?.total_pases_maestros_semana) || 0)
-      : Number(activeReport?.total_pases_maestros_semana) || 0;
-    const globalMes = isCurrentPeriod
-      ? Math.max(rpcMasterPasses.mes, Number(activeReport?.total_pases_maestros_mes) || 0)
-      : Number(activeReport?.total_pases_maestros_mes) || 0;
-    const masterPassResumen = useMemo(
-      () =&gt; ({ dia: globalDia, semana: globalSemana, mes: globalMes }),
-      [globalDia, globalSemana, globalMes]
-    );
+    const globalDia = isCurrentPeriod ? Math.max(rpcMasterPasses.dia, Number(activeReport?.total_pases_maestros_dia) || 0) : Number(activeReport?.total_pases_maestros_dia) || 0;
+    const globalSemana = isCurrentPeriod ? Math.max(rpcMasterPasses.semana, Number(activeReport?.total_pases_maestros_semana) || 0) : Number(activeReport?.total_pases_maestros_semana) || 0;
+    const globalMes = isCurrentPeriod ? Math.max(rpcMasterPasses.mes, Number(activeReport?.total_pases_maestros_mes) || 0) : Number(activeReport?.total_pases_maestros_mes) || 0;
+    const masterPassResumen = useMemo(() =&gt; ({ dia: globalDia, semana: globalSemana, mes: globalMes }), [globalDia, globalSemana, globalMes]);
+
+    const handleExportMasterPdf = useCallback(() =&gt; {
+      if (exportLockRef.current || speiCsvBusyRef.current || isExportingPDF || isExportingSpeiCsv) return;
+      exportLockRef.current = true;
+      Promise.resolve(exportarReporteMaestroPDF?.(activeReport, masterPassResumen)).finally(() =&gt; { exportLockRef.current = false; });
+    }, [exportarReporteMaestroPDF, activeReport, masterPassResumen, isExportingPDF, isExportingSpeiCsv]);
+
+    const handleExportSpeiBatchCsv = useCallback(async () =&gt; {
+      if (exportLockRef.current || speiCsvBusyRef.current || isExportingPDF || isExportingSpeiCsv) return;
+      exportLockRef.current = true;
+      speiCsvBusyRef.current = true;
+      setIsExportingSpeiCsv(true);
+      triggerHaptic(&#39;Medium&#39;);
+      await yieldNextUiFrame();
+      try {
+        const res = await exportarLayoutSpeiMasivoCsv(activeReport as Partial&lt;IReporteMaestroSemanalCEO&gt;);
+        triggerHaptic(res.exported ? &#39;Success&#39; : &#39;Warning&#39;);
+        showSpeiToast(buildSpeiBatchToastSummary(res, formatMxn, tx));
+      } catch {
+        triggerHaptic(&#39;Error&#39;);
+        showSpeiToast(tx(&#39;No se pudo exportar el Layout SPEI Masivo (.CSV).&#39;, &#39;Could not export the Massive SPEI Layout (.CSV).&#39;));
+      } finally {
+        exportLockRef.current = false;
+        speiCsvBusyRef.current = false;
+        if (mountedRef.current) setIsExportingSpeiCsv(false);
+      }
+    }, [activeReport, isExportingPDF, isExportingSpeiCsv, showSpeiToast, tx]);
 
     const listHeader = useMemo(
       () =&gt; (
         &lt;View&gt;
           &lt;SpeiPeriodDropdownSelector
-            periodOptions={periodOptions}
-            selectedPeriodRange={selectedPeriodRange}
-            isPeriodMenuOpen={isPeriodMenuOpen}
-            onToggleMenu={() =&gt; {
-              triggerHaptic(&#39;Selection&#39;);
-              setIsPeriodMenuOpen((prev) =&gt; !prev);
-            }}
-            onSelectPeriod={(k: string) =&gt; {
-              setSelectedPeriodKey(k);
-              setIsPeriodMenuOpen(false);
-            }}
-            pStyles={pStyles}
-            isLightMode={isLightMode}
-            cyanInk={cyanInk}
-            themeColors={themeColors}
-            tx={tx}
+            periodOptions={periodOptions} selectedPeriodRange={selectedPeriodRange} isPeriodMenuOpen={isPeriodMenuOpen}
+            onToggleMenu={() =&gt; { triggerHaptic(&#39;Selection&#39;); setIsPeriodMenuOpen((prev) =&gt; !prev); }}
+            onSelectPeriod={(k: string) =&gt; { setSelectedPeriodKey(k); setIsPeriodMenuOpen(false); }}
+            pStyles={pStyles} isLightMode={isLightMode} cyanInk={cyanInk} themeColors={themeColors} tx={tx}
           /&gt;
 
           {Boolean(speiToastMsg) &amp;&amp; (
@@ -4460,16 +4812,9 @@ export const AdminDispersionSpeiView = memo(({
           )}
 
           &lt;View style={styles.speiHeroBox}&gt;
-            &lt;Text style={styles.sectionTag}&gt;
-              {tx(&#39;CORTE SEMANAL B2B • MANDATO MERCANTIL 80/20&#39;, &#39;WEEKLY B2B SETTLEMENT • 80/20 COMMERCIAL MANDATE&#39;)}
-            &lt;/Text&gt;
+            &lt;Text style={styles.sectionTag}&gt;{tx(&#39;CORTE SEMANAL B2B • MANDATO MERCANTIL 80/20&#39;, &#39;WEEKLY B2B SETTLEMENT • 80/20 COMMERCIAL MANDATE&#39;)}&lt;/Text&gt;
             &lt;Text style={styles.speiHeroAmount}&gt;{formatMxn(activeReport?.total_neto_dispersar_spei_mxn || 0)} MXN&lt;/Text&gt;
-            &lt;Text style={styles.sectionSub}&gt;
-              {tx(
-                `Neto total a dispersar vía SPEI • Periodo: ${periodoStartStr} al ${periodoEndStr}`,
-                `Total net SPEI payout • Period: ${periodoStartStr} to ${periodoEndStr}`
-              )}
-            &lt;/Text&gt;
+            &lt;Text style={styles.sectionSub}&gt;{tx(`Neto total a dispersar vía SPEI • Periodo: ${periodoStartStr} al ${periodoEndStr}`, `Total net SPEI payout • Period: ${periodoStartStr} to ${periodoEndStr}`)}&lt;/Text&gt;
 
             &lt;View style={styles.speiSummaryGrid}&gt;
               &lt;View style={styles.speiSummaryItem}&gt;
@@ -4478,44 +4823,18 @@ export const AdminDispersionSpeiView = memo(({
               &lt;/View&gt;
               &lt;View style={styles.speiSummaryItem}&gt;
                 &lt;Text style={styles.speiSummaryLabel}&gt;{tx(&#39;COMISIÓN KINETIC 20%&#39;, &#39;KINETIC 20% FEE&#39;)}&lt;/Text&gt;
-                &lt;Text style={[styles.speiSummaryValue, { color: themeColors.cyanText }]}&gt;
-                  {formatMxn(activeReport?.total_comision_kinetic_20_mxn || 0)}
-                &lt;/Text&gt;
+                &lt;Text style={[styles.speiSummaryValue, { color: themeColors.cyanText }]}&gt;{formatMxn(activeReport?.total_comision_kinetic_20_mxn || 0)}&lt;/Text&gt;
               &lt;/View&gt;
               &lt;View style={styles.speiSummaryItem}&gt;
                 &lt;Text style={styles.speiSummaryLabel}&gt;{tx(&#39;RETENCIÓN SAT&#39;, &#39;SAT TAX WITHHELD&#39;)}&lt;/Text&gt;
-                &lt;Text style={[styles.speiSummaryValue, { color: &#39;#D97706&#39; }]}&gt;
-                  {formatMxn(activeReport?.total_retenciones_sat_mxn || 0)}
-                &lt;/Text&gt;
+                &lt;Text style={[styles.speiSummaryValue, { color: &#39;#D97706&#39; }]}&gt;{formatMxn(activeReport?.total_retenciones_sat_mxn || 0)}&lt;/Text&gt;
               &lt;/View&gt;
             &lt;/View&gt;
 
-            &lt;View
-              style={{
-                marginTop: 10,
-                paddingVertical: 8,
-                paddingHorizontal: 10,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: isLightMode ? &#39;#CBD5E1&#39; : &#39;rgba(255, 255, 255, 0.14)&#39;,
-                backgroundColor: isLightMode ? &#39;#F8FAFC&#39; : &#39;rgba(255, 255, 255, 0.04)&#39;,
-                elevation: 0,
-                flexDirection: &#39;row&#39;,
-                justifyContent: &#39;space-between&#39;,
-                alignItems: &#39;center&#39;,
-                gap: 8,
-              }}
-            &gt;
+            &lt;View style={[styles.masterPassRow, isLightMode &amp;&amp; { borderColor: &#39;#CBD5E1&#39;, backgroundColor: &#39;#F8FAFC&#39; }]}&gt;
               &lt;View style={{ flex: 1 }}&gt;
-                &lt;Text style={{ fontSize: 10.5, fontWeight: &#39;900&#39;, color: themeColors.textPrimary, letterSpacing: 0.4 }}&gt;
-                  {tx(&#39;Pases Maestros 0 KC&#39;, &#39;0 KC Master Passes&#39;)}
-                &lt;/Text&gt;
-                &lt;Text style={{ fontSize: 10, fontWeight: &#39;700&#39;, color: themeColors.textMuted, marginTop: 2 }}&gt;
-                  {tx(
-                    `${globalDia} Día / ${globalSemana} Semana / ${globalMes} Mes • Exento SPEI $0.00`,
-                    `${globalDia} Day / ${globalSemana} Week / ${globalMes} Month • Exempt SPEI $0.00`
-                  )}
-                &lt;/Text&gt;
+                &lt;Text style={{ fontSize: 10.5, fontWeight: &#39;900&#39;, color: themeColors.textPrimary, letterSpacing: 0.4 }}&gt;{tx(&#39;Pases Maestros 0 KC&#39;, &#39;0 KC Master Passes&#39;)}&lt;/Text&gt;
+                &lt;Text style={{ fontSize: 10, fontWeight: &#39;700&#39;, color: themeColors.textMuted, marginTop: 2 }}&gt;{tx(`${globalDia} Día / ${globalSemana} Semana / ${globalMes} Mes • Exento SPEI $0.00`, `${globalDia} Day / ${globalSemana} Week / ${globalMes} Month • Exempt SPEI $0.00`)}&lt;/Text&gt;
               &lt;/View&gt;
               &lt;View style={{ alignItems: &#39;flex-end&#39; }}&gt;
                 &lt;Text style={{ fontSize: 11, fontWeight: &#39;900&#39;, color: themeColors.textMuted }}&gt;$0.00&lt;/Text&gt;
@@ -4524,10 +4843,10 @@ export const AdminDispersionSpeiView = memo(({
             &lt;/View&gt;
 
             &lt;TouchableOpacity
-              style={[styles.masterPdfBtn, isExportingPDF &amp;&amp; { opacity: 0.85 }]}
+              style={[styles.masterPdfBtn, (isExportingPDF || isExportingSpeiCsv) &amp;&amp; { opacity: 0.85 }]}
               activeOpacity={0.85}
-              disabled={isExportingPDF}
-              onPress={() =&gt; exportarReporteMaestroPDF?.(activeReport, masterPassResumen)}
+              disabled={isExportingPDF || isExportingSpeiCsv}
+              onPress={handleExportMasterPdf}
             &gt;
               &lt;Feather name={isExportingPDF ? &#39;loader&#39; : &#39;file-text&#39;} size={15} color=&quot;#050505&quot; /&gt;
               &lt;Text style={styles.masterPdfBtnText}&gt;
@@ -4536,11 +4855,20 @@ export const AdminDispersionSpeiView = memo(({
                   : tx(&#39;DESCARGAR REPORTE MAESTRO CEO (.PDF)&#39;, &#39;DOWNLOAD CEO MASTER REPORT (.PDF)&#39;)}
               &lt;/Text&gt;
             &lt;/TouchableOpacity&gt;
+
+            &lt;TouchableOpacity
+              style={[styles.speiBatchCsvBtn, isLightMode &amp;&amp; { backgroundColor: &#39;#047857&#39;, borderColor: &#39;#059669&#39;, borderTopColor: &#39;#6EE7B7&#39;, borderBottomColor: &#39;#064E3B&#39; }, (isExportingPDF || isExportingSpeiCsv) &amp;&amp; { opacity: 0.85 }]}
+              activeOpacity={0.85} disabled={isExportingPDF || isExportingSpeiCsv} onPress={handleExportSpeiBatchCsv}
+            &gt;
+              {isExportingSpeiCsv ? &lt;KineticLoader size={15} color={isLightMode ? &#39;#FFFFFF&#39; : &#39;#6EE7B7&#39;} /&gt; : &lt;Feather name=&quot;download&quot; size={15} color={isLightMode ? &#39;#FFFFFF&#39; : &#39;#6EE7B7&#39;} /&gt;}
+              &lt;Text style={[styles.speiBatchCsvBtnText, isLightMode &amp;&amp; { color: &#39;#FFFFFF&#39; }]}&gt;
+                {isExportingSpeiCsv ? tx(&#39;GENERANDO LAYOUT SPEI...&#39;, &#39;GENERATING SPEI LAYOUT...&#39;) : tx(&#39;EXPORTAR LAYOUT SPEI MASIVO (.CSV)&#39;, &#39;EXPORT MASSIVE SPEI LAYOUT (.CSV)&#39;)}
+              &lt;/Text&gt;
+            &lt;/TouchableOpacity&gt;
           &lt;/View&gt;
 
           &lt;KineticListFilterSortBar
-            searchQuery={searchQuery}
-            onChangeSearch={setSearchQuery}
+            searchQuery={searchQuery} onChangeSearch={setSearchQuery}
             searchPlaceholder={tx(&#39;Buscar socio, RFC o CLABE...&#39;, &#39;Search partner, Tax ID or CLABE...&#39;)}
             filterChips={[
               { key: &#39;activos_o_movimiento&#39;, label: tx(&#39;Activas / Con Operación&#39;, &#39;Active / With Volume&#39;) },
@@ -4549,24 +4877,22 @@ export const AdminDispersionSpeiView = memo(({
               { key: &#39;con_clabe&#39;, label: tx(&#39;CLABE Lista&#39;, &#39;CLABE Ready&#39;) },
               { key: &#39;sin_rfc&#39;, label: tx(&#39;Sin RFC&#39;, &#39;No Tax ID&#39;) },
             ]}
-            activeFilter={activeFilter}
-            onSelectFilter={setActiveFilter}
+            activeFilter={activeFilter} onSelectFilter={setActiveFilter}
             sortOptions={[
               { key: &#39;spei_desc&#39;, label: tx(&#39;Mayor SPEI&#39;, &#39;Top SPEI&#39;) },
               { key: &#39;bruto_desc&#39;, label: tx(&#39;Mayor Bruto&#39;, &#39;Top Gross&#39;) },
               { key: &#39;ret_desc&#39;, label: tx(&#39;Mayor Ret.&#39;, &#39;Top Tax&#39;) },
               { key: &#39;name_az&#39;, label: &#39;A-Z&#39; },
             ]}
-            activeSort={activeSort}
-            onSelectSort={setActiveSort}
+            activeSort={activeSort} onSelectSort={setActiveSort}
           /&gt;
         &lt;/View&gt;
       ),
       [
         periodOptions, selectedPeriodRange, isPeriodMenuOpen, pStyles, isLightMode, cyanInk,
         themeColors, tx, speiToastMsg, styles, activeReport, periodoStartStr, periodoEndStr,
-        globalDia, globalSemana, globalMes, masterPassResumen, isExportingPDF,
-        exportarReporteMaestroPDF, searchQuery, cortes.length, activeFilter, activeSort,
+        globalDia, globalSemana, globalMes, isExportingPDF, isExportingSpeiCsv,
+        handleExportMasterPdf, handleExportSpeiBatchCsv, searchQuery, cortes.length, activeFilter, activeSort,
       ]
     );
 
@@ -4575,10 +4901,12 @@ export const AdminDispersionSpeiView = memo(({
         const matchedSocio =
           socioLookup.byId.get(String(c.afiliado_id || &#39;&#39;)) ||
           socioLookup.byKey.get(normalizeAffiliateKey(c.afiliado_nombre));
+        const hasRevealedClabe =
+          Object.prototype.hasOwnProperty.call(revealedClabeIds, c.afiliado_id) &amp;&amp; Boolean(revealedClabeIds[c.afiliado_id]);
         return (
           &lt;SpeiAffiliateCorteCard
             c={c} matchedSocio={matchedSocio} activeReport={activeReport}
-            isEditing={editingAffiliateId === c.afiliado_id} revealedClabe={Boolean(revealedClabeIds[c.afiliado_id])}
+            isEditing={editingAffiliateId === c.afiliado_id} revealedClabe={hasRevealedClabe}
             isLightMode={isLightMode} themeColors={themeColors} styles={styles} tx={tx} td={td} isEn={isEn}
             rfcDraft={rfcDraft} setRfcDraft={setRfcDraft} clabeDraft={clabeDraft} setClabeDraft={setClabeDraft}
             regimenDraft={regimenDraft} setRegimenDraft={setRegimenDraft}
@@ -7524,6 +7852,17 @@ export const styles = StyleSheet.create({
     shadowColor: &#39;#00B8D4&#39;, shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.35, shadowRadius: 12, elevation: 10,
   },
   masterPdfBtnText: { color: &#39;#050505&#39;, fontSize: 11, fontWeight: &#39;900&#39;, letterSpacing: 0.6 },
+  speiBatchCsvBtn: {
+    flexDirection: &#39;row&#39;, alignItems: &#39;center&#39;, justifyContent: &#39;center&#39;, gap: 8, backgroundColor: &#39;#111A2B&#39;, paddingVertical: 11, borderRadius: 11, marginTop: 9,
+    borderWidth: 1.2, borderColor: &#39;#10B981&#39;, borderTopWidth: 1.8, borderTopColor: &#39;#6EE7B7&#39;, borderBottomWidth: 4.5, borderBottomColor: &#39;#047857&#39;,
+    shadowColor: &#39;#10B981&#39;, shadowOffset: { width: 0, height: 5 }, shadowOpacity: 0.28, shadowRadius: 10, elevation: 9,
+  },
+  speiBatchCsvBtnText: { color: &#39;#6EE7B7&#39;, fontSize: 11, fontWeight: &#39;900&#39;, letterSpacing: 0.6 },
+  masterPassRow: {
+    marginTop: 10, paddingVertical: 8, paddingHorizontal: 10, borderRadius: 10, borderWidth: 1,
+    borderColor: &#39;rgba(255, 255, 255, 0.14)&#39;, backgroundColor: &#39;rgba(255, 255, 255, 0.04)&#39;,
+    elevation: 0, flexDirection: &#39;row&#39;, justifyContent: &#39;space-between&#39;, alignItems: &#39;center&#39;, gap: 8,
+  },
   speiAffiliateCard: {
     backgroundColor: &#39;#090D16&#39;, borderRadius: RADIUS.xl, borderWidth: 1.2, borderColor: &#39;rgba(255,255,255,0.16)&#39;,
     borderTopWidth: 1.8, borderTopColor: &#39;rgba(255,255,255,0.28)&#39;, borderBottomWidth: 4.5, borderBottomColor: &#39;#00B8D4&#39;,
@@ -10446,6 +10785,195 @@ export async function fetchResumenPasesMaestrosRpc(
   } catch {
     return { dia: 0, semana: 0, mes: 0, source: &#39;fallback&#39; };
   }
+}
+</code></pre>
+<h2>FILE: src/services/admin/adminSpeiBatchCsvHelper.ts</h2>
+<pre><code class="language-ts">// === src/services/admin/adminSpeiBatchCsvHelper.ts === //
+import { Platform } from &#39;react-native&#39;;
+import * as FileSystem from &#39;expo-file-system/legacy&#39;;
+import * as Sharing from &#39;expo-sharing&#39;;
+import type { ICorteSemanalAfiliado, IReporteMaestroSemanalCEO } from &#39;../../types&#39;;
+
+const CLABE_18_RE = /^\d{18}$/;
+const FORMULA_PREFIX_RE = /^(?:[=+\-@|\t\r]|[\s\u0000-\u0020\u00A0\uFEFF]+[=+\-@|\t\r])/;
+const SPEI_CSV_HEADER =
+  &#39;BENEFICIARIO,CLABE_18_DIGITOS,IMPORTE_NETO_MXN,CONCEPTO_SPEI,REFERENCIA_NUMERICA,RFC_FISCAL,REGIMEN_SAT,BRUTO_100_MXN,COMISION_KINETIC_20_MXN,RETENCION_ISR_MXN,RETENCION_IVA_MXN,AFILIADO_ID&#39;;
+
+export interface ISpeiBatchSkippedAffiliate { id: string; nombre: string; neto: number; }
+export interface ISpeiBatchCsvRow {
+  afiliadoId: string; beneficiario: string; clabe18: string; importeNetoMxn: string; netoCents: number;
+  conceptoSpei: string; referenciaNumerica: string; rfcFiscal: string; regimenSat: string;
+  bruto100Mxn: string; comisionKinetic20Mxn: string; retencionIsrMxn: string; retencionIvaMxn: string;
+}
+export interface IAdminSpeiBatchCsvPayload {
+  fileName: string; csvContent: string; readyCount: number; totalNetoSpeiMxn: number;
+  skippedCount: number; skippedNames: string[]; skippedMissingClabe: ISpeiBatchSkippedAffiliate[]; rows: ISpeiBatchCsvRow[];
+}
+export interface IAdminSpeiBatchExportResult extends IAdminSpeiBatchCsvPayload { exported: boolean; }
+
+export function sanitizeSpeiCsvCell(raw: unknown): string {
+  const str = raw == null ? &#39;&#39; : String(raw);
+  const neutralized = FORMULA_PREFIX_RE.test(str) ? `&#39;${str}` : str;
+  return /[,&quot;\r\n]/.test(neutralized) ? `&quot;${neutralized.replace(/&quot;/g, &#39;&quot;&quot;&#39;)}&quot;` : neutralized;
+}
+
+export function cleanSpeiBankField(raw: unknown, maxLen: number, fallback = &#39;&#39;): string {
+  const original = raw == null ? &#39;&#39; : String(raw);
+  const hadFormulaPrefix = FORMULA_PREFIX_RE.test(original);
+  const normalized = original.normalize(&#39;NFD&#39;).replace(/[\u0300-\u036f]/g, &#39;&#39;).replace(/[\r\n\t]+/g, &#39; &#39;).replace(/[^\x20-\x7E]/g, &#39; &#39;).replace(/\s+/g, &#39; &#39;).trim();
+  const base = normalized || fallback;
+  const safe = hadFormulaPrefix || FORMULA_PREFIX_RE.test(base) ? (base.startsWith(&quot;&#39;&quot;) ? base : `&#39;${base}`) : base;
+  return safe.slice(0, Math.max(1, maxLen));
+}
+
+function resolveBatchDateIso(reporte: Partial&lt;IReporteMaestroSemanalCEO&gt; | null | undefined, overrideIso?: string): string {
+  for (const cand of [overrideIso, reporte?.periodo_fin, reporte?.fecha_corte_dominical]) {
+    const m = /^(\d{4}-\d{2}-\d{2})/.exec(String(cand || &#39;&#39;).trim());
+    if (m) return m[1];
+  }
+  try {
+    const parts = new Intl.DateTimeFormat(&#39;en-CA&#39;, { timeZone: &#39;America/Mazatlan&#39;, year: &#39;numeric&#39;, month: &#39;2-digit&#39;, day: &#39;2-digit&#39; }).formatToParts(new Date());
+    const y = parts.find((p) =&gt; p.type === &#39;year&#39;)?.value;
+    const m = parts.find((p) =&gt; p.type === &#39;month&#39;)?.value;
+    const d = parts.find((p) =&gt; p.type === &#39;day&#39;)?.value;
+    if (y &amp;&amp; m &amp;&amp; d) return `${y}-${m}-${d}`;
+  } catch {}
+  return new Date().toISOString().slice(0, 10);
+}
+
+const fmtFixed = (val: unknown): string =&gt; {
+  const n = Number(val);
+  const safe = Number.isFinite(n) &amp;&amp; n &gt; 0 ? n : 0;
+  return (Math.round(safe * 100) / 100).toFixed(2);
+};
+
+export function buildAdminSpeiBatchCsvPayload(
+  reporte: Partial&lt;IReporteMaestroSemanalCEO&gt; | null | undefined,
+  options?: { referenceDateIso?: string }
+): IAdminSpeiBatchCsvPayload {
+  const dateIso = resolveBatchDateIso(reporte, options?.referenceDateIso);
+  const dateCompact = dateIso.replace(/-/g, &#39;&#39;);
+  const conceptoSpei = cleanSpeiBankField(`KINETIC SPEI SEM ${dateCompact}`, 40, &#39;KINETIC SPEI&#39;);
+  const cortes = Array.isArray(reporte?.cortes_por_afiliado) ? reporte.cortes_por_afiliado : [];
+  const skippedMissingClabe: ISpeiBatchSkippedAffiliate[] = [];
+  const readyEntries: Array&lt;{ corte: Partial&lt;ICorteSemanalAfiliado&gt;; netoCents: number; clabe18: string }&gt; = [];
+
+  for (const corte of cortes) {
+    if (!corte) continue;
+    const netoCents = Math.round((Number(corte.neto_dispersar_spei_mxn) || 0) * 100);
+    if (!Number.isFinite(netoCents) || netoCents &lt;= 0) continue;
+    const clabeClean = String(corte.clabe_bancaria ?? &#39;&#39;).replace(/\D/g, &#39;&#39;);
+    if (!CLABE_18_RE.test(clabeClean)) {
+      skippedMissingClabe.push({
+        id: String(corte.afiliado_id || &#39;&#39;),
+        nombre: cleanSpeiBankField(corte.afiliado_nombre || corte.nombre, 60, &#39;Socio B2B&#39;),
+        neto: Number((netoCents / 100).toFixed(2)),
+      });
+      continue;
+    }
+    readyEntries.push({ corte, netoCents, clabe18: clabeClean });
+  }
+  readyEntries.sort((a, b) =&gt; b.netoCents - a.netoCents || String(a.corte.afiliado_id || &#39;&#39;).localeCompare(String(b.corte.afiliado_id || &#39;&#39;)));
+
+  let totalNetoCents = 0;
+  const rows: ISpeiBatchCsvRow[] = readyEntries.map((entry, idx) =&gt; {
+    const c = entry.corte;
+    totalNetoCents += entry.netoCents;
+    const refDigits = `${dateCompact.slice(4, 8)}${String((idx + 1) % 1000).padStart(3, &#39;0&#39;)}`;
+    return {
+      afiliadoId: cleanSpeiBankField(c.afiliado_id, 64, &#39;SIN_ID&#39;),
+      beneficiario: cleanSpeiBankField(c.afiliado_nombre || c.nombre, 40, &#39;BENEFICIARIO B2B&#39;),
+      clabe18: entry.clabe18,
+      importeNetoMxn: (entry.netoCents / 100).toFixed(2),
+      netoCents: entry.netoCents,
+      conceptoSpei,
+      referenciaNumerica: /^\d{7}$/.test(refDigits) ? refDigits : String((idx + 1) % 10_000_000).padStart(7, &#39;0&#39;),
+      rfcFiscal: cleanSpeiBankField(c.rfc, 20, &#39;XAXX010101000&#39;),
+      regimenSat: cleanSpeiBankField(c.regimen_fiscal || &#39;sin_rfc&#39;, 32, &#39;sin_rfc&#39;),
+      bruto100Mxn: fmtFixed(c.volumen_bruto_mxn),
+      comisionKinetic20Mxn: fmtFixed(c.comision_kinetic_total_mxn),
+      retencionIsrMxn: fmtFixed(c.retencion_isr_mxn),
+      retencionIvaMxn: fmtFixed(c.retencion_iva_mxn),
+    };
+  });
+
+  const csvLines = [
+    SPEI_CSV_HEADER,
+    ...rows.map((r) =&gt;
+      [r.beneficiario, r.clabe18, r.importeNetoMxn, r.conceptoSpei, r.referenciaNumerica, r.rfcFiscal, r.regimenSat, r.bruto100Mxn, r.comisionKinetic20Mxn, r.retencionIsrMxn, r.retencionIvaMxn, r.afiliadoId]
+        .map(sanitizeSpeiCsvCell)
+        .join(&#39;,&#39;)
+    ),
+  ];
+  return {
+    fileName: `Kinetic_Layout_SPEI_Masivo_${dateIso}.csv`,
+    csvContent: `\uFEFF${csvLines.join(&#39;\r\n&#39;)}`,
+    readyCount: rows.length,
+    totalNetoSpeiMxn: Number((totalNetoCents / 100).toFixed(2)),
+    skippedCount: skippedMissingClabe.length,
+    skippedNames: skippedMissingClabe.map((s) =&gt; s.nombre),
+    skippedMissingClabe,
+    rows,
+  };
+}
+
+export function buildSpeiBatchToastSummary(
+  res: IAdminSpeiBatchExportResult,
+  formatAmount: (n: number) =&gt; string,
+  tx: (es: string, en: string) =&gt; string
+): string {
+  if (!res.exported) {
+    return res.skippedCount &gt; 0
+      ? tx(`Sin filas listas: faltan CLABEs de 18 dígitos en ${res.skippedNames.join(&#39;, &#39;)}.`, `No rows ready: missing 18-digit CLABE for ${res.skippedNames.join(&#39;, &#39;)}.`)
+      : tx(&#39;No hay socios con saldo neto SPEI &gt; $0.00 MXN en este periodo.&#39;, &#39;No partners with net SPEI payout &gt; $0.00 MXN in this period.&#39;);
+  }
+  const skipNotice = res.skippedCount &gt; 0 ? tx(` Omitidos sin CLABE: ${res.skippedNames.join(&#39;, &#39;)}.`, ` Skipped (no CLABE): ${res.skippedNames.join(&#39;, &#39;)}.`) : &#39;&#39;;
+  return tx(`Layout SPEI listo: ${res.readyCount} socios • ${formatAmount(res.totalNetoSpeiMxn)} MXN.${skipNotice}`, `SPEI layout ready: ${res.readyCount} partners • ${formatAmount(res.totalNetoSpeiMxn)} MXN.${skipNotice}`);
+}
+
+function triggerWebCsvDownload(fileName: string, csvContent: string): boolean {
+  const g = globalThis as {
+    Blob?: new (parts: string[], opts: { type: string }) =&gt; unknown;
+    URL?: { createObjectURL?: (b: unknown) =&gt; string; revokeObjectURL?: (u: string) =&gt; void };
+    document?: { createElement?: (tag: string) =&gt; { href: string; download: string; style: { display: string }; click: () =&gt; void; remove?: () =&gt; void }; body?: { appendChild?: (node: unknown) =&gt; void } };
+  };
+  if (typeof g.Blob !== &#39;function&#39; || !g.URL?.createObjectURL || !g.document?.createElement || !g.document.body?.appendChild) return false;
+  let url = &#39;&#39;;
+  try {
+    url = g.URL.createObjectURL(new g.Blob([csvContent], { type: &#39;text/csv;charset=utf-8;&#39; }));
+    const link = g.document.createElement(&#39;a&#39;);
+    link.href = url;
+    link.download = fileName;
+    link.style.display = &#39;none&#39;;
+    g.document.body.appendChild(link);
+    link.click();
+    if (typeof link.remove === &#39;function&#39;) link.remove();
+    setTimeout(() =&gt; { try { g.URL?.revokeObjectURL?.(url); } catch {} }, 1500);
+    return true;
+  } catch {
+    if (url) try { g.URL?.revokeObjectURL?.(url); } catch {}
+    return false;
+  }
+}
+
+export async function exportarLayoutSpeiMasivoCsv(
+  reporte: Partial&lt;IReporteMaestroSemanalCEO&gt; | null | undefined,
+  options?: { referenceDateIso?: string }
+): Promise&lt;IAdminSpeiBatchExportResult&gt; {
+  const payload = buildAdminSpeiBatchCsvPayload(reporte, options);
+  if (payload.readyCount === 0) return { ...payload, exported: false };
+  if (Platform.OS === &#39;web&#39;) {
+    if (!triggerWebCsvDownload(payload.fileName, payload.csvContent)) throw new Error(&#39;WEB_CSV_DOWNLOAD_UNAVAILABLE&#39;);
+    return { ...payload, exported: true };
+  }
+  const baseDir = FileSystem.cacheDirectory ? (FileSystem.cacheDirectory.endsWith(&#39;/&#39;) ? FileSystem.cacheDirectory : `${FileSystem.cacheDirectory}/`) : &#39;&#39;;
+  if (!baseDir) throw new Error(&#39;NATIVE_CACHE_DIR_UNAVAILABLE&#39;);
+  const targetUri = `${baseDir}${payload.fileName}`;
+  await FileSystem.writeAsStringAsync(targetUri, payload.csvContent, { encoding: FileSystem.EncodingType.UTF8 });
+  if (await Sharing.isAvailableAsync().catch(() =&gt; false)) {
+    await Sharing.shareAsync(targetUri, { mimeType: &#39;text/csv&#39;, UTI: &#39;public.comma-separated-values-text&#39;, dialogTitle: payload.fileName });
+  }
+  return { ...payload, exported: true };
 }
 </code></pre>
 <h2>FILE: src/services/admin/adminUgcModerationHelpers.ts</h2>
