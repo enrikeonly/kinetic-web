@@ -54,6 +54,56 @@
               return;
             }
           }
+          var cleanRootSeg = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase().split('/')[0] || '';
+          var isExemptPrelaunch = cleanRootSeg === '' || cleanRootSeg === 'index.html' || cleanRootSeg === 'oauth' || cleanRootSeg === 'privacidad' || cleanRootSeg === 'terminos';
+          if (!isExemptPrelaunch) {
+            var hasValidFounder = false;
+            try {
+              var salt = window.localStorage && window.localStorage.getItem('@kinetic_device_cipher_salt_v1');
+              var rawPass = window.localStorage && window.localStorage.getItem('@kinetic_founder_web_device_v1');
+              if (salt && rawPass && rawPass.indexOf('kenc_v1:') === 0) {
+                var parts = rawPass.slice(8).split(':');
+                if (parts.length === 3 && parts[0] && parts[1] && parts[2] && (parts[2].length & 1) === 0) {
+                  var fnvMix = function (inp, seed) {
+                    var h = seed >>> 0;
+                    for (var i = 0; i < inp.length; i++) h = Math.imul(h ^ inp.charCodeAt(i), 0x01000193) >>> 0;
+                    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
+                    return (Math.imul(h ^ (h >>> 13), 0xc2b2ae35) ^ (h >>> 16)) >>> 0;
+                  };
+                  var fnvStep = function (stVal, idx, kSeed) {
+                    var h = (stVal ^ kSeed ^ Math.imul((idx + 1) >>> 0, 0x9e3779b9)) >>> 0;
+                    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
+                    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
+                    return (h ^ (h >>> 16)) >>> 0;
+                  };
+                  var navUa = (typeof navigator !== 'undefined' ? navigator.userAgent || '' : '').slice(0, 48);
+                  var fp = fnvMix('knt25|web||' + navUa, 0x9e3779b9).toString(16).padStart(8, '0');
+                  var macIn = salt + '|' + fp + '|' + parts[0] + '|' + parts[2];
+                  var expMac = fnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + fnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
+                  if (parts[1] === expMac) {
+                    var bLen = parts[2].length >>> 1;
+                    var outB = new Uint8Array(bLen);
+                    var keyStr = salt + '|' + fp + '|' + parts[0];
+                    var kSeed = fnvMix(keyStr, 0x27d4eb2f);
+                    var cSt = fnvMix(keyStr, 0x811c9dc5);
+                    for (var bi = 0; bi < bLen; bi++) {
+                      if ((bi & 3) === 0) cSt = fnvStep(cSt, bi >>> 2, kSeed);
+                      outB[bi] = parseInt(parts[2].slice(bi * 2, bi * 2 + 2), 16) ^ ((cSt >>> ((bi & 3) * 8)) & 0xff);
+                    }
+                    var decoded = JSON.parse(new TextDecoder().decode(outB));
+                    var nowMs = Date.now();
+                    if (decoded && decoded.v === 1 && decoded.issuer === 'is_kinetic_master_admin' && decoded.expiresAtMs > nowMs && decoded.issuedAtMs <= nowMs + 60000) {
+                      hasValidFounder = true;
+                    }
+                  }
+                }
+              }
+            } catch (e2) {}
+            if (!hasValidFounder) {
+              window.location.replace('/');
+              return;
+            }
+          }
         } catch (e) {}
         try {
           var t =
@@ -76,6 +126,8 @@
         } catch (e) {}
       })();
     </script>
+    <link rel="preload" as="image" href="/logo.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/kinetic-mark.png" />
     <link rel="manifest" href="/manifest.json?v=274" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=274" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=274" />
@@ -88,6 +140,6 @@
   <body>
     <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
     <div id="root"></div>
-  <script src="/_expo/static/js/web/entry-bd20de2870fe4cc615442dbdd6c50f90.js" defer></script>
+  <script src="/_expo/static/js/web/entry-6f147e2dfe8783b5f1012ad2aa61baff.js" defer></script>
 </body>
 </html>

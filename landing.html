@@ -114,7 +114,7 @@
 
     /* Hero Full-Bleed (Google + Xbox) */
     .hero {
-      position: relative; min-height: min(92vh, 840px); padding: 108px 0 46px;
+      position: relative; min-height: min(76vh, 690px); padding: 96px 0 38px;
       display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06); touch-action: pan-y; user-select: none;
     }
@@ -280,6 +280,21 @@
     .p-bar:nth-child(6) { animation-delay: 1.25s; background: linear-gradient(180deg, var(--rose), rgba(255, 0, 85, 0.16)); }
     .p-bar:nth-child(7) { animation-delay: 1.5s; background: linear-gradient(180deg, var(--purple), rgba(168, 85, 247, 0.14)); }
     @keyframes barScale { 0%, 100% { transform: scaleY(0.38); } 50% { transform: scaleY(0.98); } }
+    .sculpture-card.card-wide { grid-column: 1 / -1; min-height: 350px; }
+    .comm-stage { position: relative; width: 224px; height: 224px; display: flex; align-items: center; justify-content: center; }
+    .comm-ring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(0, 255, 102, 0.35); animation: orbitSpinB 7.5s linear infinite; }
+    .comm-ring.c1 { inset: 14px; border-top-color: var(--green); border-right-color: rgba(0, 240, 255, 0.45); }
+    .comm-ring.c2 { inset: 40px; border-bottom-color: var(--cyan); animation: spinSlow 5.2s linear infinite; }
+    .comm-node { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: #0B1220; border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--white); box-shadow: 0 0 14px rgba(0, 255, 102, 0.32); }
+    .comm-node.n1 { top: 6px; left: 50%; transform: translateX(-50%); border-color: var(--cyan); }
+    .comm-node.n2 { right: 8px; bottom: 38px; border-color: var(--purple); }
+    .comm-node.n3 { left: 8px; bottom: 38px; border-color: var(--green); }
+    .comm-core { padding: 8px 13px; border-radius: 999px; background: rgba(0, 255, 102, 0.14); border: 1px solid rgba(0, 255, 102, 0.55); font-size: 11px; font-weight: 800; color: #FFFFFF; letter-spacing: 0.4px; }
+    .venues-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0 18px; max-width: 680px; }
+    .venue-pill { padding: 8px 13px; border-radius: 999px; background: rgba(9, 12, 18, 0.9); border: 1px solid rgba(157, 78, 221, 0.42); font-size: 12px; font-weight: 700; color: #E2E8F0; }
+    .venue-pill strong { color: var(--green); }
+    body:not(.founder-unlocked) [data-founder-gated] { display: none !important; }
+    .founder-trigger { cursor: pointer; user-select: none; -webkit-user-select: none; }
 
     /* Carrusel Horizontal Snap (Estilo Apple Store) */
     .snap-section { padding: 44px 0 72px; }
@@ -332,7 +347,7 @@
     .field-stack { display: flex; flex-direction: column; gap: 12px; }
     .field-input {
       width: 100%; padding: 14px 16px; border-radius: 14px; background: #050505;
-      border: 1px solid rgba(255, 255, 255, 0.14); color: var(--white); outline: none;
+      border: 1px solid rgba(255, 255, 255, 0.14); color: var(--white); outline: none; font-size: 16px !important;
       transition: border-color 0.2s ease;
     }
     .field-input:focus { border-color: var(--cyan); }
@@ -378,13 +393,13 @@
     .sheet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin: 16px 0 22px; }
     .sheet-list li { font-size: 14.5px; color: var(--text-sec); display: flex; align-items: flex-start; gap: 10px; }
     .concierge-fab {
-      position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 80;
-      height: 44px; padding: 0 16px; border-radius: 999px;
-      background: rgba(9, 12, 18, 0.9); border: 1px solid rgba(0, 240, 255, 0.42);
+      position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 80;
+      height: 38px; padding: 0 13px; border-radius: 999px;
+      background: rgba(9, 12, 18, 0.92); border: 1px solid rgba(0, 240, 255, 0.42);
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--white);
+      display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--white);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 12px 30px rgba(0, 0, 0, 0.6);
-      transition: opacity 0.22s ease, transform 0.22s ease;
+      transition: opacity 0.08s ease, transform 0.08s ease;
     }
     .concierge-fab.fab-hidden { opacity: 0; pointer-events: none; transform: translateY(14px); }
     .concierge-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 12px; }
@@ -425,32 +440,35 @@
 
     @media (max-width: 840px) {
       .sculpture-stack { grid-template-columns: 1fr; }
+      .sculpture-card.card-wide { grid-column: auto; min-height: 380px; }
       .quick-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
       .quick-label { font-size: 10.5px; }
       .cta-mag { padding: 8px 12px; font-size: 11px; }
     }
+    @media (max-width: 720px) {
+      #navPartnersBtn, #navLoginBtn { display: none !important; }
+    }
     @media (max-width: 580px) {
-      .topbar-inner { padding: 0 10px; gap: 6px; }
-      .topbar-left { gap: 6px; min-width: 0; }
+      .topbar-inner { padding: 0 12px; gap: 10px; }
+      .topbar-left { gap: 8px; min-width: 0; }
       .menu-btn { width: 32px; height: 32px; font-size: 14px; flex-shrink: 0; }
-      .brand { gap: 6px; min-width: 0; }
+      .brand { gap: 7px; min-width: 0; }
       .brand-mark { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; }
-      .brand-word { font-size: clamp(11px, 3vw, 13px); letter-spacing: 1.4px; }
-      .topbar-right { gap: 5px; flex-shrink: 0; }
+      .brand-word { font-size: 12px; letter-spacing: 1.5px; margin-right: 4px; }
+      .topbar-right { gap: 6px; flex-shrink: 0; }
       .lang-pill { padding: 6px 8px; font-size: 10px; letter-spacing: 0.3px; white-space: nowrap; flex-shrink: 0; }
-      #navPartnersBtn { display: none; }
-      .cta-mag { padding: 6px 9px; font-size: 10px; letter-spacing: 0; white-space: nowrap; flex-shrink: 0; }
+      .cta-mag { padding: 6px 10px; font-size: 10px; letter-spacing: 0; white-space: nowrap; flex-shrink: 0; }
     }
     @media (max-width: 480px) {
       .seg-row { grid-template-columns: 1fr; }
       .quick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     @media (max-width: 360px) {
-      .topbar-inner { padding: 0 8px; gap: 4px; }
-      .brand-word { display: none; }
-      .topbar-right { gap: 4px; }
+      .topbar-inner { padding: 0 10px; gap: 8px; }
+      .brand-word { font-size: 11px; letter-spacing: 1.2px; margin-right: 2px; }
+      .topbar-right { gap: 5px; }
       .lang-pill { padding: 5px 6px; font-size: 9.5px; }
-      .cta-mag { padding: 5px 7px; font-size: 9.5px; }
+      .cta-mag { padding: 5px 8px; font-size: 9.5px; }
     }
   </style>
 </head>
@@ -469,8 +487,8 @@
       </div>
       <div class="topbar-right">
         <button type="button" id="langBtn" class="lang-pill" aria-label="Language">ES | EN</button>
-        <a href="/socios" target="_top" id="navPartnersBtn" class="lang-pill" style="border-color:rgba(123,97,255,0.5);color:#C4B5FD;white-space:nowrap;" data-i18n="navPartners">Portal Socios</a>
-        <a href="/login" target="_top" id="navLoginBtn" class="lang-pill" style="border-color:rgba(0,240,255,0.45);color:var(--cyan);white-space:nowrap;" data-i18n="navLogin">Iniciar Sesión</a>
+        <a href="/socios" target="_top" id="navPartnersBtn" data-founder-gated class="lang-pill" style="border-color:rgba(123,97,255,0.5);color:#C4B5FD;white-space:nowrap;" data-i18n="navPartners">Portal Socios</a>
+        <a href="/login" target="_top" id="navLoginBtn" data-founder-gated class="lang-pill" style="border-color:rgba(0,240,255,0.45);color:var(--cyan);white-space:nowrap;" data-i18n="navLogin">Iniciar Sesión</a>
         <a href="#waitlist" id="navCtaBtn" class="cta-mag" style="white-space:nowrap;" data-i18n="navCta">Acceso Anticipado</a>
       </div>
     </div>
@@ -490,8 +508,8 @@
         <button type="button" id="menuCloseBtn" class="menu-btn" aria-label="Close">✕</button>
       </div>
       <nav class="drawer-links">
-        <a href="/socios" target="_top" class="drawer-link" style="color:#C4B5FD;font-weight:800;"><span data-i18n="dPartners">Portal Socios</span><span>→</span></a>
-        <a href="/login" target="_top" class="drawer-link" style="color:var(--cyan);font-weight:800;"><span data-i18n="dLogin">Iniciar Sesión</span><span>→</span></a>
+        <a href="/socios" target="_top" id="drawerPartnersLink" data-founder-gated class="drawer-link" style="color:#C4B5FD;font-weight:800;"><span data-i18n="dPartners">Portal Socios</span><span>→</span></a>
+        <a href="/login" target="_top" id="drawerLoginLink" data-founder-gated class="drawer-link" style="color:var(--cyan);font-weight:800;"><span data-i18n="dLogin">Iniciar Sesión</span><span>→</span></a>
         <a href="#hero" class="drawer-link" data-close-drawer><span data-i18n="dHome">Inicio</span><span>›</span></a>
         <a href="#discover" class="drawer-link" data-close-drawer><span data-i18n="dExp">Experiencia</span><span>›</span></a>
         <a href="#disciplines" class="drawer-link" data-close-drawer><span data-i18n="dDisc">Disciplinas</span><span>›</span></a>
@@ -512,7 +530,7 @@
         <h1 id="heroHeadline" class="hero-title font-display">
           <span class="tone-bright">Tu ciudad entera,</span> <span class="tone-titanium">un solo pase.</span>
         </h1>
-        <p id="heroSub" class="hero-sub">Más de 230 disciplinas, canchas y especialistas en tu ciudad.</p>
+        <p id="heroSub" class="hero-sub">Más de 230 disciplinas deportivas, estudios boutique, canchas y especialistas conectados sin ataduras.</p>
         <div class="hero-ctas">
           <button type="button" id="heroBtnAthlete" class="btn-pill btn-cyan" data-i18n="ctaAthlete">Soy Atleta</button>
           <button type="button" id="heroBtnClub" class="btn-pill btn-purple" data-i18n="ctaClub">Tengo un Club o Consultorio</button>
@@ -627,22 +645,49 @@
             </div>
             <div class="sculpture-footer">
               <h3 class="sculpture-title font-display" data-i18n-html="card3Title">
-                <span class="tone-bright">Progreso y</span> <span class="tone-titanium">cofres con premios.</span>
+                <span class="tone-bright">Evolución y</span> <span class="tone-titanium">cofres con premios.</span>
               </h3>
               <button type="button" class="plus-circle" data-detail="evolution" aria-label="Details">+</button>
             </div>
           </article>
 
-          <!-- Tarjeta 4: Pulso Óptico Sedes -->
+          <!-- Tarjeta 4: Comunidad Viva & Historias 24h -->
           <article class="sculpture-card" data-reveal-card>
-            <div class="sculpture-stage" id="stageVenues">
-              <div class="pulse-bars">
-                <div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div>
+            <div class="sculpture-stage" id="stageCommunity">
+              <div class="comm-stage">
+                <div class="comm-ring c1"></div>
+                <div class="comm-ring c2"></div>
+                <div class="comm-node n1">⚡</div>
+                <div class="comm-node n2">24h</div>
+                <div class="comm-node n3">★</div>
+                <div class="comm-core" data-i18n="commCoreBadge">COMUNIDAD 24H</div>
               </div>
             </div>
             <div class="sculpture-footer">
               <h3 class="sculpture-title font-display" data-i18n-html="card4Title">
-                <span class="tone-bright">Alianza para</span> <span class="tone-titanium">clubes líderes.</span>
+                <span class="tone-bright">Comunidad viva,</span> <span class="tone-titanium">historias 24h.</span>
+              </h3>
+              <button type="button" class="plus-circle" data-detail="community" aria-label="Details">+</button>
+            </div>
+          </article>
+
+          <!-- Tarjeta 5: Alianza Comercial Sedes y Especialistas -->
+          <article class="sculpture-card card-wide" data-reveal-card>
+            <div class="sculpture-stage" id="stageVenues" style="flex-direction:column;gap:18px;">
+              <div class="pulse-bars" style="height:105px;">
+                <div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div><div class="p-bar"></div>
+              </div>
+              <div class="venues-pills" data-i18n-html="venuesPillsHtml">
+                <span class="venue-pill"><strong>$0.00 MXN</strong> fijos/mes</span>
+                <span class="venue-pill">Garantía <strong>40%</strong> no-show</span>
+                <span class="venue-pill">Llave QR <strong>60s</strong></span>
+                <span class="venue-pill">SPEI semanal <strong>80%</strong></span>
+                <span class="venue-pill">Panel Web <strong>B2B</strong></span>
+              </div>
+            </div>
+            <div class="sculpture-footer">
+              <h3 class="sculpture-title font-display" data-i18n-html="card5Title">
+                <span class="tone-bright">Alianza para</span> <span class="tone-titanium">sedes y especialistas.</span>
               </h3>
               <button type="button" class="plus-circle" data-detail="venues" aria-label="Details">+</button>
             </div>
@@ -664,35 +709,35 @@
         <article class="snap-card">
           <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=900&q=80')"></div>
           <div class="snap-foot">
-            <h3 class="font-display" style="font-size:17px" data-i18n-html="c1Title"><span class="tone-bright">Fuerza &amp;</span> <span class="tone-titanium">Alto Rendimiento</span></h3>
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c1Title"><span class="tone-bright">Fuerza y</span> <span class="tone-titanium">Alto Rendimiento</span></h3>
             <button type="button" class="plus-circle" data-detail="disc-fuerza">+</button>
           </div>
         </article>
         <article class="snap-card">
           <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=900&q=80')"></div>
           <div class="snap-foot">
-            <h3 class="font-display" style="font-size:17px" data-i18n-html="c2Title"><span class="tone-bright">Pádel &amp;</span> <span class="tone-titanium">Canchas</span></h3>
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c2Title"><span class="tone-bright">Pádel y</span> <span class="tone-titanium">Canchas</span></h3>
             <button type="button" class="plus-circle" data-detail="disc-padel">+</button>
           </div>
         </article>
         <article class="snap-card">
           <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80')"></div>
           <div class="snap-foot">
-            <h3 class="font-display" style="font-size:17px" data-i18n-html="c3Title"><span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Movimiento</span></h3>
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c3Title"><span class="tone-bright">Pilates y</span> <span class="tone-titanium">Movimiento</span></h3>
             <button type="button" class="plus-circle" data-detail="disc-pilates">+</button>
           </div>
         </article>
         <article class="snap-card">
           <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=900&q=80')"></div>
           <div class="snap-foot">
-            <h3 class="font-display" style="font-size:17px" data-i18n-html="c4Title"><span class="tone-bright">Boxeo &amp;</span> <span class="tone-titanium">Metabólico</span></h3>
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c4Title"><span class="tone-bright">Boxeo y</span> <span class="tone-titanium">Acondicionamiento</span></h3>
             <button type="button" class="plus-circle" data-detail="disc-boxeo">+</button>
           </div>
         </article>
         <article class="snap-card">
           <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=900&q=80')"></div>
           <div class="snap-foot">
-            <h3 class="font-display" style="font-size:17px" data-i18n-html="c5Title"><span class="tone-bright">Fisioterapia &amp;</span> <span class="tone-titanium">Recovery</span></h3>
+            <h3 class="font-display" style="font-size:17px" data-i18n-html="c5Title"><span class="tone-bright">Fisioterapia y</span> <span class="tone-titanium">Recuperación</span></h3>
             <button type="button" class="plus-circle" data-detail="disc-recovery">+</button>
           </div>
         </article>
@@ -723,6 +768,9 @@
             </div>
             <div class="field-stack">
               <input id="regName" type="text" class="field-input" required placeholder="Tu nombre completo" autocomplete="name" />
+              <div id="regBizDetailWrap" style="display:none;">
+                <input id="regBizDetail" type="text" class="field-input" placeholder="Nombre del club o estudio" autocomplete="organization" />
+              </div>
               <input id="regEmail" type="email" class="field-input" required placeholder="Correo electrónico" autocomplete="email" autocapitalize="none" />
               <input id="regWhatsapp" type="tel" inputmode="tel" class="field-input" required placeholder="WhatsApp (10 dígitos)" autocomplete="tel" />
               <p id="formErr" class="form-err"></p>
@@ -745,26 +793,26 @@
     <div class="container">
       <div class="acc-item">
         <button type="button" class="acc-btn"><span data-i18n="fEco">El Ecosistema</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fEcoBody">Una experiencia digital unificada que conecta disciplinas deportivas, estudios boutique, canchas y especialistas de recuperación en tu ciudad.</div></div>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fEcoBody">Un pase digital flexible con recargas desde 100 KC que conecta más de 230 disciplinas deportivas, estudios boutique, canchas y recuperación física en un solo lugar.</div></div>
       </div>
       <div class="acc-item">
         <button type="button" class="acc-btn"><span data-i18n="fAth">Experiencia Atleta</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fAthBody">Explora el radar en vivo, selecciona tu estación exacta en 3D, conecta con tu comunidad mediante historias 24h y eleva tus cuatro pilares con cofres con premios y trofeos.</div></div>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fAthBody">Elige tu lugar exacto en 3D antes de salir, comparte historias de 24h, eleva tus cuatro pilares, protege tu constancia con 1 Escudo de Racha gratis al mes y desbloquea cofres con premios.</div></div>
       </div>
       <div class="acc-item">
         <button type="button" class="acc-btn"><span data-i18n="fB2B">Clubes y Especialistas</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fB2BBody">Tecnología de ocupación inteligente y agenda garantizada para gimnasios, estudios boutique, clubes deportivos y consultorios dentro de la red fundadora.</div></div>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fB2BBody">$0.00 MXN fijos al mes para clubes, estudios y especialistas: garantía 40% anti-inasistencias, llave QR de 60s en recepción, dispersión semanal SPEI del 80% y panel web administrativo de tu negocio.</div></div>
       </div>
       <div class="acc-item">
         <button type="button" class="acc-btn"><span data-i18n="fFaq">Preguntas Frecuentes</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fFaqBody">El acceso se habilita mediante oleadas controladas por invitación. Solicitar tu lugar en la lista es gratuito y sin compromiso.</div></div>
+        <div class="acc-panel"><div class="acc-body" data-i18n="fFaqBody">El acceso se habilita mediante oleadas controladas sin costo al registrarte. Top-Up flexible desde 100 KC y 1 Escudo de Racha gratis al mes en tus entrenamientos.</div></div>
       </div>
       <div class="acc-item">
         <button type="button" class="acc-btn"><span data-i18n="fLeg">Legal y Privacidad</span><span class="acc-chev">⌄</span></button>
         <div class="acc-panel">
           <div class="acc-body">
             <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
-              <a href="/socios" target="_top" id="footerAccPartnersLink" style="color:#C4B5FD;font-weight:700" data-i18n="fPartnersLink">Portal Socios</a>
+              <a href="/socios" target="_top" id="footerAccPartnersLink" data-founder-gated style="color:#C4B5FD;font-weight:700" data-i18n="fPartnersLink">Portal Socios</a>
               <a href="/privacidad" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fPrivLink">Aviso de Privacidad</a>
               <a href="/terminos" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fTermsLink">Términos de Uso</a>
               <a href="mailto:soporte@kineticapp.com.mx" style="color:var(--text-sec)">soporte@kineticapp.com.mx</a>
@@ -775,9 +823,10 @@
       </div>
 
       <div class="footer-base">
-        <span>© 2026 KineticApp S.A.S. • México.</span>
+        <span id="founderCopyrightTrigger" class="founder-trigger" role="button" tabindex="0">© 2026 KineticApp S.A.S. • México.</span>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <a href="/socios" target="_top" id="footerPartnersLink" class="lang-pill" style="border-color:rgba(123,97,255,0.45);color:#C4B5FD;" data-i18n="fPartnersLink">Portal Socios</a>
+          <a href="/socios" target="_top" id="footerPartnersLink" data-founder-gated class="lang-pill" style="border-color:rgba(123,97,255,0.45);color:#C4B5FD;" data-i18n="fPartnersLink">Portal Socios</a>
+          <button type="button" id="footerRevokeFounderBtn" data-founder-gated class="lang-pill" style="border-color:rgba(148,163,184,0.35);color:#94A3B8;" data-i18n="revokeFounder">Revocar Modo Fundador</button>
           <button type="button" id="footerLangBtn" class="lang-pill">Español / English</button>
         </div>
       </div>
@@ -785,7 +834,7 @@
   </footer>
 
   <!-- BOTÓN CONCIERGE 24/7 -->
-  <button type="button" id="conciergeFab" class="concierge-fab">✦ <span data-i18n="conciergeBtn">Concierge 24/7</span></button>
+  <button type="button" id="conciergeFab" class="concierge-fab fab-hidden">✦ <span data-i18n="conciergeBtn">Concierge 24/7</span></button>
 
   <!-- HOJA DE DETALLE GLASS / CONCIERGE -->
   <div id="sheetOverlay" class="sheet-overlay" role="dialog" aria-modal="true">
@@ -796,6 +845,25 @@
       </div>
       <h3 id="sheetTitle" class="font-display" style="font-size:26px;line-height:1.12"></h3>
       <div id="sheetBody"></div>
+    </div>
+  </div>
+
+  <!-- COMPUERTA DISCRETA DE FUNDADOR (5 TOQUES EN COPYRIGHT, CERO SECRETO EN BUNDLE) -->
+  <div id="founderGateOverlay" class="sheet-overlay" role="dialog" aria-modal="true">
+    <div class="sheet-box" style="max-width:420px;">
+      <div class="sheet-top">
+        <span style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--purple)" data-i18n="fgTag">PASE DE DISPOSITIVO FUNDADOR</span>
+        <button type="button" id="founderGateCloseBtn" class="menu-btn" aria-label="Close">✕</button>
+      </div>
+      <h3 class="font-display" style="font-size:22px;line-height:1.15;margin-bottom:6px;" data-i18n-html="fgTitle"><span class="tone-bright">Autorizar</span> <span class="tone-titanium">navegador.</span></h3>
+      <p style="font-size:12.5px;color:var(--titanium);margin-bottom:14px;" data-i18n="fgSub">Autentica un Master Admin Kinetic contra servidor (90 días en este navegador).</p>
+      <form id="founderGateForm" class="field-stack" novalidate>
+        <input id="fgEmail" type="email" class="field-input" required placeholder="Master Admin Email" autocomplete="username" autocapitalize="none" />
+        <input id="fgPass" type="password" class="field-input" required placeholder="Password" autocomplete="current-password" />
+        <p id="fgErr" class="form-err"></p>
+        <button id="fgSubmitBtn" type="submit" class="btn-pill btn-cyan" style="width:100%;" data-i18n="fgSubmit">Autorizar Dispositivo</button>
+        <button id="fgRevokeBtn" type="button" data-founder-gated class="lang-pill" style="width:100%;text-align:center;" data-i18n="revokeFounder">Revocar Modo Fundador</button>
+      </form>
     </div>
   </div>
 
@@ -823,28 +891,39 @@
           scrollSub: 'Toca + en cualquier tarjeta para descubrir más detalles.',
           card1Title: '<span class="tone-bright">Radar</span> <span class="tone-titanium">en vivo.</span>',
           card2Title: '<span class="tone-bright">Mapa espacial</span> <span class="tone-titanium">sin filas.</span>',
-          card3Title: '<span class="tone-bright">Progreso y</span> <span class="tone-titanium">cofres con premios.</span>',
-          card4Title: '<span class="tone-bright">Alianza para</span> <span class="tone-titanium">clubes líderes.</span>',
+          card3Title: '<span class="tone-bright">Evolución y</span> <span class="tone-titanium">cofres con premios.</span>',
+          card4Title: '<span class="tone-bright">Comunidad viva,</span> <span class="tone-titanium">historias 24h.</span>',
+          card5Title: '<span class="tone-bright">Alianza para</span> <span class="tone-titanium">sedes y especialistas.</span>',
+          commCoreBadge: 'COMUNIDAD 24H',
+          venuesPillsHtml: '<span class="venue-pill"><strong>$0.00 MXN</strong> fijos/mes</span><span class="venue-pill">Garantía <strong>40%</strong> no-show</span><span class="venue-pill">Llave QR <strong>60s</strong></span><span class="venue-pill">SPEI semanal <strong>80%</strong></span><span class="venue-pill">Panel Web <strong>B2B</strong></span>',
           snapHead: '<span class="tone-bright">Más de 230</span> <span class="tone-titanium">disciplinas vivas.</span>',
-          c1Title: '<span class="tone-bright">Fuerza &amp;</span> <span class="tone-titanium">Alto Rendimiento</span>',
-          c2Title: '<span class="tone-bright">Pádel &amp;</span> <span class="tone-titanium">Canchas</span>',
-          c3Title: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Movimiento</span>',
-          c4Title: '<span class="tone-bright">Boxeo &amp;</span> <span class="tone-titanium">Metabólico</span>',
-          c5Title: '<span class="tone-bright">Fisioterapia &amp;</span> <span class="tone-titanium">Recovery</span>',
+          c1Title: '<span class="tone-bright">Fuerza y</span> <span class="tone-titanium">Alto Rendimiento</span>',
+          c2Title: '<span class="tone-bright">Pádel y</span> <span class="tone-titanium">Canchas</span>',
+          c3Title: '<span class="tone-bright">Pilates y</span> <span class="tone-titanium">Movimiento</span>',
+          c4Title: '<span class="tone-bright">Boxeo y</span> <span class="tone-titanium">Acondicionamiento</span>',
+          c5Title: '<span class="tone-bright">Fisioterapia y</span> <span class="tone-titanium">Recuperación</span>',
           wlTitle: '<span class="tone-bright">Solicita tu</span> <span class="tone-titanium">invitación.</span>',
           wlSub: 'Acceso prioritario por invitación.',
           roleAthlete: 'Atleta', roleClub: 'Club', roleSpec: 'Especialista',
-          nameAtletaPh: 'Tu nombre completo', nameClubPh: 'Nombre del club o estudio', nameSpecPh: 'Nombre del especialista o consultorio',
+          nameAtletaPh: 'Tu nombre completo', bizClubPh: 'Nombre del club o estudio', bizSpecPh: 'Nombre del consultorio o especialidad',
           emailPh: 'Correo electrónico', waPh: 'WhatsApp (10 dígitos)', wlSubmit: 'Solicitar Invitación',
           okTitle: 'Invitación en lista prioritaria', okDesc: 'Sigue las pistas oficiales y revelaciones progresivas en Instagram.',
-          fEco: 'El Ecosistema', fEcoBody: 'Una experiencia digital unificada que conecta disciplinas deportivas, estudios boutique, canchas y especialistas de recuperación en tu ciudad.',
-          fAth: 'Experiencia Atleta', fAthBody: 'Explora el radar en vivo, selecciona tu estación exacta en 3D, conecta con tu comunidad mediante historias 24h y eleva tus cuatro pilares con cofres con premios y trofeos.',
-          fB2B: 'Clubes y Especialistas', fB2BBody: 'Tecnología de ocupación inteligente y agenda garantizada para gimnasios, estudios boutique, clubes deportivos y consultorios dentro de la red fundadora.',
-          fFaq: 'Preguntas Frecuentes', fFaqBody: 'El acceso se habilita mediante oleadas controladas por invitación. Solicitar tu lugar en la lista es gratuito y sin compromiso.',
+          fEco: 'El Ecosistema', fEcoBody: 'Un pase digital flexible con recargas desde 100 KC que conecta más de 230 disciplinas deportivas, estudios boutique, canchas y recuperación física en un solo lugar.',
+          fAth: 'Experiencia Atleta', fAthBody: 'Elige tu lugar exacto en 3D antes de salir, comparte historias de 24h, eleva tus cuatro pilares, protege tu constancia con 1 Escudo de Racha gratis al mes y desbloquea cofres con premios.',
+          fB2B: 'Clubes y Especialistas', fB2BBody: '$0.00 MXN fijos al mes para clubes, estudios y especialistas: garantía 40% anti-inasistencias, llave QR de 60s en recepción, dispersión semanal SPEI del 80% y panel web administrativo de tu negocio.',
+          fFaq: 'Preguntas Frecuentes', fFaqBody: 'El acceso se habilita mediante oleadas controladas sin costo al registrarte. Top-Up flexible desde 100 KC y 1 Escudo de Racha gratis al mes en tus entrenamientos.',
           fLeg: 'Legal y Privacidad', fPrivLink: 'Aviso de Privacidad', fTermsLink: 'Términos de Uso',
           fLegNote: 'Operado por KineticApp S.A.S. • México.',
           conciergeBtn: 'Concierge 24/7',
-          errName: 'Ingresa tu nombre completo o el nombre de tu sede.',
+          revokeFounder: 'Revocar Modo Fundador',
+          fgTag: 'PASE DE DISPOSITIVO FUNDADOR',
+          fgTitle: '<span class="tone-bright">Autorizar</span> <span class="tone-titanium">navegador.</span>',
+          fgSub: 'Autentica un Master Admin Kinetic contra servidor (90 días en este navegador).',
+          fgSubmit: 'Autorizar Dispositivo',
+          fgErrCreds: 'Ingresa correo y contraseña de Master Admin.',
+          fgErrDenied: 'Acceso denegado: requiere privilegio Master Admin.',
+          errName: 'Ingresa tu nombre completo.',
+          errBiz: 'Ingresa el nombre de tu club o especialidad.',
           errEmail: 'Ingresa un correo electrónico válido.',
           errWa: 'Ingresa un WhatsApp válido de 10 dígitos.',
           errNet: 'No pudimos enviar la solicitud ahora. Intenta de nuevo.'
@@ -860,28 +939,39 @@
           scrollSub: 'Tap + on any card to uncover more.',
           card1Title: '<span class="tone-bright">Live</span> <span class="tone-titanium">radar.</span>',
           card2Title: '<span class="tone-bright">Spatial 3D</span> <span class="tone-titanium">selection.</span>',
-          card3Title: '<span class="tone-bright">Progress and</span> <span class="tone-titanium">reward chests.</span>',
-          card4Title: '<span class="tone-bright">Built for</span> <span class="tone-titanium">leading venues.</span>',
+          card3Title: '<span class="tone-bright">Evolution and</span> <span class="tone-titanium">reward chests.</span>',
+          card4Title: '<span class="tone-bright">Living community,</span> <span class="tone-titanium">24h stories.</span>',
+          card5Title: '<span class="tone-bright">Built for</span> <span class="tone-titanium">venues &amp; specialists.</span>',
+          commCoreBadge: '24H COMMUNITY',
+          venuesPillsHtml: '<span class="venue-pill"><strong>$0.00 MXN</strong> fixed/mo</span><span class="venue-pill"><strong>40%</strong> no-show guard</span><span class="venue-pill"><strong>60s</strong> QR Key</span><span class="venue-pill">Weekly <strong>80%</strong> SPEI</span><span class="venue-pill"><strong>B2B</strong> Web Portal</span>',
           snapHead: '<span class="tone-bright">Over 230</span> <span class="tone-titanium">living disciplines.</span>',
           c1Title: '<span class="tone-bright">Strength &amp;</span> <span class="tone-titanium">Peak Output</span>',
           c2Title: '<span class="tone-bright">Padel &amp;</span> <span class="tone-titanium">Courts</span>',
           c3Title: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Motion</span>',
-          c4Title: '<span class="tone-bright">Boxing &amp;</span> <span class="tone-titanium">Metabolic</span>',
+          c4Title: '<span class="tone-bright">Boxing &amp;</span> <span class="tone-titanium">Conditioning</span>',
           c5Title: '<span class="tone-bright">Physio &amp;</span> <span class="tone-titanium">Recovery</span>',
           wlTitle: '<span class="tone-bright">Request your</span> <span class="tone-titanium">invitation.</span>',
           wlSub: 'Priority access by invitation.',
           roleAthlete: 'Athlete', roleClub: 'Club', roleSpec: 'Specialist',
-          nameAtletaPh: 'Your full name', nameClubPh: 'Club or studio name', nameSpecPh: 'Specialist or clinic name',
+          nameAtletaPh: 'Your full name', bizClubPh: 'Club or studio name', bizSpecPh: 'Clinic name or specialty',
           emailPh: 'Email address', waPh: 'WhatsApp (10 digits)', wlSubmit: 'Request Invitation',
           okTitle: 'Invitation queued', okDesc: 'Follow official clues and progressive drops on Instagram.',
-          fEco: 'The Ecosystem', fEcoBody: 'A unified digital experience connecting sports, boutique studios, courts and recovery specialists in your city.',
-          fAth: 'Athlete Experience', fAthBody: 'Explore the live radar, lock your exact 3D spot, connect through 24h stories and awaken four living pillars with reward chests and trophies.',
-          fB2B: 'Clubs & Specialists', fB2BBody: 'Smart occupancy tech and verified scheduling for gyms, boutique studios, sports clubs and clinics inside the founding network.',
-          fFaq: 'FAQ', fFaqBody: 'Access opens via controlled invitation waves. Joining the list is free and carries zero commitment.',
+          fEco: 'The Ecosystem', fEcoBody: 'One flexible digital pass starting from 100 KC Top-Ups uniting 230+ sports disciplines, boutique studios, courts and recovery care.',
+          fAth: 'Athlete Experience', fAthBody: 'Pick your exact 3D spot before leaving home, share 24h stories, elevate four pillars, protect streaks with 1 free Streak Shield per month and unlock reward chests.',
+          fB2B: 'Clubs & Specialists', fB2BBody: '$0.00 MXN fixed monthly fee for clubs, studios and specialists: 40% no-show guarantee, 60s dynamic QR check-in key, weekly 80% SPEI bank payouts and widescreen web admin portal.',
+          fFaq: 'FAQ', fFaqBody: 'Access opens via controlled waves at zero cost to join. Flexible Top-Ups starting from 100 KC and 1 free Streak Shield per month.',
           fLeg: 'Legal & Privacy', fPrivLink: 'Privacy Notice', fTermsLink: 'Terms of Use',
           fLegNote: 'Operated by KineticApp S.A.S. • Mexico.',
           conciergeBtn: '24/7 Concierge',
-          errName: 'Please enter your full name or venue name.',
+          revokeFounder: 'Revoke Founder Mode',
+          fgTag: 'FOUNDER DEVICE PASS',
+          fgTitle: '<span class="tone-bright">Authorize</span> <span class="tone-titanium">browser.</span>',
+          fgSub: 'Authenticate a Kinetic Master Admin against the server (90-day device pass).',
+          fgSubmit: 'Authorize Device',
+          fgErrCreds: 'Enter Master Admin email and password.',
+          fgErrDenied: 'Access denied: Master Admin privilege required.',
+          errName: 'Please enter your full name.',
+          errBiz: 'Please enter your club or specialty.',
           errEmail: 'Please enter a valid email address.',
           errWa: 'Please enter a valid 10-digit WhatsApp number.',
           errNet: 'Unable to send right now. Please try again.'
@@ -891,8 +981,8 @@
       var SCENES = [
         {
           mode: 'radar', bg: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1400&q=80',
-          es: { h: '<span class="tone-bright">Tu ciudad entera,</span> <span class="tone-titanium">un solo pase.</span>', s: 'Más de 230 disciplinas, canchas y especialistas en tu ciudad.' },
-          en: { h: '<span class="tone-bright">Your entire city,</span> <span class="tone-titanium">one pass.</span>', s: 'Over 230 disciplines, courts and specialists in your city.' }
+          es: { h: '<span class="tone-bright">Tu ciudad entera,</span> <span class="tone-titanium">un solo pase.</span>', s: 'Más de 230 disciplinas deportivas, estudios boutique, canchas y especialistas conectados sin ataduras.' },
+          en: { h: '<span class="tone-bright">Your entire city,</span> <span class="tone-titanium">one pass.</span>', s: 'Over 230 sports disciplines, boutique studios, courts and recovery specialists united with zero lock-ins.' }
         },
         {
           mode: 'space3d', bg: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1400&q=80',
@@ -901,8 +991,8 @@
         },
         {
           mode: 'aura', bg: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1400&q=80',
-          es: { h: '<span class="tone-bright">Cada sesión</span> <span class="tone-titanium">te evoluciona.</span>', s: 'Eleva tu nivel en cuatro pilares, activa rachas, desbloquea cofres con premios y conecta con tu comunidad.' },
-          en: { h: '<span class="tone-bright">Every session</span> <span class="tone-titanium">evolves you.</span>', s: 'Level up across four pillars, build active streaks, unlock reward chests and connect with your community.' }
+          es: { h: '<span class="tone-bright">Cada sesión</span> <span class="tone-titanium">te evoluciona.</span>', s: 'Eleva tu nivel en cuatro pilares, activa rachas con 1 escudo gratis al mes, desbloquea cofres y conecta con tu comunidad.' },
+          en: { h: '<span class="tone-bright">Every session</span> <span class="tone-titanium">evolves you.</span>', s: 'Level up across four pillars, keep streaks with 1 free monthly shield, unlock reward chests and connect.' }
         }
       ];
 
@@ -919,33 +1009,39 @@
         },
         evolution: {
           tag: 'EVOLUCIÓN REAL',
-          es: { t: '<span class="tone-bright">Cuatro pilares</span> <span class="tone-titanium">en vivo.</span>', b: ['Tus sesiones reales alimentan tu nivel de Fuerza, Zen, Resistencia y Agilidad.', 'Mantén rachas activas para desbloquear cofres con premios y trofeos.', 'Progresión tangible y visual ligada a tu esfuerzo real.'] },
-          en: { t: '<span class="tone-bright">Four living</span> <span class="tone-titanium">pillars.</span>', b: ['Your real sessions fuel your Strength, Zen, Endurance and Agility levels.', 'Keep active streaks to unlock reward chests and trophies.', 'Tangible visual progression tied to your real effort.'] }
+          es: { t: '<span class="tone-bright">Evolución y</span> <span class="tone-titanium">cofres con premios.</span>', b: ['Tus sesiones reales alimentan tu nivel de Fuerza, Zen, Resistencia y Agilidad.', 'Protege tu constancia con 1 Escudo de Racha gratis al mes.', 'Desbloquea cofres con premios y trofeos ligados a tu asistencia.'] },
+          en: { t: '<span class="tone-bright">Evolution and</span> <span class="tone-titanium">reward chests.</span>', b: ['Your real sessions fuel Strength, Zen, Endurance and Agility levels.', 'Protect consistency with 1 free Streak Shield every month.', 'Unlock reward chests and trophies tied to real attendance.'] }
         },
         community: {
-          tag: 'COMUNIDAD & CONCIERGE',
-          es: { t: '<span class="tone-bright">Atletas reales,</span> <span class="tone-titanium">tu equipo.</span>', b: ['Comparte entrenamientos mediante Historias 24h desde cada sede.', 'Arma equipos y coordina sesiones con atletas de tu ciudad.', 'Concierge inteligente bilingüe disponible 24/7.'] },
-          en: { t: '<span class="tone-bright">Real athletes,</span> <span class="tone-titanium">your squad.</span>', b: ['Share workouts through 24h venue stories.', 'Form squads and coordinate sessions with local athletes.', 'Bilingual smart concierge ready 24/7.'] }
+          tag: 'COMUNIDAD 24H',
+          es: { t: '<span class="tone-bright">Comunidad viva,</span> <span class="tone-titanium">historias 24h.</span>', b: ['Comparte entrenamientos mediante Historias 24h desde cada sede.', 'Arma grupos y coordina sesiones con atletas cercanos.', 'Concierge inteligente bilingüe disponible 24/7.'] },
+          en: { t: '<span class="tone-bright">Living community,</span> <span class="tone-titanium">24h stories.</span>', b: ['Share workouts through 24h venue stories.', 'Form groups and coordinate sessions with local athletes.', 'Bilingual smart concierge ready 24/7.'] }
         },
         venues: {
           tag: 'ALIANZA SEDES',
-          es: { t: '<span class="tone-bright">Agenda</span> <span class="tone-titanium">llena.</span>', b: ['Ocupación inteligente para gimnasios, estudios y canchas.', 'Asistencia verificada y agenda garantizada para especialistas.', 'Invitación prioritaria para sedes fundadoras.'] },
-          en: { t: '<span class="tone-bright">Full</span> <span class="tone-titanium">calendar.</span>', b: ['Smart occupancy for gyms, boutique studios and courts.', 'Verified attendance and reliable scheduling for clinics.', 'Priority invitation for founding venues.'] }
+          es: { t: '<span class="tone-bright">Alianza para</span> <span class="tone-titanium">sedes y especialistas.</span>', b: ['$0.00 MXN fijos al mes (cero rentas fijas ni costos ocultos).', 'Garantía 40% anti-inasistencias acreditada por reserva.', 'Llave QR dinámica de 60s en recepción + dispersión semanal SPEI del 80% + panel web administrativo.'] },
+          en: { t: '<span class="tone-bright">Built for</span> <span class="tone-titanium">venues &amp; specialists.</span>', b: ['$0.00 MXN fixed monthly fee (zero fixed subscription cost).', '40% no-show protection guarantee on every booking.', '60s dynamic QR check-in key + weekly 80% SPEI bank payouts + widescreen web admin portal.'] }
         },
-        'disc-fuerza': { tag: 'FUERZA', es: { t: '<span class="tone-bright">Fuerza &amp;</span> <span class="tone-titanium">Alto Rendimiento</span>', b: ['Racks olímpicos y fuerza funcional en toda la ciudad.', 'Reserva tu plataforma exacta en 3D.', 'Eleva el pilar Fuerza en cada entrenamiento.'] }, en: { t: '<span class="tone-bright">Strength &amp;</span> <span class="tone-titanium">Peak Output</span>', b: ['Olympic racks and functional strength citywide.', 'Reserve your exact 3D training platform.', 'Level up your Strength pillar every workout.'] } },
-        'disc-padel': { tag: 'PÁDEL', es: { t: '<span class="tone-bright">Pádel &amp;</span> <span class="tone-titanium">Canchas</span>', b: ['Canchas panorámicas de pádel y tenis en tu ciudad.', 'Organiza equipos y comparte en Historias 24h.', 'Acceso inmediato sin filas en recepción.'] }, en: { t: '<span class="tone-bright">Padel &amp;</span> <span class="tone-titanium">Courts</span>', b: ['Panoramic padel and tennis courts in your city.', 'Form squads and share via 24h Stories.', 'Instant check-in with zero lobby lines.'] } },
-        'disc-pilates': { tag: 'PILATES', es: { t: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Movimiento</span>', b: ['Estudios boutique de Reformer, barre y movilidad.', 'Elige tu cama exacta antes de salir de casa.', 'Equilibra tu pilar Zen y Agilidad.'] }, en: { t: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Motion</span>', b: ['Boutique Reformer, barre and mobility studios.', 'Pick your exact bed before leaving home.', 'Balance your Zen and Agility pillars.'] } },
-        'disc-boxeo': { tag: 'BOXEO', es: { t: '<span class="tone-bright">Boxeo &amp;</span> <span class="tone-titanium">Metabólico</span>', b: ['Sacos, conditioning y sesiones de alta intensidad.', 'Aparta tu estación numerada al instante.', 'Activa rachas reales y cofres con premios.'] }, en: { t: '<span class="tone-bright">Boxing &amp;</span> <span class="tone-titanium">Metabolic</span>', b: ['Heavy bags, conditioning and metabolic training.', 'Lock your numbered station in seconds.', 'Ignite real streaks and reward chests.'] } },
-        'disc-recovery': { tag: 'RECOVERY', es: { t: '<span class="tone-bright">Fisioterapia &amp;</span> <span class="tone-titanium">Recovery</span>', b: ['Especialistas en fisioterapia, crioterapia y descarga.', 'Agenda tu camilla sin llamadas ni fricción.', 'Recuperación integrada con tu evolución física.'] }, en: { t: '<span class="tone-bright">Physio &amp;</span> <span class="tone-titanium">Recovery</span>', b: ['Physiotherapy, cryotherapy and recovery specialists.', 'Book your treatment bed with zero friction.', 'Recovery woven into your physical evolution.'] } }
+        'disc-fuerza': { tag: 'FUERZA', es: { t: '<span class="tone-bright">Fuerza y</span> <span class="tone-titanium">Alto Rendimiento</span>', b: ['Racks olímpicos y fuerza funcional en toda la ciudad.', 'Reserva tu plataforma exacta en 3D.', 'Eleva el pilar Fuerza en cada entrenamiento.'] }, en: { t: '<span class="tone-bright">Strength &amp;</span> <span class="tone-titanium">Peak Output</span>', b: ['Olympic racks and functional strength citywide.', 'Reserve your exact 3D training platform.', 'Level up your Strength pillar every workout.'] } },
+        'disc-padel': { tag: 'PÁDEL', es: { t: '<span class="tone-bright">Pádel y</span> <span class="tone-titanium">Canchas</span>', b: ['Canchas panorámicas de pádel y tenis.', 'Organiza partidos en grupo y comparte en Historias 24h.', 'Acceso inmediato sin filas en recepción.'] }, en: { t: '<span class="tone-bright">Padel &amp;</span> <span class="tone-titanium">Courts</span>', b: ['Panoramic padel and tennis courts.', 'Organize group matches and share via 24h Stories.', 'Instant check-in with zero lobby lines.'] } },
+        'disc-pilates': { tag: 'PILATES', es: { t: '<span class="tone-bright">Pilates y</span> <span class="tone-titanium">Movimiento</span>', b: ['Estudios boutique de Reformer, barre y movilidad.', 'Elige tu cama exacta antes de salir de casa.', 'Equilibra tu pilar Zen y Agilidad.'] }, en: { t: '<span class="tone-bright">Pilates &amp;</span> <span class="tone-titanium">Motion</span>', b: ['Boutique Reformer, barre and mobility studios.', 'Pick your exact bed before leaving home.', 'Balance your Zen and Agility pillars.'] } },
+        'disc-boxeo': { tag: 'BOXEO', es: { t: '<span class="tone-bright">Boxeo y</span> <span class="tone-titanium">Acondicionamiento</span>', b: ['Sacos, boxeo técnico y acondicionamiento de alta intensidad.', 'Aparta tu estación numerada al instante.', 'Activa rachas reales y cofres con premios.'] }, en: { t: '<span class="tone-bright">Boxing &amp;</span> <span class="tone-titanium">Conditioning</span>', b: ['Heavy bags, technical boxing and high-intensity conditioning.', 'Lock your numbered station in seconds.', 'Ignite real streaks and reward chests.'] } },
+        'disc-recovery': { tag: 'RECUPERACIÓN', es: { t: '<span class="tone-bright">Fisioterapia y</span> <span class="tone-titanium">Recuperación</span>', b: ['Especialistas en fisioterapia, crioterapia y descarga muscular.', 'Agenda tu camilla sin llamadas ni fricción.', 'Recuperación integrada con tu evolución física.'] }, en: { t: '<span class="tone-bright">Physio &amp;</span> <span class="tone-titanium">Recovery</span>', b: ['Physiotherapy, cryotherapy and sports recovery specialists.', 'Book your treatment bed with zero friction.', 'Recovery woven into your physical evolution.'] } }
       };
 
       function updateFormPlaceholders() {
         var dict = I18N[state.lang];
         var rn = document.getElementById('regName');
+        var bw = document.getElementById('regBizDetailWrap');
+        var rb = document.getElementById('regBizDetail');
         var re = document.getElementById('regEmail');
         var rw = document.getElementById('regWhatsapp');
-        if (rn) {
-          rn.placeholder = state.role === 'club' ? dict.nameClubPh : state.role === 'especialista' ? dict.nameSpecPh : dict.nameAtletaPh;
+        if (rn) rn.placeholder = dict.nameAtletaPh;
+        if (bw && rb) {
+          var isBiz = state.role === 'club' || state.role === 'especialista';
+          bw.style.display = isBiz ? 'block' : 'none';
+          rb.required = isBiz;
+          rb.placeholder = state.role === 'especialista' ? dict.bizSpecPh : dict.bizClubPh;
         }
         if (re) re.placeholder = dict.emailPh;
         if (rw) rw.placeholder = dict.waPh;
@@ -1160,6 +1256,7 @@
           c.style.transform = 'translate3d(0,' + ty.toFixed(1) + 'px,0) scale(' + scale.toFixed(3) + ')';
           c.style.opacity = op.toFixed(2);
         });
+        if (typeof updateFabVisibility === 'function') updateFabVisibility();
       }
       window.addEventListener('scroll', function () {
         if (!scrollTicking) {
@@ -1195,23 +1292,64 @@
 
       // Hojas de Detalle Glass + Motor Conversacional IA Stealth 24/7
       var overlay = document.getElementById('sheetOverlay');
+      var founderOverlay = document.getElementById('founderGateOverlay');
       var sheetTag = document.getElementById('sheetTag');
       var sheetTitle = document.getElementById('sheetTitle');
       var sheetBody = document.getElementById('sheetBody');
       var fabEl = document.getElementById('conciergeFab');
 
+      function doesFabCollideWithKeyUi() {
+        if (!fabEl || typeof window === 'undefined') return false;
+        var docEl = document.documentElement;
+        var vw = (docEl && docEl.clientWidth) || window.innerWidth || 0;
+        var vh = (docEl && docEl.clientHeight) || window.innerHeight || 0;
+        var cs = getComputedStyle(fabEl);
+        var rOff = parseFloat(cs.right) || 14;
+        var bOff = parseFloat(cs.bottom) || 14;
+        var w = Math.max(fabEl.offsetWidth || 148, 136);
+        var h = Math.max(fabEl.offsetHeight || 38, 38);
+        var fRight = vw - rOff + 12;
+        var fBottom = vh - bOff + 12;
+        var fLeft = vw - rOff - w - 12;
+        var fTop = vh - bOff - h - 12;
+        var targets = document.querySelectorAll('.quick-strip, .quick-item, .snap-arrow, .section-head, .plus-circle, .footer-base, #waitlist, .acc-btn, #heroPauseBtn');
+        for (var i = 0; i < targets.length; i++) {
+          var r = targets[i].getBoundingClientRect();
+          if (r.width <= 0 || r.height <= 0) continue;
+          if (!(r.right < fLeft || r.left > fRight || r.bottom < fTop || r.top > fBottom)) return true;
+        }
+        return false;
+      }
+
       function updateFabVisibility() {
         if (!fabEl) return;
         var modalOpen = overlay && overlay.classList.contains('open');
+        var founderOpen = founderOverlay && founderOverlay.classList.contains('open');
         var drawerOpen = drawer && drawer.classList.contains('open');
-        fabEl.classList.toggle('fab-hidden', Boolean(state.waitlistVisible || state.inputFocused || modalOpen || drawerOpen));
+        var blocked = Boolean(state.waitlistVisible || state.inputFocused || modalOpen || founderOpen || drawerOpen || doesFabCollideWithKeyUi());
+        fabEl.classList.toggle('fab-hidden', blocked);
+      }
+      window.addEventListener('resize', function () { requestAnimationFrame(updateFabVisibility); }, { passive: true });
+      window.addEventListener('load', updateFabVisibility);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(updateFabVisibility).catch(function () {});
+      }
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(function () { requestAnimationFrame(updateFabVisibility); }).observe(document.body);
       }
 
       var origSetDrawer = setDrawer;
       setDrawer = function (open) { origSetDrawer(open); updateFabVisibility(); };
 
       function closeSheet() {
-        if (state.conciergeTyping) { clearTimeout(state.conciergeTyping); state.conciergeTyping = null; }
+        if (state.conciergeTyping) {
+          clearTimeout(state.conciergeTyping);
+          state.conciergeTyping = null;
+          if (state.pendingAiMsg) {
+            state.chat.push(state.pendingAiMsg);
+            state.pendingAiMsg = null;
+          }
+        }
         if (overlay) overlay.classList.remove('open');
         updateFabVisibility();
       }
@@ -1403,9 +1541,12 @@
           inputEl.value = '';
           renderConciergeStream(streamEl, true);
           var reply = resolveConciergeAI(q, state.lang);
+          state.pendingAiMsg = { from: 'ai', text: reply.text, ctaRole: reply.ctaRole };
           state.conciergeTyping = setTimeout(function () {
             state.conciergeTyping = null;
-            state.chat.push({ from: 'ai', text: reply.text, ctaRole: reply.ctaRole });
+            var msgObj = state.pendingAiMsg || { from: 'ai', text: reply.text, ctaRole: reply.ctaRole };
+            state.pendingAiMsg = null;
+            state.chat.push(msgObj);
             renderConciergeStream(streamEl, false);
           }, 420);
         }
@@ -1461,6 +1602,7 @@
           b.classList.toggle('active', b.getAttribute('data-role') === next);
         });
         updateFormPlaceholders();
+        requestAnimationFrame(updateFabVisibility);
       }
       document.querySelectorAll('.seg-btn').forEach(function (b) {
         b.addEventListener('click', function () { selectRole(b.getAttribute('data-role')); });
@@ -1489,12 +1631,16 @@
         }
         var btn = document.getElementById('submitBtn');
         var rawName = document.getElementById('regName').value.trim();
+        var rawBizEl = document.getElementById('regBizDetail');
+        var isBizRole = state.role === 'club' || state.role === 'especialista';
+        var rawBiz = rawBizEl ? rawBizEl.value.trim() : '';
         var rawEmail = document.getElementById('regEmail').value.trim().toLowerCase();
         var rawWa = document.getElementById('regWhatsapp').value.trim();
         var digits = rawWa.replace(/\D/g, '');
         errEl.style.display = 'none';
 
         if (rawName.length < 2) { errEl.textContent = dict.errName; errEl.style.display = 'block'; return; }
+        if (isBizRole && rawBiz.length < 2) { errEl.textContent = dict.errBiz; errEl.style.display = 'block'; return; }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(rawEmail)) { errEl.textContent = dict.errEmail; errEl.style.display = 'block'; return; }
         if (digits.length < 10 || digits.length > 15) { errEl.textContent = dict.errWa; errEl.style.display = 'block'; return; }
 
@@ -1502,6 +1648,7 @@
 
         var tipoPerfil = state.role === 'club' ? 'Club / Estudio B2B' : state.role === 'especialista' ? 'Especialista / Consultorio B2B' : 'Atleta Acceso Prioritario';
         var discTags = ['Acceso Anticipado Web'];
+        if (isBizRole && rawBiz) discTags.push((state.role === 'especialista' ? 'Esp: ' : 'Club: ') + rawBiz);
         if (state.sede) discTags.push('Sede: ' + state.sede);
         if (state.ref) discTags.push('Ref: ' + state.ref);
         var discVal = discTags.join(' • ');
@@ -1538,12 +1685,14 @@
             });
           }
           if (resp.ok || resp.status === 201 || resp.status === 409) {
+            if (rawBizEl) rawBizEl.value = '';
             form.style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
           } else {
             throw new Error('HTTP_' + resp.status);
           }
         } catch (_) {
+          state.cooldownUntil = 0;
           errEl.textContent = dict.errNet;
           errEl.style.display = 'block';
           btn.disabled = false;
@@ -1554,6 +1703,219 @@
         }
       });
 
+      // Candado Pre-Lanzamiento + Pase Discreto de Fundador (5 toques en © 2026 KineticApp S.A.S.)
+      var PUBLIC_WEB_APP_OPEN = false;
+      var FOUNDER_SALT_KEY = '@kinetic_device_cipher_salt_v1';
+      var FOUNDER_PASS_KEY = '@kinetic_founder_web_device_v1';
+      var FOUNDER_PASS_EVENT = 'kinetic:founder-pass-changed';
+      var FOUNDER_TTL_MS = 90 * 24 * 60 * 60 * 1000;
+      var UUID_V4_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+      function kFnvMix(inp, seed) {
+        var h = seed >>> 0;
+        for (var i = 0; i < inp.length; i++) h = Math.imul(h ^ inp.charCodeAt(i), 0x01000193) >>> 0;
+        h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
+        return (Math.imul(h ^ (h >>> 13), 0xc2b2ae35) ^ (h >>> 16)) >>> 0;
+      }
+      function kFnvStep(stVal, idx, kSeed) {
+        var h = (stVal ^ kSeed ^ Math.imul((idx + 1) >>> 0, 0x9e3779b9)) >>> 0;
+        h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
+        h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
+        return (h ^ (h >>> 16)) >>> 0;
+      }
+      function kEnvFp() {
+        var ua = (typeof navigator !== 'undefined' ? navigator.userAgent || '' : '').slice(0, 48);
+        return kFnvMix('knt25|web||' + ua, 0x9e3779b9).toString(16).padStart(8, '0');
+      }
+      function getOrCreateSaltSync() {
+        try {
+          var cur = window.localStorage.getItem(FOUNDER_SALT_KEY);
+          if (cur && cur.length >= 32) return cur;
+          var arr = new Uint8Array(32);
+          if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
+          else for (var i = 0; i < 32; i++) arr[i] = Math.floor(Math.random() * 256);
+          var hex = '';
+          for (var j = 0; j < arr.length; j++) hex += arr[j].toString(16).padStart(2, '0');
+          window.localStorage.setItem(FOUNDER_SALT_KEY, hex);
+          return hex;
+        } catch (_) { return ''; }
+      }
+      function hasValidFounderPass() {
+        try {
+          var salt = window.localStorage.getItem(FOUNDER_SALT_KEY);
+          var raw = window.localStorage.getItem(FOUNDER_PASS_KEY);
+          if (!salt || !raw || raw.indexOf('kenc_v1:') !== 0) return false;
+          var parts = raw.slice(8).split(':');
+          if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2] || (parts[2].length & 1) !== 0) return false;
+          var fp = kEnvFp();
+          var macIn = salt + '|' + fp + '|' + parts[0] + '|' + parts[2];
+          var expMac = kFnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + kFnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
+          if (parts[1] !== expMac) return false;
+          var bLen = parts[2].length >>> 1;
+          var outB = new Uint8Array(bLen);
+          var keyStr = salt + '|' + fp + '|' + parts[0];
+          var kSeed = kFnvMix(keyStr, 0x27d4eb2f);
+          var cSt = kFnvMix(keyStr, 0x811c9dc5);
+          for (var bi = 0; bi < bLen; bi++) {
+            if ((bi & 3) === 0) cSt = kFnvStep(cSt, bi >>> 2, kSeed);
+            outB[bi] = parseInt(parts[2].slice(bi * 2, bi * 2 + 2), 16) ^ ((cSt >>> ((bi & 3) * 8)) & 0xff);
+          }
+          var dec = JSON.parse(new TextDecoder().decode(outB));
+          var nowMs = Date.now();
+          if (!dec || dec.v !== 1 || dec.issuer !== 'is_kinetic_master_admin') return false;
+          if (!UUID_V4_RE.test(String(dec.uid || '')) || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(dec.email || ''))) return false;
+          if (!(dec.issuedAtMs > 0 && dec.issuedAtMs <= nowMs + 60000)) return false;
+          if (!(dec.expiresAtMs > nowMs && dec.expiresAtMs - dec.issuedAtMs <= FOUNDER_TTL_MS + 60000)) return false;
+          return true;
+        } catch (_) { return false; }
+      }
+      function notifyFounderChange() {
+        try { window.dispatchEvent(new Event(FOUNDER_PASS_EVENT)); } catch (_) {}
+        try {
+          if (window.parent && window.parent !== window && window.parent.location.origin === window.location.origin) {
+            window.parent.dispatchEvent(new Event(FOUNDER_PASS_EVENT));
+          }
+        } catch (_) {}
+      }
+      function writeFounderPass(uid, email) {
+        try {
+          var salt = getOrCreateSaltSync();
+          if (!salt) return false;
+          var nowMs = Date.now();
+          var nonceArr = new Uint8Array(16);
+          if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(nonceArr);
+          else for (var ni = 0; ni < 16; ni++) nonceArr[ni] = Math.floor(Math.random() * 256);
+          var nonce = '';
+          for (var nj = 0; nj < nonceArr.length; nj++) nonce += nonceArr[nj].toString(16).padStart(2, '0');
+          var payload = JSON.stringify({ v: 1, uid: String(uid).toLowerCase(), email: String(email).toLowerCase(), issuedAtMs: nowMs, expiresAtMs: nowMs + FOUNDER_TTL_MS, issuer: 'is_kinetic_master_admin' });
+          var src = new TextEncoder().encode(payload);
+          var fp = kEnvFp();
+          var keyStr = salt + '|' + fp + '|' + nonce;
+          var kSeed = kFnvMix(keyStr, 0x27d4eb2f);
+          var cSt = kFnvMix(keyStr, 0x811c9dc5);
+          var cHex = '';
+          for (var i = 0; i < src.length; i++) {
+            if ((i & 3) === 0) cSt = kFnvStep(cSt, i >>> 2, kSeed);
+            cHex += (src[i] ^ ((cSt >>> ((i & 3) * 8)) & 0xff)).toString(16).padStart(2, '0');
+          }
+          var macIn = salt + '|' + fp + '|' + nonce + '|' + cHex;
+          var mac = kFnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + kFnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
+          window.localStorage.setItem(FOUNDER_PASS_KEY, 'kenc_v1:' + nonce + ':' + mac + ':' + cHex);
+          syncFounderUnlockUi();
+          notifyFounderChange();
+          return hasValidFounderPass();
+        } catch (_) { return false; }
+      }
+      function revokeFounderPass() {
+        try { window.localStorage.removeItem(FOUNDER_PASS_KEY); } catch (_) {}
+        syncFounderUnlockUi();
+        notifyFounderChange();
+      }
+      function syncFounderUnlockUi() {
+        var unlocked = PUBLIC_WEB_APP_OPEN || hasValidFounderPass();
+        document.body.classList.toggle('founder-unlocked', unlocked);
+        if (typeof updateFabVisibility === 'function') updateFabVisibility();
+      }
+      function closeFounderGate() {
+        if (founderOverlay) founderOverlay.classList.remove('open');
+        var fgErrEl = document.getElementById('fgErr');
+        if (fgErrEl) { fgErrEl.style.display = 'none'; fgErrEl.textContent = ''; }
+        var fgPassEl = document.getElementById('fgPass');
+        if (fgPassEl) fgPassEl.value = '';
+        updateFabVisibility();
+      }
+
+      var founderTapCount = 0;
+      var founderLastTapMs = 0;
+      var founderTrigger = document.getElementById('founderCopyrightTrigger');
+      if (founderTrigger && founderOverlay) {
+        founderTrigger.addEventListener('click', function () {
+          var nowTap = Date.now();
+          founderTapCount = nowTap - founderLastTapMs > 2800 ? 1 : founderTapCount + 1;
+          founderLastTapMs = nowTap;
+          if (founderTapCount >= 5) {
+            founderTapCount = 0;
+            founderLastTapMs = 0;
+            founderOverlay.classList.add('open');
+            updateFabVisibility();
+          }
+        });
+      }
+      var fgCloseBtn = document.getElementById('founderGateCloseBtn');
+      if (fgCloseBtn) fgCloseBtn.addEventListener('click', closeFounderGate);
+      if (founderOverlay) founderOverlay.addEventListener('click', function (ev) { if (ev.target === founderOverlay) closeFounderGate(); });
+      document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && founderOverlay && founderOverlay.classList.contains('open')) closeFounderGate(); });
+
+      var fgRevokeBtn = document.getElementById('fgRevokeBtn');
+      var footerRevokeBtn = document.getElementById('footerRevokeFounderBtn');
+      if (fgRevokeBtn) fgRevokeBtn.addEventListener('click', function () { revokeFounderPass(); closeFounderGate(); });
+      if (footerRevokeBtn) footerRevokeBtn.addEventListener('click', function () { revokeFounderPass(); });
+
+      var fgForm = document.getElementById('founderGateForm');
+      if (fgForm) {
+        fgForm.addEventListener('submit', async function (ev) {
+          ev.preventDefault();
+          if (state.fgBusy) return;
+          var dict = I18N[state.lang];
+          var fgErr = document.getElementById('fgErr');
+          var fgBtn = document.getElementById('fgSubmitBtn');
+          var fgEmail = String((document.getElementById('fgEmail') || {}).value || '').trim().toLowerCase();
+          var fgPass = String((document.getElementById('fgPass') || {}).value || '');
+          if (fgErr) fgErr.style.display = 'none';
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fgEmail) || fgPass.length < 6) {
+            if (fgErr) { fgErr.textContent = dict.fgErrCreds; fgErr.style.display = 'block'; }
+            return;
+          }
+          state.fgBusy = true;
+          if (fgBtn) { fgBtn.disabled = true; fgBtn.textContent = '...'; }
+          var ctrl = new AbortController();
+          var tOut = setTimeout(function () { ctrl.abort(); }, 10000);
+          try {
+            var authRes = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+              method: 'POST', signal: ctrl.signal,
+              headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY },
+              body: JSON.stringify({ email: fgEmail, password: fgPass })
+            });
+            var authJson = await authRes.json().catch(function () { return {}; });
+            var tok = authJson && authJson.access_token ? String(authJson.access_token) : '';
+            var uid = authJson && authJson.user && authJson.user.id ? String(authJson.user.id) : '';
+            if (!authRes.ok || !tok || !UUID_V4_RE.test(uid)) {
+              throw new Error('DENIED');
+            }
+            var admRes = await fetch(SUPABASE_URL + '/rest/v1/rpc/is_kinetic_master_admin', {
+              method: 'POST', signal: ctrl.signal,
+              headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: 'Bearer ' + tok },
+              body: '{}'
+            });
+            var isAdm = admRes.ok ? await admRes.json().catch(function () { return false; }) : false;
+            try {
+              await fetch(SUPABASE_URL + '/auth/v1/logout?scope=local', {
+                method: 'POST', headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + tok }
+              });
+            } catch (_) {}
+            if (isAdm !== true) throw new Error('DENIED');
+            if (!writeFounderPass(uid, (authJson.user && authJson.user.email) || fgEmail)) {
+              throw new Error('STORAGE_BLOCKED');
+            }
+            closeFounderGate();
+          } catch (err) {
+            if (fgErr) {
+              fgErr.textContent = err && err.message === 'STORAGE_BLOCKED'
+                ? (state.lang === 'en' ? 'Browser storage is blocked; enable localStorage.' : 'El almacenamiento local está bloqueado en este navegador.')
+                : dict.fgErrDenied;
+              fgErr.style.display = 'block';
+            }
+          } finally {
+            state.fgBusy = false;
+            clearTimeout(tOut);
+            if (fgBtn) { fgBtn.disabled = false; fgBtn.textContent = dict.fgSubmit; }
+          }
+        });
+      }
+
+      window.addEventListener('storage', syncFounderUnlockUi);
+      window.addEventListener(FOUNDER_PASS_EVENT, syncFounderUnlockUi);
+
       // Acordeones del Footer
       document.querySelectorAll('.acc-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -1561,6 +1923,7 @@
           var wasOpen = parent.classList.contains('open');
           document.querySelectorAll('.acc-item').forEach(function (it) { it.classList.remove('open'); });
           if (!wasOpen) parent.classList.add('open');
+          setTimeout(updateFabVisibility, 160);
         });
       });
 
@@ -1569,6 +1932,7 @@
       document.getElementById('langBtn').addEventListener('click', toggleLang);
       document.getElementById('footerLangBtn').addEventListener('click', toggleLang);
       applyLang('es');
+      syncFounderUnlockUi();
     })();
   </script>
 </body>
