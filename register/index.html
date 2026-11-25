@@ -55,8 +55,30 @@
             }
           }
           var cleanRootSeg = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase().split('/')[0] || '';
-          var isExemptPrelaunch = cleanRootSeg === '' || cleanRootSeg === 'index.html' || cleanRootSeg === 'oauth' || cleanRootSeg === 'privacidad' || cleanRootSeg === 'terminos';
-          if (!isExemptPrelaunch) {
+          var isAlwaysExempt = cleanRootSeg === '' || cleanRootSeg === 'index.html' || cleanRootSeg === 'privacidad' || cleanRootSeg === 'terminos';
+          var isOauthRoute = cleanRootSeg === 'oauth';
+          var rawSearch = String(window.location.search || '');
+          var rawHash = String(window.location.hash || '');
+          var hasNativeNonce = /(?:^|[?&])nonce=[0-9a-f]{64}(?:&|$)/i.test(rawSearch);
+          var isNativeInit = /(?:^|[?&])platform=native(?:&|$)/i.test(rawSearch) && /(?:^|[?&])state=knt1\.native\.(?:b2c|b2b)\.[0-9a-f]{32}(?:&|$)/i.test(rawSearch) && hasNativeNonce;
+          var hasNativeCbTok = /(?:^|[?&#])(?:id_token|code|error)=/i.test(rawSearch + '&' + rawHash);
+          var isNativeOAuth = isNativeInit || (hasNativeCbTok && /(?:^|[?&#])state=knt1\.native\.(?:b2c|b2b)\.[0-9a-f]{32}(?:&|$)/i.test(rawSearch + '&' + rawHash));
+          var hasOauthReturn = /(?:^|[?&#])(?:code|access_token|id_token|error)=/i.test(rawSearch + '&' + rawHash);
+          try {
+            var purgeLegacyKey = function (k, cName) {
+              try { window.localStorage && window.localStorage.removeItem(k); } catch (eA) {}
+              try { window.sessionStorage && window.sessionStorage.removeItem(k); } catch (eB) {}
+              if (cName) {
+                try {
+                  var secP = window.location.protocol === 'https:' ? '; Secure' : '';
+                  document.cookie = cName + '=; Path=/; Max-Age=0; SameSite=Lax' + secP;
+                } catch (eC) {}
+              }
+            };
+            purgeLegacyKey('@kinetic_founder_web_device_v1', 'knt_fpass_v1');
+            purgeLegacyKey('@kinetic_web_invite_grant_v286', 'knt_wgrant_v1');
+          } catch (ePurge) {}
+          if (!isAlwaysExempt && !(isOauthRoute && isNativeOAuth)) {
             var hasValidFounder = false;
             try {
               var readKStorage = function (k, cName) {
@@ -77,13 +99,9 @@
                 return val;
               };
               var salt = readKStorage('@kinetic_device_cipher_salt_v1', 'knt_salt_v1');
-              var kSpecs = [
-                { k: '@kinetic_founder_web_device_v1', c: 'knt_fpass_v1' },
-                { k: '@kinetic_web_invite_grant_v286', c: 'knt_wgrant_v1' }
-              ];
-              for (var ki = 0; ki < kSpecs.length && !hasValidFounder; ki++) {
-                var rawPass = readKStorage(kSpecs[ki].k, kSpecs[ki].c);
-              if (salt && rawPass && rawPass.indexOf('kenc_v1:') === 0) {
+              var rawPass = readKStorage('@kinetic_web_invite_grant_kenc_v2', 'knt_wgrant_kenc_v2');
+              if (salt && rawPass && rawPass.indexOf('kenc_v2:') === 0) {
+                var v2Salt = salt + ':kenc_v2';
                 var parts = rawPass.slice(8).split(':');
                 if (parts.length === 3 && parts[0] && parts[1] && parts[2] && (parts[2].length & 1) === 0) {
                   var fnvMix = function (inp, seed) {
@@ -100,12 +118,12 @@
                   };
                   var navUa = (typeof navigator !== 'undefined' ? navigator.userAgent || '' : '').slice(0, 48);
                   var fp = fnvMix('knt25|web||' + navUa, 0x9e3779b9).toString(16).padStart(8, '0');
-                  var macIn = salt + '|' + fp + '|' + parts[0] + '|' + parts[2];
+                  var macIn = v2Salt + '|' + fp + '|' + parts[0] + '|' + parts[2];
                   var expMac = fnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + fnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
                   if (parts[1] === expMac) {
                     var bLen = parts[2].length >>> 1;
                     var outB = new Uint8Array(bLen);
-                    var keyStr = salt + '|' + fp + '|' + parts[0];
+                    var keyStr = v2Salt + '|' + fp + '|' + parts[0];
                     var kSeed = fnvMix(keyStr, 0x27d4eb2f);
                     var cSt = fnvMix(keyStr, 0x811c9dc5);
                     for (var bi = 0; bi < bLen; bi++) {
@@ -114,16 +132,15 @@
                     }
                     var decoded = JSON.parse(new TextDecoder().decode(outB));
                     var nowMs = Date.now();
-                    var okIss = decoded && decoded.v === 1 && (decoded.issuer === 'is_kinetic_master_admin' || (decoded.issuer === 'kinetic_web_invite_v286' && typeof decoded.grantToken === 'string' && decoded.grantToken.indexOf('kwg1_') === 0));
+                    var okIss = decoded && decoded.v === 1 && decoded.issuer === 'kinetic_web_invite_v286' && typeof decoded.grantToken === 'string' && decoded.grantToken.indexOf('kwg1_') === 0;
                     if (okIss && decoded.expiresAtMs > nowMs && decoded.issuedAtMs <= nowMs + 60000) {
                       hasValidFounder = true;
                     }
                   }
                 }
               }
-              }
             } catch (e2) {}
-            if (!hasValidFounder) {
+            if (!hasValidFounder || (isOauthRoute && !hasOauthReturn)) {
               var kpassQ = window.location.search && window.location.search.indexOf('kpass=') !== -1 ? window.location.search : '';
               window.location.replace('/' + kpassQ);
               return;
@@ -165,6 +182,6 @@
   <body>
     <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
     <div id="root"></div>
-  <script src="/_expo/static/js/web/entry-5b711e3362f6ed635112e016a22c9f18.js" defer></script>
+  <script src="/_expo/static/js/web/entry-5548c464c41170d0cef3bf2e990c85e8.js" defer></script>
 </body>
 </html>

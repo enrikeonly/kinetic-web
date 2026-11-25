@@ -487,8 +487,6 @@
       </div>
       <div class="topbar-right">
         <button type="button" id="langBtn" class="lang-pill" aria-label="Language">ES | EN</button>
-        <a href="/socios" target="_top" id="navPartnersBtn" data-founder-gated class="lang-pill" style="border-color:rgba(123,97,255,0.5);color:#C4B5FD;white-space:nowrap;" data-i18n="navPartners">Portal Socios</a>
-        <a href="/login" target="_top" id="navLoginBtn" data-founder-gated class="lang-pill" style="border-color:rgba(0,240,255,0.45);color:var(--cyan);white-space:nowrap;" data-i18n="navLogin">Iniciar Sesión</a>
         <a href="#waitlist" id="navCtaBtn" class="cta-mag" style="white-space:nowrap;" data-i18n="navCta">Acceso Anticipado</a>
       </div>
     </div>
@@ -508,8 +506,6 @@
         <button type="button" id="menuCloseBtn" class="menu-btn" aria-label="Close">✕</button>
       </div>
       <nav class="drawer-links">
-        <a href="/socios" target="_top" id="drawerPartnersLink" data-founder-gated class="drawer-link" style="color:#C4B5FD;font-weight:800;"><span data-i18n="dPartners">Portal Socios</span><span>→</span></a>
-        <a href="/login" target="_top" id="drawerLoginLink" data-founder-gated class="drawer-link" style="color:var(--cyan);font-weight:800;"><span data-i18n="dLogin">Iniciar Sesión</span><span>→</span></a>
         <a href="#hero" class="drawer-link" data-close-drawer><span data-i18n="dHome">Inicio</span><span>›</span></a>
         <a href="#discover" class="drawer-link" data-close-drawer><span data-i18n="dExp">Experiencia</span><span>›</span></a>
         <a href="#disciplines" class="drawer-link" data-close-drawer><span data-i18n="dDisc">Disciplinas</span><span>›</span></a>
@@ -812,7 +808,6 @@
         <div class="acc-panel">
           <div class="acc-body">
             <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
-              <a href="/socios" target="_top" id="footerAccPartnersLink" data-founder-gated style="color:#C4B5FD;font-weight:700" data-i18n="fPartnersLink">Portal Socios</a>
               <a href="/privacidad" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fPrivLink">Aviso de Privacidad</a>
               <a href="/terminos" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fTermsLink">Términos de Uso</a>
               <a href="mailto:soporte@kineticapp.com.mx" style="color:var(--text-sec)">soporte@kineticapp.com.mx</a>
@@ -825,8 +820,6 @@
       <div class="footer-base">
         <span id="founderCopyrightTrigger" class="founder-trigger" role="button" tabindex="0">© 2026 KineticApp S.A.S. • México.</span>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <a href="/socios" target="_top" id="footerPartnersLink" data-founder-gated class="lang-pill" style="border-color:rgba(123,97,255,0.45);color:#C4B5FD;" data-i18n="fPartnersLink">Portal Socios</a>
-          <button type="button" id="footerRevokeFounderBtn" data-founder-gated class="lang-pill" style="border-color:rgba(148,163,184,0.35);color:#94A3B8;" data-i18n="revokeFounder">Revocar Modo Fundador</button>
           <button type="button" id="footerLangBtn" class="lang-pill">Español / English</button>
         </div>
       </div>
@@ -848,27 +841,23 @@
     </div>
   </div>
 
-  <!-- COMPUERTA DISCRETA DE FUNDADOR (5 TOQUES EN COPYRIGHT, CERO SECRETO EN BUNDLE) -->
+  <!-- COMPUERTA PRIVADA SOLO POR CLAVE DE INVITACIÓN ACTIVA KNT-XXXX-XXXX -->
   <div id="founderGateOverlay" class="sheet-overlay" role="dialog" aria-modal="true">
     <div class="sheet-box" style="max-width:420px;">
       <div class="sheet-top">
-        <span style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--purple)" data-i18n="fgTag">PASE DE DISPOSITIVO FUNDADOR</span>
+        <span style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--purple)" data-i18n="fgTag">ACCESO PRIVADO POR INVITACIÓN</span>
         <button type="button" id="founderGateCloseBtn" class="menu-btn" aria-label="Close">✕</button>
       </div>
-      <h3 class="font-display" style="font-size:22px;line-height:1.15;margin-bottom:6px;" data-i18n-html="fgTitle"><span class="tone-bright">Autorizar</span> <span class="tone-titanium">navegador.</span></h3>
-      <p style="font-size:12.5px;color:var(--titanium);margin-bottom:14px;" data-i18n="fgSub">Autentica un Master Admin Kinetic contra servidor (90 días en este navegador).</p>
-      <form id="founderGateForm" class="field-stack" novalidate>
-        <div style="padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;gap:8px;">
+      <h3 class="font-display" style="font-size:22px;line-height:1.15;margin-bottom:6px;" data-i18n-html="fgTitle"><span class="tone-bright">Ingresar código</span> <span class="tone-titanium">activo.</span></h3>
+      <p style="font-size:12.5px;color:var(--titanium);margin-bottom:14px;" data-i18n="fgSub">Introduce tu clave KNT-XXXX-XXXX autorizada por Kinetic.</p>
+      <div id="founderGateForm" class="field-stack">
+        <div style="display:flex;flex-direction:column;gap:8px;">
           <input id="fgInviteCode" type="text" class="field-input" style="font-size:16px;text-transform:uppercase;" placeholder="Clave Privada (KNT-XXXX-XXXX)" autocomplete="off" autocapitalize="characters" />
           <p id="fgInviteErr" class="form-err"></p>
-          <button id="fgInviteBtn" type="button" class="btn-pill" style="width:100%;background:linear-gradient(135deg,#7B61FF,#5B42F3);color:#fff;" data-i18n="fgInviteBtn">Canjear Clave Privada</button>
+          <button id="fgInviteBtn" type="button" class="btn-pill" style="width:100%;background:linear-gradient(135deg,#7B61FF,#5B42F3);color:#fff;" data-i18n="fgInviteBtn">Validar Clave de Acceso</button>
         </div>
-        <input id="fgEmail" type="email" class="field-input" style="font-size:16px;" required placeholder="Master Admin Email" autocomplete="username" autocapitalize="none" />
-        <input id="fgPass" type="password" class="field-input" style="font-size:16px;" required placeholder="Password" autocomplete="current-password" />
-        <p id="fgErr" class="form-err"></p>
-        <button id="fgSubmitBtn" type="submit" class="btn-pill btn-cyan" style="width:100%;" data-i18n="fgSubmit">Autorizar Dispositivo</button>
-        <button id="fgRevokeBtn" type="button" data-founder-gated class="lang-pill" style="width:100%;text-align:center;" data-i18n="revokeFounder">Revocar Modo Fundador</button>
-      </form>
+        <button id="fgRevokeBtn" type="button" data-founder-gated class="lang-pill" style="width:100%;text-align:center;" data-i18n="revokeFounder">Cerrar Pase de Invitación</button>
+      </div>
     </div>
   </div>
 
@@ -887,8 +876,6 @@
       var I18N = {
         es: {
           docTitle: 'KINETIC — Fitness, Deporte & Wellness',
-          navPartners: 'Portal Socios', dPartners: 'Portal Socios', fPartnersLink: 'Portal Socios',
-          navLogin: 'Iniciar Sesión', dLogin: 'Iniciar Sesión',
           navCta: 'Acceso Anticipado', dHome: 'Inicio', dExp: 'Experiencia', dDisc: 'Disciplinas', dInvite: 'Acceso Anticipado', dConcierge: 'Concierge 24/7',
           ctaAthlete: 'Soy Atleta', ctaClub: 'Tengo un Club o Consultorio',
           qRadar: 'Radar', qSpace: 'Espacio 3D', qEvo: 'Evolución', qComm: 'Comunidad', qVenues: 'Sedes',
@@ -920,13 +907,11 @@
           fLeg: 'Legal y Privacidad', fPrivLink: 'Aviso de Privacidad', fTermsLink: 'Términos de Uso',
           fLegNote: 'Operado por KineticApp S.A.S. • México.',
           conciergeBtn: 'Concierge 24/7',
-          revokeFounder: 'Revocar Modo Fundador',
-          fgTag: 'PASE DE DISPOSITIVO FUNDADOR',
-          fgTitle: '<span class="tone-bright">Autorizar</span> <span class="tone-titanium">navegador.</span>',
-          fgSub: 'Autentica un Master Admin Kinetic contra servidor (90 días en este navegador).',
-          fgSubmit: 'Autorizar Dispositivo',
-          fgErrCreds: 'Ingresa correo y contraseña de Master Admin.',
-          fgErrDenied: 'Acceso denegado: requiere privilegio Master Admin.',
+          revokeFounder: 'Cerrar Pase Privado',
+          fgTag: 'ACCESO PRIVADO POR INVITACIÓN',
+          fgTitle: '<span class="tone-bright">Ingresar código</span> <span class="tone-titanium">activo.</span>',
+          fgSub: 'Introduce tu clave KNT-XXXX-XXXX autorizada por Kinetic.',
+          fgInviteBtn: 'Validar Clave de Acceso',
           errName: 'Ingresa tu nombre completo.',
           errBiz: 'Ingresa el nombre de tu club o especialidad.',
           errEmail: 'Ingresa un correo electrónico válido.',
@@ -935,8 +920,6 @@
         },
         en: {
           docTitle: 'KINETIC — Fitness, Sports & Wellness',
-          navPartners: 'Partner Login', dPartners: 'Partner Login', fPartnersLink: 'Partner Login',
-          navLogin: 'Sign In', dLogin: 'Sign In',
           navCta: 'Early Access', dHome: 'Home', dExp: 'Experience', dDisc: 'Disciplines', dInvite: 'Early Access', dConcierge: '24/7 Concierge',
           ctaAthlete: "I'm an Athlete", ctaClub: 'I Own a Club or Clinic',
           qRadar: 'Radar', qSpace: '3D Space', qEvo: 'Evolution', qComm: 'Community', qVenues: 'Venues',
@@ -968,13 +951,11 @@
           fLeg: 'Legal & Privacy', fPrivLink: 'Privacy Notice', fTermsLink: 'Terms of Use',
           fLegNote: 'Operated by KineticApp S.A.S. • Mexico.',
           conciergeBtn: '24/7 Concierge',
-          revokeFounder: 'Revoke Founder Mode',
-          fgTag: 'FOUNDER DEVICE PASS',
-          fgTitle: '<span class="tone-bright">Authorize</span> <span class="tone-titanium">browser.</span>',
-          fgSub: 'Authenticate a Kinetic Master Admin against the server (90-day device pass).',
-          fgSubmit: 'Authorize Device',
-          fgErrCreds: 'Enter Master Admin email and password.',
-          fgErrDenied: 'Access denied: Master Admin privilege required.',
+          revokeFounder: 'Close Private Pass',
+          fgTag: 'INVITE-ONLY ACCESS',
+          fgTitle: '<span class="tone-bright">Enter active</span> <span class="tone-titanium">code.</span>',
+          fgSub: 'Enter your Kinetic-authorized KNT-XXXX-XXXX invitation code.',
+          fgInviteBtn: 'Verify Invite Code',
           errName: 'Please enter your full name.',
           errBiz: 'Please enter your club or specialty.',
           errEmail: 'Please enter a valid email address.',
@@ -1704,6 +1685,11 @@
             });
           }
           if (resp.ok || resp.status === 201 || resp.status === 409) {
+            fetch(SUPABASE_URL + '/functions/v1/kinetic-push-dispatcher', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
+              body: JSON.stringify({ action: 'notify_waitlist_admin', email: rawEmail })
+            }).catch(function () {});
             if (rawBizEl) rawBizEl.value = '';
             form.style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
@@ -1722,33 +1708,19 @@
         }
       });
 
-      // Candado Pre-Lanzamiento + Pase Discreto de Fundador (5 toques en © 2026 KineticApp S.A.S.)
+      // Candado Pre-Lanzamiento kenc_v2 + Compuerta Solo Clave Privada (5 toques en © 2026 KineticApp S.A.S.)
       var PUBLIC_WEB_APP_OPEN = false;
-      var FOUNDER_SALT_KEY = '@kinetic_device_cipher_salt_v1';
       var FOUNDER_PASS_KEY = '@kinetic_founder_web_device_v1';
-      var COOKIE_SALT_NAME = 'knt_salt_v1';
+      var LEGACY_GRANT_KEY = '@kinetic_web_invite_grant_v286';
       var COOKIE_FOUNDER_NAME = 'knt_fpass_v1';
-      var COOKIE_TTL_SEC = 90 * 24 * 60 * 60;
+      var COOKIE_LEGACY_GRANT_NAME = 'knt_wgrant_v1';
       var FOUNDER_PASS_EVENT = 'kinetic:founder-pass-changed';
-      var FOUNDER_TTL_MS = 90 * 24 * 60 * 60 * 1000;
-      var UUID_V4_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
       function getTopSameOriginWin() {
         try {
           if (window.top && window.top !== window && window.top.location.origin === window.location.origin) return window.top;
         } catch (_) {}
         return window;
-      }
-      function readCookieSafe(name) {
-        try {
-          var prefix = name + '=';
-          var parts = String(document.cookie || '').split(';');
-          for (var ci = 0; ci < parts.length; ci++) {
-            var p = parts[ci].trim();
-            if (p.indexOf(prefix) === 0) return decodeURIComponent(p.slice(prefix.length));
-          }
-        } catch (_) {}
-        return null;
       }
       function writeCookieSafe(name, val, maxAgeSec) {
         try {
@@ -1759,29 +1731,6 @@
           if (topW && topW !== window && topW.document) topW.document.cookie = cStr;
         } catch (_) {}
       }
-      function mirrorRead(key, cookieName) {
-        var topW = getTopSameOriginWin();
-        var v = null;
-        try { v = topW.localStorage.getItem(key); } catch (_) {}
-        if (!v && topW !== window) { try { v = window.localStorage.getItem(key); } catch (_) {} }
-        if (!v) { try { v = topW.sessionStorage.getItem(key) || window.sessionStorage.getItem(key); } catch (_) {} }
-        if (!v && cookieName) v = readCookieSafe(cookieName);
-        if (v) {
-          try { topW.localStorage.setItem(key, v); } catch (_) {}
-          try { if (topW !== window) window.localStorage.setItem(key, v); } catch (_) {}
-        }
-        return v;
-      }
-      function mirrorWrite(key, cookieName, val) {
-        var topW = getTopSameOriginWin();
-        var ok = false;
-        try { topW.localStorage.setItem(key, val); ok = true; } catch (_) {}
-        try { if (topW !== window) window.localStorage.setItem(key, val); ok = true; } catch (_) {}
-        try { topW.sessionStorage.setItem(key, val); ok = true; } catch (_) {}
-        try { if (topW !== window) window.sessionStorage.setItem(key, val); ok = true; } catch (_) {}
-        if (cookieName) { writeCookieSafe(cookieName, val, COOKIE_TTL_SEC); ok = true; }
-        return ok;
-      }
       function mirrorRemove(key, cookieName) {
         var topW = getTopSameOriginWin();
         try { topW.localStorage.removeItem(key); } catch (_) {}
@@ -1790,68 +1739,14 @@
         try { window.sessionStorage.removeItem(key); } catch (_) {}
         if (cookieName) writeCookieSafe(cookieName, '', 0);
       }
-      function navigateTopSafe(path) {
-        try { (window.top || window).location.assign(path); } catch (_) { window.location.assign(path); }
+      function purgeLegacyKencV1OnLanding() {
+        mirrorRemove(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME);
+        mirrorRemove(LEGACY_GRANT_KEY, COOKIE_LEGACY_GRANT_NAME);
       }
+      purgeLegacyKencV1OnLanding();
 
-      function kFnvMix(inp, seed) {
-        var h = seed >>> 0;
-        for (var i = 0; i < inp.length; i++) h = Math.imul(h ^ inp.charCodeAt(i), 0x01000193) >>> 0;
-        h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
-        return (Math.imul(h ^ (h >>> 13), 0xc2b2ae35) ^ (h >>> 16)) >>> 0;
-      }
-      function kFnvStep(stVal, idx, kSeed) {
-        var h = (stVal ^ kSeed ^ Math.imul((idx + 1) >>> 0, 0x9e3779b9)) >>> 0;
-        h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
-        h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
-        return (h ^ (h >>> 16)) >>> 0;
-      }
-      function kEnvFp() {
-        var ua = (typeof navigator !== 'undefined' ? navigator.userAgent || '' : '').slice(0, 48);
-        return kFnvMix('knt25|web||' + ua, 0x9e3779b9).toString(16).padStart(8, '0');
-      }
-      function getOrCreateSaltSync() {
-        try {
-          var cur = mirrorRead(FOUNDER_SALT_KEY, '');
-          if (cur && cur.length >= 32) return cur;
-          var arr = new Uint8Array(32);
-          if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
-          else for (var i = 0; i < 32; i++) arr[i] = Math.floor(Math.random() * 256);
-          var hex = '';
-          for (var j = 0; j < arr.length; j++) hex += arr[j].toString(16).padStart(2, '0');
-          mirrorWrite(FOUNDER_SALT_KEY, '', hex);
-          return hex;
-        } catch (_) { return ''; }
-      }
       function hasValidFounderPass() {
-        if (window.__kineticHasPrivateWebGrant && window.__kineticHasPrivateWebGrant()) return true;
-        try {
-          var salt = mirrorRead(FOUNDER_SALT_KEY, '');
-          var raw = mirrorRead(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME);
-          if (!salt || !raw || raw.indexOf('kenc_v1:') !== 0) return false;
-          var parts = raw.slice(8).split(':');
-          if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2] || (parts[2].length & 1) !== 0) return false;
-          var fp = kEnvFp();
-          var macIn = salt + '|' + fp + '|' + parts[0] + '|' + parts[2];
-          var expMac = kFnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + kFnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
-          if (parts[1] !== expMac) return false;
-          var bLen = parts[2].length >>> 1;
-          var outB = new Uint8Array(bLen);
-          var keyStr = salt + '|' + fp + '|' + parts[0];
-          var kSeed = kFnvMix(keyStr, 0x27d4eb2f);
-          var cSt = kFnvMix(keyStr, 0x811c9dc5);
-          for (var bi = 0; bi < bLen; bi++) {
-            if ((bi & 3) === 0) cSt = kFnvStep(cSt, bi >>> 2, kSeed);
-            outB[bi] = parseInt(parts[2].slice(bi * 2, bi * 2 + 2), 16) ^ ((cSt >>> ((bi & 3) * 8)) & 0xff);
-          }
-          var dec = JSON.parse(new TextDecoder().decode(outB));
-          var nowMs = Date.now();
-          if (!dec || dec.v !== 1 || dec.issuer !== 'is_kinetic_master_admin') return false;
-          if (!UUID_V4_RE.test(String(dec.uid || '')) || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(dec.email || ''))) return false;
-          if (!(dec.issuedAtMs > 0 && dec.issuedAtMs <= nowMs + 60000)) return false;
-          if (!(dec.expiresAtMs > nowMs && dec.expiresAtMs - dec.issuedAtMs <= FOUNDER_TTL_MS + 60000)) return false;
-          return true;
-        } catch (_) { return false; }
+        return PUBLIC_WEB_APP_OPEN || Boolean(window.__kineticHasPrivateWebGrant && window.__kineticHasPrivateWebGrant());
       }
       function notifyFounderChange() {
         try { window.dispatchEvent(new Event(FOUNDER_PASS_EVENT)); } catch (_) {}
@@ -1861,37 +1756,8 @@
           }
         } catch (_) {}
       }
-      function writeFounderPass(uid, email) {
-        try {
-          var salt = getOrCreateSaltSync();
-          if (!salt) return false;
-          var nowMs = Date.now();
-          var nonceArr = new Uint8Array(16);
-          if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(nonceArr);
-          else for (var ni = 0; ni < 16; ni++) nonceArr[ni] = Math.floor(Math.random() * 256);
-          var nonce = '';
-          for (var nj = 0; nj < nonceArr.length; nj++) nonce += nonceArr[nj].toString(16).padStart(2, '0');
-          var payload = JSON.stringify({ v: 1, uid: String(uid).toLowerCase(), email: String(email).toLowerCase(), issuedAtMs: nowMs, expiresAtMs: nowMs + FOUNDER_TTL_MS, issuer: 'is_kinetic_master_admin' });
-          var src = new TextEncoder().encode(payload);
-          var fp = kEnvFp();
-          var keyStr = salt + '|' + fp + '|' + nonce;
-          var kSeed = kFnvMix(keyStr, 0x27d4eb2f);
-          var cSt = kFnvMix(keyStr, 0x811c9dc5);
-          var cHex = '';
-          for (var i = 0; i < src.length; i++) {
-            if ((i & 3) === 0) cSt = kFnvStep(cSt, i >>> 2, kSeed);
-            cHex += (src[i] ^ ((cSt >>> ((i & 3) * 8)) & 0xff)).toString(16).padStart(2, '0');
-          }
-          var macIn = salt + '|' + fp + '|' + nonce + '|' + cHex;
-          var mac = kFnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + kFnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
-          mirrorWrite(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME, 'kenc_v1:' + nonce + ':' + mac + ':' + cHex);
-          syncFounderUnlockUi();
-          notifyFounderChange();
-          return hasValidFounderPass();
-        } catch (_) { return false; }
-      }
       function revokeFounderPass() {
-        mirrorRemove(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME);
+        purgeLegacyKencV1OnLanding();
         if (window.__kineticRevokePrivateGrant) window.__kineticRevokePrivateGrant();
         syncFounderUnlockUi();
         notifyFounderChange();
@@ -1903,10 +1769,10 @@
       }
       function closeFounderGate() {
         if (founderOverlay) founderOverlay.classList.remove('open');
-        var fgErrEl = document.getElementById('fgErr');
-        if (fgErrEl) { fgErrEl.style.display = 'none'; fgErrEl.textContent = ''; }
-        var fgPassEl = document.getElementById('fgPass');
-        if (fgPassEl) fgPassEl.value = '';
+        var fgInviteErrEl = document.getElementById('fgInviteErr');
+        if (fgInviteErrEl) { fgInviteErrEl.style.display = 'none'; fgInviteErrEl.textContent = ''; }
+        var fgInviteInp = document.getElementById('fgInviteCode');
+        if (fgInviteInp) fgInviteInp.value = '';
         updateFabVisibility();
       }
 
@@ -1932,83 +1798,10 @@
       document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && founderOverlay && founderOverlay.classList.contains('open')) closeFounderGate(); });
 
       var fgRevokeBtn = document.getElementById('fgRevokeBtn');
-      var footerRevokeBtn = document.getElementById('footerRevokeFounderBtn');
       if (fgRevokeBtn) fgRevokeBtn.addEventListener('click', function () { revokeFounderPass(); closeFounderGate(); });
-      if (footerRevokeBtn) footerRevokeBtn.addEventListener('click', function () { revokeFounderPass(); });
-
-      var fgForm = document.getElementById('founderGateForm');
-      if (fgForm) {
-        fgForm.addEventListener('submit', async function (ev) {
-          ev.preventDefault();
-          if (state.fgBusy) return;
-          var dict = I18N[state.lang];
-          var fgErr = document.getElementById('fgErr');
-          var fgBtn = document.getElementById('fgSubmitBtn');
-          var fgEmail = String((document.getElementById('fgEmail') || {}).value || '').trim().toLowerCase();
-          var fgPass = String((document.getElementById('fgPass') || {}).value || '');
-          if (fgErr) fgErr.style.display = 'none';
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(fgEmail) || fgPass.length < 6) {
-            if (fgErr) { fgErr.textContent = dict.fgErrCreds; fgErr.style.display = 'block'; }
-            return;
-          }
-          state.fgBusy = true;
-          if (fgBtn) { fgBtn.disabled = true; fgBtn.textContent = '...'; }
-          var ctrl = new AbortController();
-          var tOut = setTimeout(function () { ctrl.abort(); }, 10000);
-          try {
-            var authRes = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
-              method: 'POST', signal: ctrl.signal,
-              headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY },
-              body: JSON.stringify({ email: fgEmail, password: fgPass })
-            });
-            var authJson = await authRes.json().catch(function () { return {}; });
-            var tok = authJson && authJson.access_token ? String(authJson.access_token) : '';
-            var uid = authJson && authJson.user && authJson.user.id ? String(authJson.user.id) : '';
-            if (!authRes.ok || !tok || !UUID_V4_RE.test(uid)) {
-              throw new Error('DENIED');
-            }
-            var admRes = await fetch(SUPABASE_URL + '/rest/v1/rpc/is_kinetic_master_admin', {
-              method: 'POST', signal: ctrl.signal,
-              headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: 'Bearer ' + tok },
-              body: '{}'
-            });
-            var isAdm = admRes.ok ? await admRes.json().catch(function () { return false; }) : false;
-            try {
-              await fetch(SUPABASE_URL + '/auth/v1/logout?scope=local', {
-                method: 'POST', headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + tok }
-              });
-            } catch (_) {}
-            if (isAdm !== true) throw new Error('DENIED');
-            if (!writeFounderPass(uid, (authJson.user && authJson.user.email) || fgEmail)) {
-              throw new Error('STORAGE_BLOCKED');
-            }
-            closeFounderGate();
-            navigateTopSafe('/login');
-          } catch (err) {
-            if (fgErr) {
-              fgErr.textContent = err && err.message === 'STORAGE_BLOCKED'
-                ? (state.lang === 'en' ? 'Browser storage is blocked; enable localStorage.' : 'El almacenamiento local está bloqueado en este navegador.')
-                : dict.fgErrDenied;
-              fgErr.style.display = 'block';
-            }
-          } finally {
-            state.fgBusy = false;
-            clearTimeout(tOut);
-            if (fgBtn) { fgBtn.disabled = false; fgBtn.textContent = dict.fgSubmit; }
-          }
-        });
-      }
 
       window.addEventListener('storage', syncFounderUnlockUi);
       window.addEventListener(FOUNDER_PASS_EVENT, syncFounderUnlockUi);
-      document.querySelectorAll('a[data-founder-gated]').forEach(function (aEl) {
-        aEl.addEventListener('click', function (ev) {
-          var targetHref = aEl.getAttribute('href');
-          if (!targetHref || targetHref.charAt(0) !== '/') return;
-          ev.preventDefault();
-          navigateTopSafe(targetHref);
-        });
-      });
 
       // Acordeones del Footer
       document.querySelectorAll('.acc-btn').forEach(function (btn) {
