@@ -60,7 +60,9 @@
             var hasValidFounder = false;
             try {
               var salt = window.localStorage && window.localStorage.getItem('@kinetic_device_cipher_salt_v1');
-              var rawPass = window.localStorage && window.localStorage.getItem('@kinetic_founder_web_device_v1');
+              var kKeys = ['@kinetic_founder_web_device_v1', '@kinetic_web_invite_grant_v286'];
+              for (var ki = 0; ki < kKeys.length && !hasValidFounder; ki++) {
+                var rawPass = window.localStorage && window.localStorage.getItem(kKeys[ki]);
               if (salt && rawPass && rawPass.indexOf('kenc_v1:') === 0) {
                 var parts = rawPass.slice(8).split(':');
                 if (parts.length === 3 && parts[0] && parts[1] && parts[2] && (parts[2].length & 1) === 0) {
@@ -92,15 +94,18 @@
                     }
                     var decoded = JSON.parse(new TextDecoder().decode(outB));
                     var nowMs = Date.now();
-                    if (decoded && decoded.v === 1 && decoded.issuer === 'is_kinetic_master_admin' && decoded.expiresAtMs > nowMs && decoded.issuedAtMs <= nowMs + 60000) {
+                    var okIss = decoded && decoded.v === 1 && (decoded.issuer === 'is_kinetic_master_admin' || (decoded.issuer === 'kinetic_web_invite_v286' && typeof decoded.grantToken === 'string' && decoded.grantToken.indexOf('kwg1_') === 0));
+                    if (okIss && decoded.expiresAtMs > nowMs && decoded.issuedAtMs <= nowMs + 60000) {
                       hasValidFounder = true;
                     }
                   }
                 }
               }
+              }
             } catch (e2) {}
             if (!hasValidFounder) {
-              window.location.replace('/');
+              var kpassQ = window.location.search && window.location.search.indexOf('kpass=') !== -1 ? window.location.search : '';
+              window.location.replace('/' + kpassQ);
               return;
             }
           }
@@ -140,6 +145,6 @@
   <body>
     <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
     <div id="root"></div>
-  <script src="/_expo/static/js/web/entry-a21de7c918af82995c5a7fbb8c375ed7.js" defer></script>
+  <script src="/_expo/static/js/web/entry-0b2b6df10086d43d8641aaaecd1927d7.js" defer></script>
 </body>
 </html>

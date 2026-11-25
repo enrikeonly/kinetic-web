@@ -858,8 +858,13 @@
       <h3 class="font-display" style="font-size:22px;line-height:1.15;margin-bottom:6px;" data-i18n-html="fgTitle"><span class="tone-bright">Autorizar</span> <span class="tone-titanium">navegador.</span></h3>
       <p style="font-size:12.5px;color:var(--titanium);margin-bottom:14px;" data-i18n="fgSub">Autentica un Master Admin Kinetic contra servidor (90 días en este navegador).</p>
       <form id="founderGateForm" class="field-stack" novalidate>
-        <input id="fgEmail" type="email" class="field-input" required placeholder="Master Admin Email" autocomplete="username" autocapitalize="none" />
-        <input id="fgPass" type="password" class="field-input" required placeholder="Password" autocomplete="current-password" />
+        <div style="padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;gap:8px;">
+          <input id="fgInviteCode" type="text" class="field-input" style="font-size:16px;text-transform:uppercase;" placeholder="Clave Privada (KNT-XXXX-XXXX)" autocomplete="off" autocapitalize="characters" />
+          <p id="fgInviteErr" class="form-err"></p>
+          <button id="fgInviteBtn" type="button" class="btn-pill" style="width:100%;background:linear-gradient(135deg,#7B61FF,#5B42F3);color:#fff;" data-i18n="fgInviteBtn">Canjear Clave Privada</button>
+        </div>
+        <input id="fgEmail" type="email" class="field-input" style="font-size:16px;" required placeholder="Master Admin Email" autocomplete="username" autocapitalize="none" />
+        <input id="fgPass" type="password" class="field-input" style="font-size:16px;" required placeholder="Password" autocomplete="current-password" />
         <p id="fgErr" class="form-err"></p>
         <button id="fgSubmitBtn" type="submit" class="btn-pill btn-cyan" style="width:100%;" data-i18n="fgSubmit">Autorizar Dispositivo</button>
         <button id="fgRevokeBtn" type="button" data-founder-gated class="lang-pill" style="width:100%;text-align:center;" data-i18n="revokeFounder">Revocar Modo Fundador</button>
@@ -1061,6 +1066,7 @@
           if (dict[k]) el.innerHTML = dict[k];
         });
         updateFormPlaceholders();
+        state.conciergeSeq = (state.conciergeSeq || 0) + 1;
         state.chat = [];
         renderScene(state.scene);
       }
@@ -1342,14 +1348,8 @@
       setDrawer = function (open) { origSetDrawer(open); updateFabVisibility(); };
 
       function closeSheet() {
-        if (state.conciergeTyping) {
-          clearTimeout(state.conciergeTyping);
-          state.conciergeTyping = null;
-          if (state.pendingAiMsg) {
-            state.chat.push(state.pendingAiMsg);
-            state.pendingAiMsg = null;
-          }
-        }
+        state.conciergeSeq = (state.conciergeSeq || 0) + 1;
+        if (state.conciergeTyping) { clearTimeout(state.conciergeTyping); state.conciergeTyping = null; }
         if (overlay) overlay.classList.remove('open');
         updateFabVisibility();
       }
@@ -1537,18 +1537,34 @@
         function sendQuery(rawTxt) {
           var q = String(rawTxt || '').trim();
           if (!q || state.conciergeTyping) return;
+          var reqSeq = (state.conciergeSeq || 0) + 1;
+          state.conciergeSeq = reqSeq;
           state.chat.push({ from: 'user', text: q });
           inputEl.value = '';
           renderConciergeStream(streamEl, true);
           var reply = resolveConciergeAI(q, state.lang);
-          state.pendingAiMsg = { from: 'ai', text: reply.text, ctaRole: reply.ctaRole };
-          state.conciergeTyping = setTimeout(function () {
+          var finished = false;
+          var done = function (textOut) {
+            if (finished) return;
+            finished = true;
             state.conciergeTyping = null;
-            var msgObj = state.pendingAiMsg || { from: 'ai', text: reply.text, ctaRole: reply.ctaRole };
-            state.pendingAiMsg = null;
-            state.chat.push(msgObj);
+            if (reqSeq !== state.conciergeSeq) return;
+            state.chat.push({ from: 'ai', text: textOut || reply.text, ctaRole: reply.ctaRole });
             renderConciergeStream(streamEl, false);
-          }, 420);
+          };
+          state.conciergeTyping = setTimeout(function () { done(reply.text); }, 6400);
+          if (typeof window.__kineticAskConciergeCloud === 'function') {
+            window.__kineticAskConciergeCloud(q, state.lang).then(function (cloudTxt) {
+              if (state.conciergeTyping) clearTimeout(state.conciergeTyping);
+              done(cloudTxt || reply.text);
+            }).catch(function () {
+              if (state.conciergeTyping) clearTimeout(state.conciergeTyping);
+              done(reply.text);
+            });
+          } else {
+            clearTimeout(state.conciergeTyping);
+            state.conciergeTyping = setTimeout(function () { done(reply.text); }, 320);
+          }
         }
 
         chips.forEach(function (c) {
@@ -1741,6 +1757,7 @@
         } catch (_) { return ''; }
       }
       function hasValidFounderPass() {
+        if (window.__kineticHasPrivateWebGrant && window.__kineticHasPrivateWebGrant()) return true;
         try {
           var salt = window.localStorage.getItem(FOUNDER_SALT_KEY);
           var raw = window.localStorage.getItem(FOUNDER_PASS_KEY);
@@ -1808,6 +1825,7 @@
       }
       function revokeFounderPass() {
         try { window.localStorage.removeItem(FOUNDER_PASS_KEY); } catch (_) {}
+        if (window.__kineticRevokePrivateGrant) window.__kineticRevokePrivateGrant();
         syncFounderUnlockUi();
         notifyFounderChange();
       }
@@ -1933,7 +1951,17 @@
       document.getElementById('footerLangBtn').addEventListener('click', toggleLang);
       applyLang('es');
       syncFounderUnlockUi();
+      window.addEventListener('DOMContentLoaded', function () {
+        if (window.__kineticInitOla6Landing) {
+          window.__kineticInitOla6Landing({
+            url: SUPABASE_URL, key: SUPABASE_KEY,
+            getLang: function () { return state.lang; },
+            onUnlocked: function () { syncFounderUnlockUi(); notifyFounderChange(); }
+          });
+        }
+      });
     })();
   </script>
+  <script src="/kinetic-landing-v286-ola6.js" defer></script>
 </body>
 </html>
