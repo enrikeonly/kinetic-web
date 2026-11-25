@@ -1726,9 +1726,73 @@
       var PUBLIC_WEB_APP_OPEN = false;
       var FOUNDER_SALT_KEY = '@kinetic_device_cipher_salt_v1';
       var FOUNDER_PASS_KEY = '@kinetic_founder_web_device_v1';
+      var COOKIE_SALT_NAME = 'knt_salt_v1';
+      var COOKIE_FOUNDER_NAME = 'knt_fpass_v1';
+      var COOKIE_TTL_SEC = 90 * 24 * 60 * 60;
       var FOUNDER_PASS_EVENT = 'kinetic:founder-pass-changed';
       var FOUNDER_TTL_MS = 90 * 24 * 60 * 60 * 1000;
       var UUID_V4_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+      function getTopSameOriginWin() {
+        try {
+          if (window.top && window.top !== window && window.top.location.origin === window.location.origin) return window.top;
+        } catch (_) {}
+        return window;
+      }
+      function readCookieSafe(name) {
+        try {
+          var prefix = name + '=';
+          var parts = String(document.cookie || '').split(';');
+          for (var ci = 0; ci < parts.length; ci++) {
+            var p = parts[ci].trim();
+            if (p.indexOf(prefix) === 0) return decodeURIComponent(p.slice(prefix.length));
+          }
+        } catch (_) {}
+        return null;
+      }
+      function writeCookieSafe(name, val, maxAgeSec) {
+        try {
+          var sec = window.location && window.location.protocol === 'https:' ? '; Secure' : '';
+          var cStr = name + '=' + encodeURIComponent(val) + '; Path=/; Max-Age=' + maxAgeSec + '; SameSite=Lax' + sec;
+          document.cookie = cStr;
+          var topW = getTopSameOriginWin();
+          if (topW && topW !== window && topW.document) topW.document.cookie = cStr;
+        } catch (_) {}
+      }
+      function mirrorRead(key, cookieName) {
+        var topW = getTopSameOriginWin();
+        var v = null;
+        try { v = topW.localStorage.getItem(key); } catch (_) {}
+        if (!v && topW !== window) { try { v = window.localStorage.getItem(key); } catch (_) {} }
+        if (!v) { try { v = topW.sessionStorage.getItem(key) || window.sessionStorage.getItem(key); } catch (_) {} }
+        if (!v && cookieName) v = readCookieSafe(cookieName);
+        if (v) {
+          try { topW.localStorage.setItem(key, v); } catch (_) {}
+          try { if (topW !== window) window.localStorage.setItem(key, v); } catch (_) {}
+        }
+        return v;
+      }
+      function mirrorWrite(key, cookieName, val) {
+        var topW = getTopSameOriginWin();
+        var ok = false;
+        try { topW.localStorage.setItem(key, val); ok = true; } catch (_) {}
+        try { if (topW !== window) window.localStorage.setItem(key, val); ok = true; } catch (_) {}
+        try { topW.sessionStorage.setItem(key, val); ok = true; } catch (_) {}
+        try { if (topW !== window) window.sessionStorage.setItem(key, val); ok = true; } catch (_) {}
+        if (cookieName) { writeCookieSafe(cookieName, val, COOKIE_TTL_SEC); ok = true; }
+        return ok;
+      }
+      function mirrorRemove(key, cookieName) {
+        var topW = getTopSameOriginWin();
+        try { topW.localStorage.removeItem(key); } catch (_) {}
+        try { window.localStorage.removeItem(key); } catch (_) {}
+        try { topW.sessionStorage.removeItem(key); } catch (_) {}
+        try { window.sessionStorage.removeItem(key); } catch (_) {}
+        if (cookieName) writeCookieSafe(cookieName, '', 0);
+      }
+      function navigateTopSafe(path) {
+        try { (window.top || window).location.assign(path); } catch (_) { window.location.assign(path); }
+      }
 
       function kFnvMix(inp, seed) {
         var h = seed >>> 0;
@@ -1748,22 +1812,22 @@
       }
       function getOrCreateSaltSync() {
         try {
-          var cur = window.localStorage.getItem(FOUNDER_SALT_KEY);
+          var cur = mirrorRead(FOUNDER_SALT_KEY, '');
           if (cur && cur.length >= 32) return cur;
           var arr = new Uint8Array(32);
           if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
           else for (var i = 0; i < 32; i++) arr[i] = Math.floor(Math.random() * 256);
           var hex = '';
           for (var j = 0; j < arr.length; j++) hex += arr[j].toString(16).padStart(2, '0');
-          window.localStorage.setItem(FOUNDER_SALT_KEY, hex);
+          mirrorWrite(FOUNDER_SALT_KEY, '', hex);
           return hex;
         } catch (_) { return ''; }
       }
       function hasValidFounderPass() {
         if (window.__kineticHasPrivateWebGrant && window.__kineticHasPrivateWebGrant()) return true;
         try {
-          var salt = window.localStorage.getItem(FOUNDER_SALT_KEY);
-          var raw = window.localStorage.getItem(FOUNDER_PASS_KEY);
+          var salt = mirrorRead(FOUNDER_SALT_KEY, '');
+          var raw = mirrorRead(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME);
           if (!salt || !raw || raw.indexOf('kenc_v1:') !== 0) return false;
           var parts = raw.slice(8).split(':');
           if (parts.length !== 3 || !parts[0] || !parts[1] || !parts[2] || (parts[2].length & 1) !== 0) return false;
@@ -1820,14 +1884,14 @@
           }
           var macIn = salt + '|' + fp + '|' + nonce + '|' + cHex;
           var mac = kFnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + kFnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
-          window.localStorage.setItem(FOUNDER_PASS_KEY, 'kenc_v1:' + nonce + ':' + mac + ':' + cHex);
+          mirrorWrite(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME, 'kenc_v1:' + nonce + ':' + mac + ':' + cHex);
           syncFounderUnlockUi();
           notifyFounderChange();
           return hasValidFounderPass();
         } catch (_) { return false; }
       }
       function revokeFounderPass() {
-        try { window.localStorage.removeItem(FOUNDER_PASS_KEY); } catch (_) {}
+        mirrorRemove(FOUNDER_PASS_KEY, COOKIE_FOUNDER_NAME);
         if (window.__kineticRevokePrivateGrant) window.__kineticRevokePrivateGrant();
         syncFounderUnlockUi();
         notifyFounderChange();
@@ -1919,6 +1983,7 @@
               throw new Error('STORAGE_BLOCKED');
             }
             closeFounderGate();
+            navigateTopSafe('/login');
           } catch (err) {
             if (fgErr) {
               fgErr.textContent = err && err.message === 'STORAGE_BLOCKED'
@@ -1936,6 +2001,14 @@
 
       window.addEventListener('storage', syncFounderUnlockUi);
       window.addEventListener(FOUNDER_PASS_EVENT, syncFounderUnlockUi);
+      document.querySelectorAll('a[data-founder-gated]').forEach(function (aEl) {
+        aEl.addEventListener('click', function (ev) {
+          var targetHref = aEl.getAttribute('href');
+          if (!targetHref || targetHref.charAt(0) !== '/') return;
+          ev.preventDefault();
+          navigateTopSafe(targetHref);
+        });
+      });
 
       // Acordeones del Footer
       document.querySelectorAll('.acc-btn').forEach(function (btn) {

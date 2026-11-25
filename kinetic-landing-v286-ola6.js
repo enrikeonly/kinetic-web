@@ -2,7 +2,68 @@
 (function () {
   var GRANT_KEY = '@kinetic_web_invite_grant_v286';
   var SALT_KEY = '@kinetic_device_cipher_salt_v1';
+  var COOKIE_SALT_NAME = 'knt_salt_v1';
+  var COOKIE_GRANT_NAME = 'knt_wgrant_v1';
+  var COOKIE_TTL_SEC = 90 * 24 * 60 * 60;
   var EV_NAME = 'kinetic:founder-pass-changed';
+  function getTopSameOriginWin() {
+    try {
+      if (window.top && window.top !== window && window.top.location.origin === window.location.origin) return window.top;
+    } catch (_) {}
+    return window;
+  }
+  function readCookieSafe(name) {
+    try {
+      var prefix = name + '=';
+      var parts = String(document.cookie || '').split(';');
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i].trim();
+        if (p.indexOf(prefix) === 0) return decodeURIComponent(p.slice(prefix.length));
+      }
+    } catch (_) {}
+    return null;
+  }
+  function writeCookieSafe(name, val, maxAgeSec) {
+    try {
+      var sec = window.location && window.location.protocol === 'https:' ? '; Secure' : '';
+      var cStr = name + '=' + encodeURIComponent(val) + '; Path=/; Max-Age=' + maxAgeSec + '; SameSite=Lax' + sec;
+      document.cookie = cStr;
+      var topW = getTopSameOriginWin();
+      if (topW && topW !== window && topW.document) topW.document.cookie = cStr;
+    } catch (_) {}
+  }
+  function mirrorRead(key, cName) {
+    var topW = getTopSameOriginWin();
+    var v = null;
+    try { v = topW.localStorage.getItem(key); } catch (_) {}
+    if (!v && topW !== window) { try { v = window.localStorage.getItem(key); } catch (_) {} }
+    if (!v) { try { v = topW.sessionStorage.getItem(key) || window.sessionStorage.getItem(key); } catch (_) {} }
+    if (!v && cName) v = readCookieSafe(cName);
+    if (v) {
+      try { topW.localStorage.setItem(key, v); } catch (_) {}
+      try { if (topW !== window) window.localStorage.setItem(key, v); } catch (_) {}
+    }
+    return v;
+  }
+  function mirrorWrite(key, cName, val) {
+    var topW = getTopSameOriginWin();
+    try { topW.localStorage.setItem(key, val); } catch (_) {}
+    try { if (topW !== window) window.localStorage.setItem(key, val); } catch (_) {}
+    try { topW.sessionStorage.setItem(key, val); } catch (_) {}
+    try { if (topW !== window) window.sessionStorage.setItem(key, val); } catch (_) {}
+    if (cName) writeCookieSafe(cName, val, COOKIE_TTL_SEC);
+  }
+  function mirrorDel(key, cName) {
+    var topW = getTopSameOriginWin();
+    try { topW.localStorage.removeItem(key); } catch (_) {}
+    try { window.localStorage.removeItem(key); } catch (_) {}
+    try { topW.sessionStorage.removeItem(key); } catch (_) {}
+    try { window.sessionStorage.removeItem(key); } catch (_) {}
+    if (cName) writeCookieSafe(cName, '', 0);
+  }
+  function navigateTopSafe(path) {
+    try { (window.top || window).location.assign(path); } catch (_) { window.location.assign(path); }
+  }
   function fnvMix(inp, seed) {
     var h = seed >>> 0;
     for (var i = 0; i < inp.length; i++) h = Math.imul(h ^ inp.charCodeAt(i), 0x01000193) >>> 0;
@@ -21,19 +82,19 @@
   }
   function getSalt() {
     try {
-      var s = window.localStorage.getItem(SALT_KEY);
+      var s = mirrorRead(SALT_KEY, '');
       if (s && s.length >= 32) return s;
       var arr = new Uint8Array(32);
       if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
       s = Array.prototype.map.call(arr, function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-      window.localStorage.setItem(SALT_KEY, s);
+      mirrorWrite(SALT_KEY, '', s);
       return s;
     } catch (_) { return ''; }
   }
   function readPrivateGrant() {
     try {
-      var salt = window.localStorage.getItem(SALT_KEY);
-      var raw = window.localStorage.getItem(GRANT_KEY);
+      var salt = mirrorRead(SALT_KEY, '');
+      var raw = mirrorRead(GRANT_KEY, COOKIE_GRANT_NAME);
       if (!salt || !raw || raw.indexOf('kenc_v1:') !== 0) return null;
       var p = raw.slice(8).split(':');
       if (p.length !== 3 || !p[0] || !p[1] || !p[2] || (p[2].length & 1) !== 0) return null;
@@ -80,7 +141,7 @@
       }
       var macIn = salt + '|' + fp + '|' + nonce + '|' + cHex;
       var mac = fnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + fnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
-      window.localStorage.setItem(GRANT_KEY, 'kenc_v1:' + nonce + ':' + mac + ':' + cHex);
+      mirrorWrite(GRANT_KEY, COOKIE_GRANT_NAME, 'kenc_v1:' + nonce + ':' + mac + ':' + cHex);
       window.dispatchEvent(new Event(EV_NAME));
       if (window.parent && window.parent !== window) window.parent.dispatchEvent(new Event(EV_NAME));
       return true;
@@ -98,7 +159,7 @@
   }
   window.__kineticHasPrivateWebGrant = function () { return Boolean(readPrivateGrant()); };
   window.__kineticRevokePrivateGrant = function () {
-    try { window.localStorage.removeItem(GRANT_KEY); } catch (_) {}
+    mirrorDel(GRANT_KEY, COOKIE_GRANT_NAME);
   };
   var cfg = null;
   window.__kineticAskConciergeCloud = async function (q, lang) {
@@ -128,7 +189,10 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: boot.key, Authorization: 'Bearer ' + boot.key },
         body: JSON.stringify({ p_grant_token: activeGrant.grantToken })
-      }).then(function (r) { return r.ok ? r.json() : null; }).then(function (v) {
+      }).then(function (r) {
+        if (r.status === 401 || r.status === 403) return { active: false };
+        return r.ok ? r.json() : null;
+      }).then(function (v) {
         if (v && v.active === false) {
           window.__kineticRevokePrivateGrant();
           if (boot.onUnlocked) boot.onUnlocked();
@@ -162,7 +226,7 @@
         if (!r.ok || !d || d.ok !== true || !d.grant_token) throw new Error((d && d.reason) || 'DENIED');
         writePrivateGrant(d.grant_token, d.target_path, d.expires_at, d.allow_sandbox_beta);
         if (boot.onUnlocked) boot.onUnlocked();
-        window.top.location.assign(d.target_path === '/socios' ? '/socios' : '/login');
+        navigateTopSafe(d.target_path === '/socios' ? '/socios' : '/login');
       } catch (_) {
         if (errEl) { errEl.textContent = lang === 'en' ? 'Invalid, expired or revoked invite.' : 'Clave inválida, expirada o revocada.'; errEl.style.display = 'block'; }
       } finally { btn.disabled = false; }

@@ -59,10 +59,30 @@
           if (!isExemptPrelaunch) {
             var hasValidFounder = false;
             try {
-              var salt = window.localStorage && window.localStorage.getItem('@kinetic_device_cipher_salt_v1');
-              var kKeys = ['@kinetic_founder_web_device_v1', '@kinetic_web_invite_grant_v286'];
-              for (var ki = 0; ki < kKeys.length && !hasValidFounder; ki++) {
-                var rawPass = window.localStorage && window.localStorage.getItem(kKeys[ki]);
+              var readKStorage = function (k, cName) {
+                var val = null;
+                try { val = window.localStorage && window.localStorage.getItem(k); } catch (e0) {}
+                if (!val) { try { val = window.sessionStorage && window.sessionStorage.getItem(k); } catch (e1) {} }
+                if (!val && cName) {
+                  try {
+                    var pref = cName + '=';
+                    var partsC = String(document.cookie || '').split(';');
+                    for (var ci = 0; ci < partsC.length; ci++) {
+                      var itemC = partsC[ci].trim();
+                      if (itemC.indexOf(pref) === 0) { val = decodeURIComponent(itemC.slice(pref.length)); break; }
+                    }
+                  } catch (e3) {}
+                }
+                if (val) { try { window.localStorage && window.localStorage.setItem(k, val); } catch (e4) {} }
+                return val;
+              };
+              var salt = readKStorage('@kinetic_device_cipher_salt_v1', 'knt_salt_v1');
+              var kSpecs = [
+                { k: '@kinetic_founder_web_device_v1', c: 'knt_fpass_v1' },
+                { k: '@kinetic_web_invite_grant_v286', c: 'knt_wgrant_v1' }
+              ];
+              for (var ki = 0; ki < kSpecs.length && !hasValidFounder; ki++) {
+                var rawPass = readKStorage(kSpecs[ki].k, kSpecs[ki].c);
               if (salt && rawPass && rawPass.indexOf('kenc_v1:') === 0) {
                 var parts = rawPass.slice(8).split(':');
                 if (parts.length === 3 && parts[0] && parts[1] && parts[2] && (parts[2].length & 1) === 0) {
@@ -145,6 +165,6 @@
   <body>
     <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
     <div id="root"></div>
-  <script src="/_expo/static/js/web/entry-672bd3e92613754e515415e6ca4ffe8d.js" defer></script>
+  <script src="/_expo/static/js/web/entry-317415099d38eb16ce6fba5d62e6ad65.js" defer></script>
 </body>
 </html>
