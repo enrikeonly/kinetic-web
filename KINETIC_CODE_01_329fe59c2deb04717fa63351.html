@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>PAQUETE 01: CORE, CONFIG, AUTH, LOGIN/REGISTRO, MOTOR 3D Y LANDING WEB</h1>
-<blockquote>Sincronizado automáticamente: 2026-11-25T18:17:32.688Z | Total archivos en este módulo: 207</blockquote>
+<blockquote>Sincronizado automáticamente: 2026-11-25T18:49:24.776Z | Total archivos en este módulo: 207</blockquote>
 <h2>ÍNDICE DE ARCHIVOS</h2>
 <li>`app.config.js`</li>
 <li>`eas.json`</li>
@@ -8559,6 +8559,7 @@ import {
   readResilientWebMirror,
   removeResilientWebMirror,
 } from &quot;../utils/kineticWebKitIosOAuthShieldLeaf&quot;;
+import { scrubOAuthSecretsFromWebLocation } from &quot;../services/kineticWebOAuthPopupHelper&quot;;
 
 const PENDING_OAUTH_MODE_KEY = &quot;@kinetic_pending_oauth_mode_v1&quot;;
 
@@ -8751,6 +8752,9 @@ function RootNavigationGuard({ fontsLoaded }: { fontsLoaded: boolean }) {
     const currentRoot = String(segments[0] || &quot;&quot;);
     const currentTab = String(segments[1] || &quot;&quot;);
     if (currentRoot === &quot;oauth&quot;) return;
+    if (Platform.OS === &quot;web&quot; &amp;&amp; typeof window !== &quot;undefined&quot; &amp;&amp; (currentRoot === &quot;(tabs)&quot; || currentRoot === &quot;socios&quot;) &amp;&amp; hasActiveWebOAuthReturnParams(window.location?.search, window.location?.hash)) {
+      scrubOAuthSecretsFromWebLocation();
+    }
     if (Platform.OS === &quot;web&quot; &amp;&amp; currentRoot === &quot;socios&quot;) return;
     const inTabsGroup = currentRoot === &quot;(tabs)&quot;;
     const isPublicEntryRoute = PUBLIC_ENTRY_ROUTES.has(currentRoot);
@@ -10358,7 +10362,8 @@ export default function KineticOAuthBridgeScreen() {
         const roleDest = resolveRoleDestination(kUser, profile, kSess.access_token);
         const finalDest = roleDest === &#39;/(tabs)/admin&#39; ? roleDest : resolvedMode === &#39;b2b&#39; &amp;&amp; roleDest === &#39;/(tabs)&#39; ? &#39;/socios&#39; : roleDest;
         latestRef.current.router.replace(finalDest as never);
-        setTimeout(() =&gt; setOidcReturnTransitionActive(false), 380);
+        setTimeout(() =&gt; scrubOAuthSecretsFromWebLocation(), 60);
+        setTimeout(() =&gt; { scrubOAuthSecretsFromWebLocation(); setOidcReturnTransitionActive(false); }, 380);
       } catch (err: unknown) {
         void err;
         clearCapturedWebOAuthUrlSnapshot();
@@ -40249,7 +40254,7 @@ export function scrubOAuthSecretsFromWebLocation(): void {
     }
     if (changed) {
       const s = searchParams.toString();
-      window.history.replaceState(null, &#39;&#39;, `${window.location.pathname || &#39;/&#39;}${s ? `?${s}` : &#39;&#39;}${nextHash}`);
+      window.history.replaceState(window.history.state ?? null, &#39;&#39;, `${window.location.pathname || &#39;/&#39;}${s ? `?${s}` : &#39;&#39;}${nextHash}`);
     }
   } catch {}
 }
