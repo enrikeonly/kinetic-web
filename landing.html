@@ -1066,6 +1066,7 @@
           if (dict[k]) el.innerHTML = dict[k];
         });
         updateFormPlaceholders();
+        if (state.conciergeTyping) { clearTimeout(state.conciergeTyping); state.conciergeTyping = null; }
         state.conciergeSeq = (state.conciergeSeq || 0) + 1;
         state.chat = [];
         renderScene(state.scene);
@@ -1555,9 +1556,11 @@
           state.conciergeTyping = setTimeout(function () { done(reply.text); }, 6400);
           if (typeof window.__kineticAskConciergeCloud === 'function') {
             window.__kineticAskConciergeCloud(q, state.lang).then(function (cloudTxt) {
+              if (reqSeq !== state.conciergeSeq) return;
               if (state.conciergeTyping) clearTimeout(state.conciergeTyping);
               done(cloudTxt || reply.text);
             }).catch(function () {
+              if (reqSeq !== state.conciergeSeq) return;
               if (state.conciergeTyping) clearTimeout(state.conciergeTyping);
               done(reply.text);
             });
