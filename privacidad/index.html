@@ -1,187 +1,271 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
-    />
-    <meta name="theme-color" content="#050505" />
-    <title>Kinetic — Red Élite de Entrenamiento</title>
-    <style id="kinetic-critical-boot">
-      html,
-      body,
-      #root {
-        background-color: #050505;
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        min-height: 100%;
-      }
-      html[data-kinetic-theme='light'],
-      html[data-kinetic-theme='light'] body,
-      html[data-kinetic-theme='light'] #root,
-      html[data-theme='light'],
-      html[data-theme='light'] body,
-      html[data-theme='light'] #root {
-        background-color: #ecf1f8;
-      }
-      body {
-        overflow: hidden;
-      }
-      #root {
-        display: flex;
-        flex: 1;
-      }
-    </style>
-    <script>
-      (function () {
-        try {
-          if (window.location.hostname === 'www.kineticapp.com.mx') {
-            window.location.replace('https://kineticapp.com.mx' + window.location.pathname + window.location.search + window.location.hash);
-            return;
-          }
-          if (window.location.pathname.replace(/\/+$/, '') === '/oauth' && window.location.hash && window.location.hash.indexOf('id_token=') !== -1) {
-            var hp = new URLSearchParams(window.location.hash.slice(1));
-            var idTok = String(hp.get('id_token') || '').trim();
-            var st = String(hp.get('state') || '').trim();
-            if (/^knt1\.native\.(b2c|b2b)\.[0-9a-f]{32}$/.test(st) && /^[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}$/.test(idTok)) {
-              if (window.history && window.history.replaceState) {
-                window.history.replaceState(null, '', '/oauth');
-              }
-              window.location.replace('kinetic://login#id_token=' + encodeURIComponent(idTok) + '&state=' + encodeURIComponent(st));
-              return;
-            }
-          }
-          var cleanRootSeg = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase().split('/')[0] || '';
-          var isAlwaysExempt = cleanRootSeg === '' || cleanRootSeg === 'index.html' || cleanRootSeg === 'privacidad' || cleanRootSeg === 'terminos';
-          var isOauthRoute = cleanRootSeg === 'oauth';
-          var rawSearch = String(window.location.search || '');
-          var rawHash = String(window.location.hash || '');
-          var hasNativeNonce = /(?:^|[?&])nonce=[0-9a-f]{64}(?:&|$)/i.test(rawSearch);
-          var isNativeInit = /(?:^|[?&])platform=native(?:&|$)/i.test(rawSearch) && /(?:^|[?&])state=knt1\.native\.(?:b2c|b2b)\.[0-9a-f]{32}(?:&|$)/i.test(rawSearch) && hasNativeNonce;
-          var hasNativeCbTok = /(?:^|[?&#])(?:id_token|code|error)=/i.test(rawSearch + '&' + rawHash);
-          var isNativeOAuth = isNativeInit || (hasNativeCbTok && /(?:^|[?&#])state=knt1\.native\.(?:b2c|b2b)\.[0-9a-f]{32}(?:&|$)/i.test(rawSearch + '&' + rawHash));
-          var hasOauthReturn = /(?:^|[?&#])(?:code|access_token|id_token|error)=/i.test(rawSearch + '&' + rawHash);
-          try {
-            var purgeLegacyKey = function (k, cName) {
-              try { window.localStorage && window.localStorage.removeItem(k); } catch (eA) {}
-              try { window.sessionStorage && window.sessionStorage.removeItem(k); } catch (eB) {}
-              if (cName) {
-                try {
-                  var secP = window.location.protocol === 'https:' ? '; Secure' : '';
-                  document.cookie = cName + '=; Path=/; Max-Age=0; SameSite=Lax' + secP;
-                } catch (eC) {}
-              }
-            };
-            purgeLegacyKey('@kinetic_founder_web_device_v1', 'knt_fpass_v1');
-            purgeLegacyKey('@kinetic_web_invite_grant_v286', 'knt_wgrant_v1');
-          } catch (ePurge) {}
-          if (!isAlwaysExempt && !(isOauthRoute && isNativeOAuth)) {
-            var hasValidFounder = false;
-            try {
-              var readKStorage = function (k, cName) {
-                var val = null;
-                try { val = window.localStorage && window.localStorage.getItem(k); } catch (e0) {}
-                if (!val) { try { val = window.sessionStorage && window.sessionStorage.getItem(k); } catch (e1) {} }
-                if (!val && cName) {
-                  try {
-                    var pref = cName + '=';
-                    var partsC = String(document.cookie || '').split(';');
-                    for (var ci = 0; ci < partsC.length; ci++) {
-                      var itemC = partsC[ci].trim();
-                      if (itemC.indexOf(pref) === 0) { val = decodeURIComponent(itemC.slice(pref.length)); break; }
-                    }
-                  } catch (e3) {}
-                }
-                if (val) { try { window.localStorage && window.localStorage.setItem(k, val); } catch (e4) {} }
-                return val;
-              };
-              var salt = readKStorage('@kinetic_device_cipher_salt_v1', 'knt_salt_v1');
-              var rawPass = readKStorage('@kinetic_web_invite_grant_kenc_v2', 'knt_wgrant_kenc_v2');
-              if (salt && rawPass && rawPass.indexOf('kenc_v2:') === 0) {
-                var v2Salt = salt + ':kenc_v2';
-                var parts = rawPass.slice(8).split(':');
-                if (parts.length === 3 && parts[0] && parts[1] && parts[2] && (parts[2].length & 1) === 0) {
-                  var fnvMix = function (inp, seed) {
-                    var h = seed >>> 0;
-                    for (var i = 0; i < inp.length; i++) h = Math.imul(h ^ inp.charCodeAt(i), 0x01000193) >>> 0;
-                    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
-                    return (Math.imul(h ^ (h >>> 13), 0xc2b2ae35) ^ (h >>> 16)) >>> 0;
-                  };
-                  var fnvStep = function (stVal, idx, kSeed) {
-                    var h = (stVal ^ kSeed ^ Math.imul((idx + 1) >>> 0, 0x9e3779b9)) >>> 0;
-                    h = Math.imul(h ^ (h >>> 16), 0x85ebca6b) >>> 0;
-                    h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
-                    return (h ^ (h >>> 16)) >>> 0;
-                  };
-                  var navUa = (typeof navigator !== 'undefined' ? navigator.userAgent || '' : '').slice(0, 48);
-                  var fp = fnvMix('knt25|web||' + navUa, 0x9e3779b9).toString(16).padStart(8, '0');
-                  var macIn = v2Salt + '|' + fp + '|' + parts[0] + '|' + parts[2];
-                  var expMac = fnvMix(macIn, 0x811c9dc5).toString(16).padStart(8, '0') + fnvMix('m:' + macIn, 0x27d4eb2f).toString(16).padStart(8, '0');
-                  if (parts[1] === expMac) {
-                    var bLen = parts[2].length >>> 1;
-                    var outB = new Uint8Array(bLen);
-                    var keyStr = v2Salt + '|' + fp + '|' + parts[0];
-                    var kSeed = fnvMix(keyStr, 0x27d4eb2f);
-                    var cSt = fnvMix(keyStr, 0x811c9dc5);
-                    for (var bi = 0; bi < bLen; bi++) {
-                      if ((bi & 3) === 0) cSt = fnvStep(cSt, bi >>> 2, kSeed);
-                      outB[bi] = parseInt(parts[2].slice(bi * 2, bi * 2 + 2), 16) ^ ((cSt >>> ((bi & 3) * 8)) & 0xff);
-                    }
-                    var decoded = JSON.parse(new TextDecoder().decode(outB));
-                    var nowMs = Date.now();
-                    var okIss = decoded && decoded.v === 1 && decoded.issuer === 'kinetic_web_invite_v286' && typeof decoded.grantToken === 'string' && decoded.grantToken.indexOf('kwg1_') === 0;
-                    if (okIss && decoded.expiresAtMs > nowMs && decoded.issuedAtMs <= nowMs + 60000) {
-                      hasValidFounder = true;
-                    }
-                  }
-                }
-              }
-            } catch (e2) {}
-            if (!hasValidFounder || (isOauthRoute && !hasOauthReturn)) {
-              var kpassQ = window.location.search && window.location.search.indexOf('kpass=') !== -1 ? window.location.search : '';
-              window.location.replace('/' + kpassQ);
-              return;
-            }
-          }
-        } catch (e) {}
-        try {
-          var t =
-            window.localStorage &&
-            window.localStorage.getItem('@kinetic_user_theme_pref') === 'light'
-              ? 'light'
-              : 'dark';
-          var bg = t === 'light' ? '#ECF1F8' : '#050505';
-          var r = document.documentElement;
-          r.setAttribute('data-kinetic-theme', t);
-          r.dataset.theme = t;
-          r.style.backgroundColor = bg;
-          var l =
-            window.localStorage &&
-            (window.localStorage.getItem('@kinetic_language_v25') ||
-              window.localStorage.getItem('@kinetic_user_lang_pref'));
-          if (l === 'es' || l === 'en') r.lang = l;
-          var m = document.querySelector('meta[name="theme-color"]');
-          if (m) m.setAttribute('content', bg);
-        } catch (e) {}
-      })();
-    </script>
-    <link rel="preload" as="image" href="/logo.png" fetchpriority="high" />
-    <link rel="preload" as="image" href="/kinetic-mark.png" />
-    <link rel="manifest" href="/manifest.json?v=274" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=274" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=274" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=274" />
-    <link rel="shortcut icon" href="/favicon.png?v=274" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=274" />
-    <meta property="og:image" content="/icon-512.png?v=274" />
-  <meta name="theme-color" content="#00F0FF">
-<link rel="icon" href="/favicon.ico"/></head>
-  <body>
-    <noscript>Necesitas habilitar JavaScript para ejecutar Kinetic.</noscript>
-    <div id="root"></div>
-  <script src="/_expo/static/js/web/entry-5548c464c41170d0cef3bf2e990c85e8.js" defer></script>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Aviso de Privacidad Integral conforme a la LFPDPPP y proceso oficial de Eliminación de Cuenta de Kinetic (KineticApp S.A.S.)." />
+  <link rel="canonical" href="https://kineticapp.com.mx/privacidad/" />
+  <title>Aviso de Privacidad y Eliminación de Cuenta | Kinetic</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --card: #090C12;
+      --text: #E2E8F0;
+      --muted: #CBD5E1;
+      --white: #FFFFFF;
+      --cyan: #00F0FF;
+      --green: #4ADE80;
+      --danger: #FCA5A5;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(5, 5, 5, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 14px 16px;
+    }
+    .topbar-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+    }
+    .nav-anchors {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .brand-pill {
+      padding: 5px 11px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .hero {
+      text-align: center;
+      padding: 8px 0 6px;
+    }
+    .shield-wrap {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 12px;
+      border-radius: 16px;
+      border: 1.5px solid var(--cyan);
+      background: rgba(0, 240, 255, 0.08);
+      display: grid;
+      place-items: center;
+    }
+    h1 {
+      margin: 0 0 6px;
+      color: var(--white);
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+    .subtitle {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .updated-badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-top: 2px solid rgba(255, 255, 255, 0.24);
+      border-bottom: 4px solid #020408;
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      color: var(--cyan);
+    }
+    .card.security h2 { color: var(--green); }
+    .card.deletion h2 { color: var(--danger); }
+    .card p { margin: 0 0 10px; font-size: 0.95rem; color: var(--text); }
+    .card p:last-child { margin-bottom: 0; }
+    .card ul, .card ol { margin: 8px 0 10px; padding-left: 20px; color: var(--text); }
+    .card li { margin-bottom: 6px; font-size: 0.95rem; }
+    .en-block {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+    }
+    .en-block p, .en-block li { color: var(--muted); }
+    .tag-lang {
+      display: inline-block;
+      margin-right: 6px;
+      padding: 1px 7px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+    strong { color: var(--white); }
+    footer {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 18px 16px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer p { margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="back-link" href="https://kineticapp.com.mx/">VOLVER A KINETIC / BACK TO KINETIC</a>
+      <nav class="nav-anchors" aria-label="Navegación del documento">
+        <a href="#es">Español</a>
+        <a href="#en">English</a>
+        <a href="#eliminacion-cuenta">Eliminación de Cuenta</a>
+        <span class="brand-pill">KINETIC</span>
+      </nav>
+    </div>
+  </header>
+
+  <main id="es">
+    <section class="hero" aria-labelledby="doc-title">
+      <div class="shield-wrap" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      </div>
+      <h1 id="doc-title">AVISO DE PRIVACIDAD INTEGRAL / COMPREHENSIVE PRIVACY NOTICE</h1>
+      <p class="subtitle">KineticApp S.A.S. &bull; Protección de Datos Personales conforme a la LFPDPPP / Personal Data Protection under Mexican Privacy Law</p>
+      <span class="updated-badge">ÚLTIMA ACTUALIZACIÓN: NOVIEMBRE 2026 / LAST UPDATED: NOVEMBER 2026</span>
+    </section>
+
+    <article class="card security">
+      <h2>COMPROMISO DE SEGURIDAD Y CERO VENTA DE DATOS / SECURITY COMMITMENT &amp; ZERO DATA SELLING</h2>
+      <p><span class="tag-lang">ES</span> En <strong>KineticApp S.A.S.</strong> tu privacidad deportiva y financiera es absoluta. No comercializamos, alquilamos ni transferimos información personal a terceros publicitarios. Toda información viaja cifrada mediante <strong>HTTPS/TLS</strong> y se utiliza exclusivamente para operar reservas deportivas presenciales, llaves de acceso óptico QR dinámicas de 60 segundos y dispersiones bancarias.</p>
+      <div class="en-block" id="en">
+        <p><span class="tag-lang">EN</span> At <strong>KineticApp S.A.S.</strong> your athletic and financial privacy is absolute. We do not sell, rent, or transfer personal data to advertising brokers. All traffic is encrypted via <strong>HTTPS/TLS</strong> and information is strictly utilized to operate in-person athletic bookings, 60-second dynamic optical QR passes, and bank payouts.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2>1. RESPONSABLE DEL TRATAMIENTO Y DATOS RECABADOS (LFPDPPP) / DATA CONTROLLER &amp; COLLECTED INFORMATION</h2>
+      <p><span class="tag-lang">ES</span> <strong>KineticApp S.A.S.</strong> es responsable del tratamiento de tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP). Recabamos nombre, correo electrónico, ID de usuario, número de teléfono opcional, fotografía de perfil opcional y datos fiscales opcionales (RFC, Régimen, CP y CLABE para socios comerciales) únicamente para operar reservas presenciales, llaves QR dinámicas de 60 segundos, dispersiones SPEI y facturas CFDI 4.0. Los pagos con tarjeta son procesados por Stripe; Kinetic no almacena números completos de tarjeta ni códigos CVV.</p>
+      <div class="en-block">
+        <p><span class="tag-lang">EN</span> <strong>KineticApp S.A.S.</strong> is the controller responsible for processing your personal data under Mexican Privacy Law (LFPDPPP). We collect your name, email address, user ID, optional phone number, optional profile photo, and optional tax details solely to operate in-person bookings, 60-second dynamic QR passes, SPEI payouts, and CFDI 4.0 invoices. Card payments are processed directly by Stripe; Kinetic never stores raw card numbers or CVV codes.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2>2. PERMISOS NATIVOS (GPS EN PRIMER PLANO Y CÁMARA QR 60S) Y PRIVACIDAD EN CLASES / NATIVE PERMISSIONS &amp; CLASS PRIVACY</h2>
+      <ul>
+        <li><strong>Ubicación GPS (Solo Primer Plano):</strong> Se utiliza únicamente mientras la app está abierta en pantalla para calcular la distancia a clubes y especialistas en el mapa. La ubicación en segundo plano está bloqueada y jamás compartimos tu ubicación física con otros usuarios.</li>
+        <li><strong>Cámara (QR 60s) y Galería:</strong> La cámara se usa solo para escanear llaves ópticas QR dinámicas de 60 segundos en recepción y actualizar tu foto de perfil o historias de 24 horas seleccionadas por ti.</li>
+        <li><strong>Calendario y Notificaciones (Opcionales):</strong> Sincronización de sesiones reservadas con tu calendario y recordatorios oportunos de asistencia.</li>
+        <li><strong>Privacidad Estricta en Sedes:</strong> Los lugares ocupados en salas y eventos permanecen anónimos frente a otros atletas.</li>
+      </ul>
+      <div class="en-block">
+        <ul>
+          <li><strong>GPS Location (Foreground Only):</strong> Used strictly while the app is open on screen to calculate distances to clubs and specialists on the radar map. Background location is blocked and your physical location is never shared with other users.</li>
+          <li><strong>Camera (60s QR) &amp; Photo Selection:</strong> Camera access is used solely to scan 60-second dynamic QR passes at reception and upload user-selected avatars or 24-hour stories.</li>
+          <li><strong>Calendar &amp; Notifications (Optional):</strong> Optional calendar sync for confirmed sessions and attendance reminders.</li>
+          <li><strong>Strict Venue Privacy:</strong> Occupied studio spots and event rosters remain anonymous to other athletes.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2>3. DERECHOS ARCO Y CERO VENTA DE DATOS / ARCO PRIVACY RIGHTS &amp; ZERO DATA SELLING</h2>
+      <p><span class="tag-lang">ES</span> Jamás vendemos tus datos personales a terceros. Puedes ejercer en todo momento tus Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición) enviando una solicitud desde tu correo registrado a <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a>.</p>
+      <div class="en-block">
+        <p><span class="tag-lang">EN</span> We never sell your personal data to third parties. You may exercise your ARCO privacy rights (Access, Rectification, Cancellation, and Opposition) at any time by emailing <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a> from your registered address.</p>
+      </div>
+    </article>
+
+    <article class="card deletion" id="eliminacion-cuenta">
+      <h2>4. ELIMINACIÓN DE CUENTA (GOOGLE PLAY &amp; APPLE 5.1.1(v)) / ACCOUNT DELETION</h2>
+      <p><span class="tag-lang">ES</span> Garantizamos tu derecho incondicional a la supresión definitiva de tu cuenta y datos personales mediante cualquiera de estas dos vías:</p>
+      <ol>
+        <li><strong>Directamente en la app Kinetic:</strong> Ingresa a <strong>Mi Bóveda &gt; Configuración &gt; Zona de Cuenta y Privacidad</strong> y mantén presionado durante 3 segundos el botón de eliminación definitiva de cuenta.</li>
+        <li><strong>Sin acceso a la app (Vía Web / Correo):</strong> Envía un correo desde tu dirección registrada a <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a> con el asunto <em>Eliminación definitiva de cuenta Kinetic</em>.</li>
+      </ol>
+      <p><strong>Alcance de la eliminación:</strong> La baja revoca de inmediato tus credenciales de acceso, cancela reservas futuras activas y elimina o anonimiza de forma permanente tu perfil, fotografía, mensajes y registros personales (conservando de manera disociada únicamente los comprobantes fiscales que exige la legislación fiscal mexicana vigente).</p>
+      <div class="en-block">
+        <p><span class="tag-lang">EN</span> We guarantee your unconditional right to permanent account and personal data erasure through either method:</p>
+        <ol>
+          <li><strong>In-App Deletion:</strong> Open <strong>My Vault &gt; Settings &gt; Account &amp; Privacy Zone</strong> (<em>Mi Bóveda &gt; Configuración &gt; Zona de Cuenta y Privacidad</em>) and press and hold the permanent deletion button for 3 seconds.</li>
+          <li><strong>Without App Access (Web / Email):</strong> Send an email from your registered address to <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a> requesting permanent account deletion.</li>
+        </ol>
+        <p><strong>Deletion Scope:</strong> Deletion immediately revokes credentials, cancels active upcoming bookings, and permanently deletes or anonymizes your profile, photos, messages, and personal records (retaining only legally mandated tax records in dissociated form).</p>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p><strong>Kinetic</strong> &bull; KineticApp S.A.S. &bull; Los Cabos, Baja California Sur, México</p>
+    <p>Soporte Oficial y Privacidad / Official Support &amp; Privacy: <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a></p>
+    <p>&copy; 2026 KineticApp S.A.S. Todos los derechos reservados.</p>
+  </footer>
 </body>
 </html>
