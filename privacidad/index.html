@@ -29,9 +29,31 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
+      max-width: 100%;
+      overflow-x: hidden;
     }
     a { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
-    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+    a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+      outline: 2.5px solid #00F0FF;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.28);
+      border-radius: 6px;
+    }
+    .skip-link {
+      position: fixed;
+      left: -9999px;
+      top: 10px;
+      z-index: 200;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: #050505;
+      color: #00F0FF;
+      border: 2px solid #00F0FF;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .skip-link:focus, .skip-link:focus-visible { left: 12px; }
     .topbar {
       position: sticky;
       top: 0;
@@ -177,6 +199,7 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#es">Saltar al contenido principal / Skip to main content</a>
   <header class="topbar">
     <div class="topbar-inner">
       <a class="back-link" href="https://kineticapp.com.mx/">VOLVER A KINETIC / BACK TO KINETIC</a>
@@ -204,7 +227,7 @@
     <article class="card security">
       <h2>COMPROMISO DE SEGURIDAD Y CERO VENTA DE DATOS / SECURITY COMMITMENT &amp; ZERO DATA SELLING</h2>
       <p><span class="tag-lang">ES</span> En <strong>KineticApp S.A.S.</strong> tu privacidad deportiva y financiera es absoluta. No comercializamos, alquilamos ni transferimos información personal a terceros publicitarios. Toda información viaja cifrada mediante <strong>HTTPS/TLS</strong> y se utiliza exclusivamente para operar reservas deportivas presenciales, llaves de acceso óptico QR dinámicas de 60 segundos y dispersiones bancarias.</p>
-      <div class="en-block" id="en">
+      <div class="en-block" id="en" lang="en">
         <p><span class="tag-lang">EN</span> At <strong>KineticApp S.A.S.</strong> your athletic and financial privacy is absolute. We do not sell, rent, or transfer personal data to advertising brokers. All traffic is encrypted via <strong>HTTPS/TLS</strong> and information is strictly utilized to operate in-person athletic bookings, 60-second dynamic optical QR passes, and bank payouts.</p>
       </div>
     </article>
@@ -212,7 +235,7 @@
     <article class="card">
       <h2>1. RESPONSABLE DEL TRATAMIENTO Y DATOS RECABADOS (LFPDPPP) / DATA CONTROLLER &amp; COLLECTED INFORMATION</h2>
       <p><span class="tag-lang">ES</span> <strong>KineticApp S.A.S.</strong> es responsable del tratamiento de tus datos personales conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP). Recabamos nombre, correo electrónico, ID de usuario, número de teléfono opcional, fotografía de perfil opcional y datos fiscales opcionales (RFC, Régimen, CP y CLABE para socios comerciales) únicamente para operar reservas presenciales, llaves QR dinámicas de 60 segundos, dispersiones SPEI y facturas CFDI 4.0. Los pagos con tarjeta son procesados por Stripe; Kinetic no almacena números completos de tarjeta ni códigos CVV.</p>
-      <div class="en-block">
+      <div class="en-block" lang="en">
         <p><span class="tag-lang">EN</span> <strong>KineticApp S.A.S.</strong> is the controller responsible for processing your personal data under Mexican Privacy Law (LFPDPPP). We collect your name, email address, user ID, optional phone number, optional profile photo, and optional tax details solely to operate in-person bookings, 60-second dynamic QR passes, SPEI payouts, and CFDI 4.0 invoices. Card payments are processed directly by Stripe; Kinetic never stores raw card numbers or CVV codes.</p>
       </div>
     </article>
@@ -225,7 +248,7 @@
         <li><strong>Calendario y Notificaciones (Opcionales):</strong> Sincronización de sesiones reservadas con tu calendario y recordatorios oportunos de asistencia.</li>
         <li><strong>Privacidad Estricta en Sedes:</strong> Los lugares ocupados en salas y eventos permanecen anónimos frente a otros atletas.</li>
       </ul>
-      <div class="en-block">
+      <div class="en-block" lang="en">
         <ul>
           <li><strong>GPS Location (Foreground Only):</strong> Used strictly while the app is open on screen to calculate distances to clubs and specialists on the radar map. Background location is blocked and your physical location is never shared with other users.</li>
           <li><strong>Camera (60s QR) &amp; Photo Selection:</strong> Camera access is used solely to scan 60-second dynamic QR passes at reception and upload user-selected avatars or 24-hour stories.</li>
@@ -238,7 +261,7 @@
     <article class="card">
       <h2>3. DERECHOS ARCO Y CERO VENTA DE DATOS / ARCO PRIVACY RIGHTS &amp; ZERO DATA SELLING</h2>
       <p><span class="tag-lang">ES</span> Jamás vendemos tus datos personales a terceros. Puedes ejercer en todo momento tus Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición) enviando una solicitud desde tu correo registrado a <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a>.</p>
-      <div class="en-block">
+      <div class="en-block" lang="en">
         <p><span class="tag-lang">EN</span> We never sell your personal data to third parties. You may exercise your ARCO privacy rights (Access, Rectification, Cancellation, and Opposition) at any time by emailing <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a> from your registered address.</p>
       </div>
     </article>
@@ -251,7 +274,7 @@
         <li><strong>Sin acceso a la app (Vía Web / Correo):</strong> Envía un correo desde tu dirección registrada a <a href="mailto:soporte@kineticapp.com.mx">soporte@kineticapp.com.mx</a> con el asunto <em>Eliminación definitiva de cuenta Kinetic</em>.</li>
       </ol>
       <p><strong>Alcance de la eliminación:</strong> La baja revoca de inmediato tus credenciales de acceso, cancela reservas futuras activas y elimina o anonimiza de forma permanente tu perfil, fotografía, mensajes y registros personales (conservando de manera disociada únicamente los comprobantes fiscales que exige la legislación fiscal mexicana vigente).</p>
-      <div class="en-block">
+      <div class="en-block" lang="en">
         <p><span class="tag-lang">EN</span> We guarantee your unconditional right to permanent account and personal data erasure through either method:</p>
         <ol>
           <li><strong>In-App Deletion:</strong> Open <strong>My Vault &gt; Settings &gt; Account &amp; Privacy Zone</strong> (<em>Mi Bóveda &gt; Configuración &gt; Zona de Cuenta y Privacidad</em>) and press and hold the permanent deletion button for 3 seconds.</li>

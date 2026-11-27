@@ -41,11 +41,24 @@
       color: var(--white);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
+      max-width: 100%;
+      overflow-x: hidden;
     }
-    body { background: var(--bg); color: var(--white); overflow-x: hidden; line-height: 1.5; }
+    body { background: var(--bg); color: var(--white); max-width: 100%; overflow-x: hidden; line-height: 1.5; }
     input, select, textarea { font-size: 16px !important; font-family: inherit; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
     a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+      outline: 2.5px solid #00F0FF !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 4px rgba(0, 240, 255, 0.28) !important;
+    }
+    .skip-link {
+      position: fixed; left: -9999px; top: 10px; z-index: 200;
+      padding: 10px 16px; border-radius: 10px; background: #050505; color: #00F0FF;
+      border: 2px solid #00F0FF; font-size: 13px; font-weight: 800;
+    }
+    .skip-link:focus, .skip-link:focus-visible { left: 12px; }
     .font-display { font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif; }
     .container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
 
@@ -100,10 +113,10 @@
       position: fixed; top: 0; left: 0; bottom: 0; width: min(320px, 86vw); z-index: 120;
       background: rgba(9, 12, 18, 0.96); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       border-right: 1px solid var(--border); padding: 22px;
-      transform: translate3d(-104%, 0, 0); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translate3d(-104%, 0, 0); visibility: hidden; transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.3s ease;
       display: flex; flex-direction: column; justify-content: space-between;
     }
-    .drawer.open { transform: translate3d(0, 0, 0); }
+    .drawer.open { transform: translate3d(0, 0, 0); visibility: visible; }
     .drawer-links { display: flex; flex-direction: column; gap: 6px; margin-top: 24px; }
     .drawer-link {
       padding: 13px 14px; border-radius: 14px; font-size: 15px; font-weight: 600; color: var(--text-sec);
@@ -311,10 +324,13 @@
     }
     .snap-card:hover { transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.26); }
     .snap-media {
-      height: 220px; position: relative; background-color: #090C12; background-size: cover; background-position: center;
+      height: 220px; position: relative; background-color: #090C12; overflow: hidden;
+    }
+    .snap-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
     }
     .snap-media::after {
-      content: ''; position: absolute; inset: 0;
+      content: ''; position: absolute; inset: 0; z-index: 1;
       background: linear-gradient(180deg, rgba(5, 5, 5, 0.1) 0%, rgba(9, 12, 18, 0.92) 100%);
     }
     .snap-foot { padding: 18px 20px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -351,6 +367,20 @@
       transition: border-color 0.2s ease;
     }
     .field-input:focus { border-color: var(--cyan); }
+    .consent-row {
+      display: flex; align-items: flex-start; gap: 10px; margin-top: 2px;
+    }
+    .consent-checkbox {
+      width: 20px; height: 20px; min-width: 20px; margin-top: 2px;
+      accent-color: #00F0FF; cursor: pointer;
+    }
+    .consent-label {
+      font-size: 12.5px; line-height: 1.5; color: #E2E8F0; cursor: pointer;
+    }
+    .consent-label a {
+      color: var(--cyan); font-weight: 700; text-decoration: underline; text-underline-offset: 2px;
+    }
+    .btn-consent-locked { opacity: 0.54; }
     .form-err { color: #FF453A; font-size: 13px; font-weight: 600; display: none; margin-top: 4px; }
     .form-ok {
       display: none; padding: 20px; border-radius: 18px; margin-top: 14px; text-align: center;
@@ -366,8 +396,8 @@
     }
     .acc-chev { color: var(--titanium); transition: transform 0.24s ease; font-size: 16px; }
     .acc-item.open .acc-chev { transform: rotate(180deg); color: var(--cyan); }
-    .acc-panel { max-height: 0; overflow: hidden; transition: max-height 0.28s ease; }
-    .acc-item.open .acc-panel { max-height: 360px; }
+    .acc-panel { max-height: 0; overflow: hidden; visibility: hidden; transition: max-height 0.28s ease, visibility 0.28s ease; }
+    .acc-item.open .acc-panel { max-height: 360px; visibility: visible; }
     .acc-body { padding: 0 0 18px; font-size: 13.5px; color: var(--titanium); line-height: 1.65; }
     .footer-base {
       display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
@@ -401,7 +431,7 @@
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 12px 30px rgba(0, 0, 0, 0.6);
       transition: opacity 0.08s ease, transform 0.08s ease;
     }
-    .concierge-fab.fab-hidden { opacity: 0; pointer-events: none; transform: translateY(14px); }
+    .concierge-fab.fab-hidden { opacity: 0; pointer-events: none; visibility: hidden; transform: translateY(14px); }
     .concierge-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 12px; }
     .concierge-chip {
       padding: 7px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
@@ -473,20 +503,21 @@
   </style>
 </head>
 <body>
+  <a href="#mainContent" class="skip-link" data-i18n="skipMain">Saltar al contenido principal</a>
   <!-- BARRA SUPERIOR LIQUID GLASS -->
   <header class="topbar">
     <div class="topbar-inner">
       <div class="topbar-left">
-        <button type="button" id="menuOpenBtn" class="menu-btn" aria-label="Menu">☰</button>
-        <a href="#hero" class="brand">
+        <button type="button" id="menuOpenBtn" class="menu-btn" aria-label="Abrir menú de navegación" aria-controls="navDrawer" aria-expanded="false">☰</button>
+        <a href="#hero" class="brand" aria-label="Kinetic — Inicio">
           <span class="brand-mark" aria-hidden="true">
-            <img src="/kinetic-mark.png" alt="Kinetic" width="32" height="32" />
+            <img src="/kinetic-mark.png" alt="" aria-hidden="true" width="32" height="32" />
           </span>
           <span class="brand-word font-display">KINETIC</span>
         </a>
       </div>
       <div class="topbar-right">
-        <button type="button" id="langBtn" class="lang-pill" aria-label="Language">ES | EN</button>
+        <button type="button" id="langBtn" class="lang-pill" aria-label="Cambiar idioma a inglés">ES | EN</button>
         <a href="#waitlist" id="navCtaBtn" class="cta-mag" style="white-space:nowrap;" data-i18n="navCta">Acceso Anticipado</a>
       </div>
     </div>
@@ -494,29 +525,29 @@
 
   <!-- DRAWER LATERAL ESTILO ABOUT.GOOGLE -->
   <div id="drawerBackdrop" class="drawer-backdrop"></div>
-  <aside id="navDrawer" class="drawer" aria-label="Navigation">
+  <aside id="navDrawer" class="drawer" aria-label="Navegación principal" aria-hidden="true">
     <div>
       <div style="display:flex;align-items:center;justify-content:space-between;">
         <span class="brand">
           <span class="brand-mark" aria-hidden="true">
-            <img src="/kinetic-mark.png" alt="Kinetic" width="32" height="32" />
+            <img src="/kinetic-mark.png" alt="" aria-hidden="true" width="32" height="32" />
           </span>
           <span class="brand-word font-display">KINETIC</span>
         </span>
-        <button type="button" id="menuCloseBtn" class="menu-btn" aria-label="Close">✕</button>
+        <button type="button" id="menuCloseBtn" class="menu-btn" aria-label="Cerrar menú">✕</button>
       </div>
-      <nav class="drawer-links">
-        <a href="#hero" class="drawer-link" data-close-drawer><span data-i18n="dHome">Inicio</span><span>›</span></a>
-        <a href="#discover" class="drawer-link" data-close-drawer><span data-i18n="dExp">Experiencia</span><span>›</span></a>
-        <a href="#disciplines" class="drawer-link" data-close-drawer><span data-i18n="dDisc">Disciplinas</span><span>›</span></a>
-        <a href="#waitlist" class="drawer-link" data-close-drawer><span data-i18n="dInvite">Acceso Anticipado</span><span>›</span></a>
-        <button type="button" id="drawerConciergeBtn" class="drawer-link"><span data-i18n="dConcierge">Concierge 24/7</span><span>✦</span></button>
+      <nav class="drawer-links" aria-label="Enlaces de sección">
+        <a href="#hero" class="drawer-link" data-close-drawer><span data-i18n="dHome">Inicio</span><span aria-hidden="true">›</span></a>
+        <a href="#discover" class="drawer-link" data-close-drawer><span data-i18n="dExp">Experiencia</span><span aria-hidden="true">›</span></a>
+        <a href="#disciplines" class="drawer-link" data-close-drawer><span data-i18n="dDisc">Disciplinas</span><span aria-hidden="true">›</span></a>
+        <a href="#waitlist" class="drawer-link" data-close-drawer><span data-i18n="dInvite">Acceso Anticipado</span><span aria-hidden="true">›</span></a>
+        <button type="button" id="drawerConciergeBtn" class="drawer-link"><span data-i18n="dConcierge">Concierge 24/7</span><span aria-hidden="true">✦</span></button>
       </nav>
     </div>
     <div style="font-size:12px;color:var(--titanium);">@kinetic.mex • KINETIC</div>
   </aside>
 
-  <main>
+  <main id="mainContent">
     <!-- HERO CINEMATOGRÁFICO FULL-BLEED -->
     <section id="hero" class="hero">
       <div id="heroBgLayer" class="hero-bg-layer"></div>
@@ -533,11 +564,11 @@
         </div>
         <div class="hero-controls">
           <div id="sceneDots" class="scene-dots">
-            <button type="button" class="scene-dot active" data-scene="0" aria-label="Scene 1"></button>
-            <button type="button" class="scene-dot" data-scene="1" aria-label="Scene 2"></button>
-            <button type="button" class="scene-dot" data-scene="2" aria-label="Scene 3"></button>
+            <button type="button" class="scene-dot active" data-scene="0" aria-label="Escena 1" aria-pressed="true"></button>
+            <button type="button" class="scene-dot" data-scene="1" aria-label="Escena 2" aria-pressed="false"></button>
+            <button type="button" class="scene-dot" data-scene="2" aria-label="Escena 3" aria-pressed="false"></button>
           </div>
-          <button type="button" id="heroPauseBtn" class="media-toggle" aria-label="Pause or play animations">⏸</button>
+          <button type="button" id="heroPauseBtn" class="media-toggle" aria-label="Pausar o reproducir animaciones" aria-pressed="false">⏸</button>
         </div>
       </div>
     </section>
@@ -546,24 +577,24 @@
     <section class="quick-strip">
       <div class="container">
         <div class="quick-grid">
-          <button type="button" class="quick-item" data-detail="radar">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l5-5"/></svg>
+          <button type="button" class="quick-item" data-detail="radar" aria-haspopup="dialog">
+            <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00F0FF" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 12l5-5"/></svg>
             <span class="quick-label" data-i18n="qRadar">Radar</span>
           </button>
-          <button type="button" class="quick-item" data-detail="space3d">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+          <button type="button" class="quick-item" data-detail="space3d" aria-haspopup="dialog">
+            <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A855F7" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
             <span class="quick-label" data-i18n="qSpace">Espacio 3D</span>
           </button>
-          <button type="button" class="quick-item" data-detail="evolution">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0055" stroke-width="1.8"><path d="M12 2l3 6.5L22 9.5l-5 4.8 1.2 6.7-6.2-3.3-6.2 3.3L7 14.3 2 9.5l7-1z"/></svg>
+          <button type="button" class="quick-item" data-detail="evolution" aria-haspopup="dialog">
+            <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF0055" stroke-width="1.8"><path d="M12 2l3 6.5L22 9.5l-5 4.8 1.2 6.7-6.2-3.3-6.2 3.3L7 14.3 2 9.5l7-1z"/></svg>
             <span class="quick-label" data-i18n="qEvo">Evolución</span>
           </button>
-          <button type="button" class="quick-item" data-detail="community">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M15.5 15c2.4.4 4.5 2.1 4.5 5"/></svg>
+          <button type="button" class="quick-item" data-detail="community" aria-haspopup="dialog">
+            <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00FF66" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M15.5 15c2.4.4 4.5 2.1 4.5 5"/></svg>
             <span class="quick-label" data-i18n="qComm">Comunidad</span>
           </button>
-          <button type="button" class="quick-item" data-detail="venues">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9D4EDD" stroke-width="1.8"><path d="M12 21s-6-5.7-6-11a6 6 0 1112 0c0 5.3-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>
+          <button type="button" class="quick-item" data-detail="venues" aria-haspopup="dialog">
+            <svg aria-hidden="true" focusable="false" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9D4EDD" stroke-width="1.8"><path d="M12 21s-6-5.7-6-11a6 6 0 1112 0c0 5.3-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>
             <span class="quick-label" data-i18n="qVenues">Sedes</span>
           </button>
         </div>
@@ -586,7 +617,7 @@
             <div class="sculpture-stage" id="stageRadar">
               <div class="radar-wrap">
                 <div class="radar-sweep"></div>
-                <svg class="radar-svg" viewBox="0 0 220 220" fill="none">
+                <svg aria-hidden="true" focusable="false" class="radar-svg" viewBox="0 0 220 220" fill="none">
                   <circle cx="110" cy="110" r="95" stroke="rgba(255,255,255,0.09)" stroke-width="1" />
                   <circle cx="110" cy="110" r="62" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="4 5" />
                   <line x1="110" y1="15" x2="110" y2="205" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
@@ -606,7 +637,7 @@
               <h3 class="sculpture-title font-display" data-i18n-html="card1Title">
                 <span class="tone-bright">Radar</span> <span class="tone-titanium">en vivo.</span>
               </h3>
-              <button type="button" class="plus-circle" data-detail="radar" aria-label="Details">+</button>
+              <button type="button" class="plus-circle" data-detail="radar" aria-label="Detalles de Radar en vivo" aria-haspopup="dialog">+</button>
             </div>
           </article>
 
@@ -619,7 +650,7 @@
               <h3 class="sculpture-title font-display" data-i18n-html="card2Title">
                 <span class="tone-bright">Mapa espacial</span> <span class="tone-titanium">sin filas.</span>
               </h3>
-              <button type="button" class="plus-circle" data-detail="space3d" aria-label="Details">+</button>
+              <button type="button" class="plus-circle" data-detail="space3d" aria-label="Detalles de Mapa espacial 3D" aria-haspopup="dialog">+</button>
             </div>
           </article>
 
@@ -631,7 +662,7 @@
                 <div class="pillar-orbit orbit-2"></div>
                 <div class="pillar-orbit orbit-3"></div>
                 <div class="pillar-orbit orbit-4"></div>
-                <svg class="chest-iso" viewBox="0 0 80 80" fill="none">
+                <svg aria-hidden="true" focusable="false" class="chest-iso" viewBox="0 0 80 80" fill="none">
                   <polygon points="40,10 68,26 40,42 12,26" fill="#0C1424" stroke="#00F0FF" stroke-width="2" />
                   <polygon points="12,26 40,42 40,70 12,54" fill="#090C12" stroke="#A855F7" stroke-width="2" />
                   <polygon points="68,26 40,42 40,70 68,54" fill="#070A10" stroke="#00FF66" stroke-width="2" />
@@ -643,7 +674,7 @@
               <h3 class="sculpture-title font-display" data-i18n-html="card3Title">
                 <span class="tone-bright">Evolución y</span> <span class="tone-titanium">cofres con premios.</span>
               </h3>
-              <button type="button" class="plus-circle" data-detail="evolution" aria-label="Details">+</button>
+              <button type="button" class="plus-circle" data-detail="evolution" aria-label="Detalles de Evolución y cofres" aria-haspopup="dialog">+</button>
             </div>
           </article>
 
@@ -663,7 +694,7 @@
               <h3 class="sculpture-title font-display" data-i18n-html="card4Title">
                 <span class="tone-bright">Comunidad viva,</span> <span class="tone-titanium">historias 24h.</span>
               </h3>
-              <button type="button" class="plus-circle" data-detail="community" aria-label="Details">+</button>
+              <button type="button" class="plus-circle" data-detail="community" aria-label="Detalles de Comunidad viva" aria-haspopup="dialog">+</button>
             </div>
           </article>
 
@@ -685,7 +716,7 @@
               <h3 class="sculpture-title font-display" data-i18n-html="card5Title">
                 <span class="tone-bright">Alianza para</span> <span class="tone-titanium">sedes y especialistas.</span>
               </h3>
-              <button type="button" class="plus-circle" data-detail="venues" aria-label="Details">+</button>
+              <button type="button" class="plus-circle" data-detail="venues" aria-label="Detalles de Alianza para sedes" aria-haspopup="dialog">+</button>
             </div>
           </article>
         </div>
@@ -701,47 +732,47 @@
           </h2>
         </div>
       </div>
-      <div id="snapTrack" class="snap-track">
+      <div id="snapTrack" class="snap-track" role="region" aria-label="Carrusel de disciplinas deportivas" tabindex="0">
         <article class="snap-card">
-          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-media"><img class="snap-img" data-snap-alt="0" src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=900&q=80" alt="Entrenamiento de fuerza y alto rendimiento" loading="lazy" /></div>
           <div class="snap-foot">
             <h3 class="font-display" style="font-size:17px" data-i18n-html="c1Title"><span class="tone-bright">Fuerza y</span> <span class="tone-titanium">Alto Rendimiento</span></h3>
-            <button type="button" class="plus-circle" data-detail="disc-fuerza">+</button>
+            <button type="button" class="plus-circle" data-detail="disc-fuerza" aria-label="Detalles de Fuerza y Alto Rendimiento" aria-haspopup="dialog">+</button>
           </div>
         </article>
         <article class="snap-card">
-          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-media"><img class="snap-img" data-snap-alt="1" src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=900&q=80" alt="Canchas de pádel y tenis" loading="lazy" /></div>
           <div class="snap-foot">
             <h3 class="font-display" style="font-size:17px" data-i18n-html="c2Title"><span class="tone-bright">Pádel y</span> <span class="tone-titanium">Canchas</span></h3>
-            <button type="button" class="plus-circle" data-detail="disc-padel">+</button>
+            <button type="button" class="plus-circle" data-detail="disc-padel" aria-label="Detalles de Pádel y Canchas" aria-haspopup="dialog">+</button>
           </div>
         </article>
         <article class="snap-card">
-          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-media"><img class="snap-img" data-snap-alt="2" src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80" alt="Estudios de Pilates y movimiento" loading="lazy" /></div>
           <div class="snap-foot">
             <h3 class="font-display" style="font-size:17px" data-i18n-html="c3Title"><span class="tone-bright">Pilates y</span> <span class="tone-titanium">Movimiento</span></h3>
-            <button type="button" class="plus-circle" data-detail="disc-pilates">+</button>
+            <button type="button" class="plus-circle" data-detail="disc-pilates" aria-label="Detalles de Pilates y Movimiento" aria-haspopup="dialog">+</button>
           </div>
         </article>
         <article class="snap-card">
-          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-media"><img class="snap-img" data-snap-alt="3" src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=900&q=80" alt="Boxeo y acondicionamiento físico" loading="lazy" /></div>
           <div class="snap-foot">
             <h3 class="font-display" style="font-size:17px" data-i18n-html="c4Title"><span class="tone-bright">Boxeo y</span> <span class="tone-titanium">Acondicionamiento</span></h3>
-            <button type="button" class="plus-circle" data-detail="disc-boxeo">+</button>
+            <button type="button" class="plus-circle" data-detail="disc-boxeo" aria-label="Detalles de Boxeo y Acondicionamiento" aria-haspopup="dialog">+</button>
           </div>
         </article>
         <article class="snap-card">
-          <div class="snap-media" style="background-image:url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=900&q=80')"></div>
+          <div class="snap-media"><img class="snap-img" data-snap-alt="4" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=900&q=80" alt="Fisioterapia y recuperación deportiva" loading="lazy" /></div>
           <div class="snap-foot">
             <h3 class="font-display" style="font-size:17px" data-i18n-html="c5Title"><span class="tone-bright">Fisioterapia y</span> <span class="tone-titanium">Recuperación</span></h3>
-            <button type="button" class="plus-circle" data-detail="disc-recovery">+</button>
+            <button type="button" class="plus-circle" data-detail="disc-recovery" aria-label="Detalles de Fisioterapia y Recuperación" aria-haspopup="dialog">+</button>
           </div>
         </article>
       </div>
       <div class="container">
         <div class="snap-nav">
-          <button type="button" id="snapPrev" class="snap-arrow" aria-label="Previous">‹</button>
-          <button type="button" id="snapNext" class="snap-arrow" aria-label="Next">›</button>
+          <button type="button" id="snapPrev" class="snap-arrow" aria-label="Disciplina anterior">‹</button>
+          <button type="button" id="snapNext" class="snap-arrow" aria-label="Siguiente disciplina">›</button>
         </div>
       </div>
     </section>
@@ -757,24 +788,28 @@
           <p class="section-sub" data-i18n="wlSub">Acceso prioritario por invitación.</p>
 
           <form id="waitlistForm" novalidate>
-            <div class="seg-row" role="tablist">
-              <button type="button" class="seg-btn active" data-role="atleta" data-i18n="roleAthlete">Atleta</button>
-              <button type="button" class="seg-btn" data-role="club" data-i18n="roleClub">Club</button>
-              <button type="button" class="seg-btn" data-role="especialista" data-i18n="roleSpec">Especialista</button>
+            <div class="seg-row" role="tablist" aria-label="Tipo de perfil">
+              <button type="button" class="seg-btn active" role="tab" aria-selected="true" data-role="atleta" data-i18n="roleAthlete">Atleta</button>
+              <button type="button" class="seg-btn" role="tab" aria-selected="false" data-role="club" data-i18n="roleClub">Club</button>
+              <button type="button" class="seg-btn" role="tab" aria-selected="false" data-role="especialista" data-i18n="roleSpec">Especialista</button>
             </div>
             <div class="field-stack">
-              <input id="regName" type="text" class="field-input" required placeholder="Tu nombre completo" autocomplete="name" />
+              <input id="regName" type="text" class="field-input" required placeholder="Tu nombre completo" aria-label="Tu nombre completo" autocomplete="name" />
               <div id="regBizDetailWrap" style="display:none;">
-                <input id="regBizDetail" type="text" class="field-input" placeholder="Nombre del club o estudio" autocomplete="organization" />
+                <input id="regBizDetail" type="text" class="field-input" placeholder="Nombre del club o estudio" aria-label="Nombre del club o estudio" autocomplete="organization" />
               </div>
-              <input id="regEmail" type="email" class="field-input" required placeholder="Correo electrónico" autocomplete="email" autocapitalize="none" />
-              <input id="regWhatsapp" type="tel" inputmode="tel" class="field-input" required placeholder="WhatsApp (10 dígitos)" autocomplete="tel" />
-              <p id="formErr" class="form-err"></p>
-              <button id="submitBtn" type="submit" class="btn-pill btn-cyan" style="width:100%;margin-top:4px" data-i18n="wlSubmit">Solicitar Invitación</button>
+              <input id="regEmail" type="email" class="field-input" required placeholder="Correo electrónico" aria-label="Correo electrónico" autocomplete="email" autocapitalize="none" />
+              <input id="regWhatsapp" type="tel" inputmode="tel" class="field-input" required placeholder="WhatsApp (10 dígitos)" aria-label="WhatsApp (10 dígitos)" autocomplete="tel" />
+              <div class="consent-row">
+                <input id="regConsent" type="checkbox" class="consent-checkbox" />
+                <label for="regConsent" class="consent-label" data-i18n-html="wlConsentHtml">Acepto el <a href="/privacidad/" target="_blank" rel="noopener noreferrer">Aviso de Privacidad</a> de Kinetic y autorizo ser contactado por correo electrónico o WhatsApp sobre mi acceso anticipado.</label>
+              </div>
+              <p id="formErr" class="form-err" role="alert" aria-live="polite"></p>
+              <button id="submitBtn" type="submit" class="btn-pill btn-cyan btn-consent-locked" aria-disabled="true" style="width:100%;margin-top:4px" data-i18n="wlSubmit">Solicitar Invitación</button>
             </div>
           </form>
 
-          <div id="formSuccess" class="form-ok">
+          <div id="formSuccess" class="form-ok" role="status" aria-live="polite">
             <div class="font-display" style="font-size:18px;font-weight:800;color:var(--green);margin-bottom:6px" data-i18n="okTitle">Invitación en lista prioritaria</div>
             <p style="font-size:13.5px;color:var(--text-sec);margin-bottom:14px" data-i18n="okDesc">Sigue las pistas oficiales y revelaciones progresivas en Instagram.</p>
             <a href="https://www.instagram.com/kinetic.mex" target="_blank" rel="noopener noreferrer" class="btn-pill btn-purple" style="padding:10px 20px;font-size:12.5px">Instagram @kinetic.mex ›</a>
@@ -788,27 +823,27 @@
   <footer class="footer">
     <div class="container">
       <div class="acc-item">
-        <button type="button" class="acc-btn"><span data-i18n="fEco">El Ecosistema</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fEcoBody">Un pase digital flexible con recargas desde 100 KC que conecta más de 230 disciplinas deportivas, estudios boutique, canchas y recuperación física en un solo lugar.</div></div>
+        <button type="button" id="accBtn1" class="acc-btn" aria-expanded="false" aria-controls="accPanel1"><span data-i18n="fEco">El Ecosistema</span><span class="acc-chev" aria-hidden="true">⌄</span></button>
+        <div id="accPanel1" class="acc-panel" role="region" aria-labelledby="accBtn1"><div class="acc-body" data-i18n="fEcoBody">Un pase digital flexible con recargas desde 100 KC que conecta más de 230 disciplinas deportivas, estudios boutique, canchas y recuperación física en un solo lugar.</div></div>
       </div>
       <div class="acc-item">
-        <button type="button" class="acc-btn"><span data-i18n="fAth">Experiencia Atleta</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fAthBody">Elige tu lugar exacto en 3D antes de salir, comparte historias de 24h, eleva tus cuatro pilares, protege tu constancia con 1 Escudo de Racha gratis al mes y desbloquea cofres con premios.</div></div>
+        <button type="button" id="accBtn2" class="acc-btn" aria-expanded="false" aria-controls="accPanel2"><span data-i18n="fAth">Experiencia Atleta</span><span class="acc-chev" aria-hidden="true">⌄</span></button>
+        <div id="accPanel2" class="acc-panel" role="region" aria-labelledby="accBtn2"><div class="acc-body" data-i18n="fAthBody">Elige tu lugar exacto en 3D antes de salir, comparte historias de 24h, eleva tus cuatro pilares, protege tu constancia con 1 Escudo de Racha gratis al mes y desbloquea cofres con premios.</div></div>
       </div>
       <div class="acc-item">
-        <button type="button" class="acc-btn"><span data-i18n="fB2B">Clubes y Especialistas</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fB2BBody">$0.00 MXN fijos al mes para clubes, estudios y especialistas: garantía 40% anti-inasistencias, llave QR de 60s en recepción, dispersión semanal SPEI del 80% y panel web administrativo de tu negocio.</div></div>
+        <button type="button" id="accBtn3" class="acc-btn" aria-expanded="false" aria-controls="accPanel3"><span data-i18n="fB2B">Clubes y Especialistas</span><span class="acc-chev" aria-hidden="true">⌄</span></button>
+        <div id="accPanel3" class="acc-panel" role="region" aria-labelledby="accBtn3"><div class="acc-body" data-i18n="fB2BBody">$0.00 MXN fijos al mes para clubes, estudios y especialistas: garantía 40% anti-inasistencias, llave QR de 60s en recepción, dispersión semanal SPEI del 80% y panel web administrativo de tu negocio.</div></div>
       </div>
       <div class="acc-item">
-        <button type="button" class="acc-btn"><span data-i18n="fFaq">Preguntas Frecuentes</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel"><div class="acc-body" data-i18n="fFaqBody">El acceso se habilita mediante oleadas controladas sin costo al registrarte. Top-Up flexible desde 100 KC y 1 Escudo de Racha gratis al mes en tus entrenamientos.</div></div>
+        <button type="button" id="accBtn4" class="acc-btn" aria-expanded="false" aria-controls="accPanel4"><span data-i18n="fFaq">Preguntas Frecuentes</span><span class="acc-chev" aria-hidden="true">⌄</span></button>
+        <div id="accPanel4" class="acc-panel" role="region" aria-labelledby="accBtn4"><div class="acc-body" data-i18n="fFaqBody">El acceso se habilita mediante oleadas controladas sin costo al registrarte. Top-Up flexible desde 100 KC y 1 Escudo de Racha gratis al mes en tus entrenamientos.</div></div>
       </div>
       <div class="acc-item">
-        <button type="button" class="acc-btn"><span data-i18n="fLeg">Legal y Privacidad</span><span class="acc-chev">⌄</span></button>
-        <div class="acc-panel">
+        <button type="button" id="accBtn5" class="acc-btn" aria-expanded="false" aria-controls="accPanel5"><span data-i18n="fLeg">Legal y Privacidad</span><span class="acc-chev" aria-hidden="true">⌄</span></button>
+        <div id="accPanel5" class="acc-panel" role="region" aria-labelledby="accBtn5">
           <div class="acc-body">
             <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:8px;">
-              <a href="/privacidad" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fPrivLink">Aviso de Privacidad</a>
+              <a href="/privacidad/" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fPrivLink">Aviso de Privacidad</a>
               <a href="/terminos" target="_top" style="color:var(--cyan);font-weight:700" data-i18n="fTermsLink">Términos de Uso</a>
               <a href="mailto:soporte@kineticapp.com.mx" style="color:var(--text-sec)">soporte@kineticapp.com.mx</a>
             </div>
@@ -818,23 +853,23 @@
       </div>
 
       <div class="footer-base">
-        <span id="founderCopyrightTrigger" class="founder-trigger" role="button" tabindex="0">© 2026 KineticApp S.A.S. • México.</span>
+        <span id="founderCopyrightTrigger" class="founder-trigger" role="button" tabindex="0" aria-label="KineticApp S.A.S. Derechos reservados">© 2026 KineticApp S.A.S. • México.</span>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <button type="button" id="footerLangBtn" class="lang-pill">Español / English</button>
+          <button type="button" id="footerLangBtn" class="lang-pill" aria-label="Cambiar idioma entre Español e Inglés">Español / English</button>
         </div>
       </div>
     </div>
   </footer>
 
   <!-- BOTÓN CONCIERGE 24/7 -->
-  <button type="button" id="conciergeFab" class="concierge-fab fab-hidden">✦ <span data-i18n="conciergeBtn">Concierge 24/7</span></button>
+  <button type="button" id="conciergeFab" class="concierge-fab fab-hidden" aria-label="Abrir asistente Concierge 24/7">✦ <span data-i18n="conciergeBtn">Concierge 24/7</span></button>
 
   <!-- HOJA DE DETALLE GLASS / CONCIERGE -->
-  <div id="sheetOverlay" class="sheet-overlay" role="dialog" aria-modal="true">
+  <div id="sheetOverlay" class="sheet-overlay" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="sheet-box">
       <div class="sheet-top">
         <span id="sheetTag" style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--cyan)">KINETIC</span>
-        <button type="button" id="sheetCloseBtn" class="menu-btn" aria-label="Close">✕</button>
+        <button type="button" id="sheetCloseBtn" class="menu-btn" aria-label="Cerrar diálogo">✕</button>
       </div>
       <h3 id="sheetTitle" class="font-display" style="font-size:26px;line-height:1.12"></h3>
       <div id="sheetBody"></div>
@@ -842,18 +877,18 @@
   </div>
 
   <!-- COMPUERTA PRIVADA SOLO POR CLAVE DE INVITACIÓN ACTIVA KNT-XXXX-XXXX -->
-  <div id="founderGateOverlay" class="sheet-overlay" role="dialog" aria-modal="true">
+  <div id="founderGateOverlay" class="sheet-overlay" role="dialog" aria-modal="true" aria-labelledby="founderGateTitle">
     <div class="sheet-box" style="max-width:420px;">
       <div class="sheet-top">
         <span style="font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--purple)" data-i18n="fgTag">ACCESO PRIVADO POR INVITACIÓN</span>
-        <button type="button" id="founderGateCloseBtn" class="menu-btn" aria-label="Close">✕</button>
+        <button type="button" id="founderGateCloseBtn" class="menu-btn" aria-label="Cerrar diálogo de acceso privado">✕</button>
       </div>
-      <h3 class="font-display" style="font-size:22px;line-height:1.15;margin-bottom:6px;" data-i18n-html="fgTitle"><span class="tone-bright">Ingresar código</span> <span class="tone-titanium">activo.</span></h3>
+      <h3 id="founderGateTitle" class="font-display" style="font-size:22px;line-height:1.15;margin-bottom:6px;" data-i18n-html="fgTitle"><span class="tone-bright">Ingresar código</span> <span class="tone-titanium">activo.</span></h3>
       <p style="font-size:12.5px;color:var(--titanium);margin-bottom:14px;" data-i18n="fgSub">Introduce tu clave KNT-XXXX-XXXX autorizada por Kinetic.</p>
       <div id="founderGateForm" class="field-stack">
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <input id="fgInviteCode" type="text" class="field-input" style="font-size:16px;text-transform:uppercase;" placeholder="Clave Privada (KNT-XXXX-XXXX)" autocomplete="off" autocapitalize="characters" />
-          <p id="fgInviteErr" class="form-err"></p>
+          <input id="fgInviteCode" type="text" class="field-input" style="font-size:16px;text-transform:uppercase;" placeholder="Clave Privada (KNT-XXXX-XXXX)" aria-label="Clave Privada (KNT-XXXX-XXXX)" autocomplete="off" autocapitalize="characters" />
+          <p id="fgInviteErr" class="form-err" role="alert" aria-live="polite"></p>
           <button id="fgInviteBtn" type="button" class="btn-pill" style="width:100%;background:linear-gradient(135deg,#7B61FF,#5B42F3);color:#fff;" data-i18n="fgInviteBtn">Validar Clave de Acceso</button>
         </div>
         <button id="fgRevokeBtn" type="button" data-founder-gated class="lang-pill" style="width:100%;text-align:center;" data-i18n="revokeFounder">Cerrar Pase de Invitación</button>
@@ -916,7 +951,18 @@
           errBiz: 'Ingresa el nombre de tu club o especialidad.',
           errEmail: 'Ingresa un correo electrónico válido.',
           errWa: 'Ingresa un WhatsApp válido de 10 dígitos.',
-          errNet: 'No pudimos enviar la solicitud ahora. Intenta de nuevo.'
+          errConsent: 'Marca la casilla para aceptar el Aviso de Privacidad y autorizar contacto sobre tu invitación.',
+          errNet: 'No pudimos enviar la solicitud ahora. Intenta de nuevo.',
+          skipMain: 'Saltar al contenido principal',
+          wlConsentHtml: 'Acepto el <a href="/privacidad/" target="_blank" rel="noopener noreferrer">Aviso de Privacidad</a> de Kinetic y autorizo ser contactado por correo electrónico o WhatsApp sobre mi acceso anticipado.',
+          ariaMenuOpen: 'Abrir menú de navegación',
+          ariaMenuClose: 'Cerrar menú',
+          ariaLang: 'Cambiar idioma a inglés',
+          ariaPrev: 'Disciplina anterior',
+          ariaNext: 'Siguiente disciplina',
+          ariaTrack: 'Carrusel de disciplinas deportivas',
+          ariaFounder: 'KineticApp S.A.S. Derechos reservados',
+          snapAlts: ['Entrenamiento de fuerza y alto rendimiento', 'Canchas de pádel y tenis', 'Estudios de Pilates y movimiento', 'Boxeo y acondicionamiento físico', 'Fisioterapia y recuperación deportiva']
         },
         en: {
           docTitle: 'KINETIC — Fitness, Sports & Wellness',
@@ -960,7 +1006,18 @@
           errBiz: 'Please enter your club or specialty.',
           errEmail: 'Please enter a valid email address.',
           errWa: 'Please enter a valid 10-digit WhatsApp number.',
-          errNet: 'Unable to send right now. Please try again.'
+          errConsent: 'Please check the box to accept the Privacy Notice and authorize invitation contact.',
+          errNet: 'Unable to send right now. Please try again.',
+          skipMain: 'Skip to main content',
+          wlConsentHtml: 'I accept the <a href="/privacidad/" target="_blank" rel="noopener noreferrer">Privacy Notice</a> of Kinetic and authorize contact via email or WhatsApp regarding early access.',
+          ariaMenuOpen: 'Open navigation menu',
+          ariaMenuClose: 'Close menu',
+          ariaLang: 'Switch language to Spanish',
+          ariaPrev: 'Previous discipline',
+          ariaNext: 'Next discipline',
+          ariaTrack: 'Sports disciplines carousel',
+          ariaFounder: 'KineticApp S.A.S. All rights reserved',
+          snapAlts: ['Strength training and high performance', 'Padel and tennis courts', 'Pilates and movement studios', 'Boxing and conditioning', 'Physiotherapy and sports recovery']
         }
       };
 
@@ -1022,15 +1079,17 @@
         var rb = document.getElementById('regBizDetail');
         var re = document.getElementById('regEmail');
         var rw = document.getElementById('regWhatsapp');
-        if (rn) rn.placeholder = dict.nameAtletaPh;
+        if (rn) { rn.placeholder = dict.nameAtletaPh; rn.setAttribute('aria-label', dict.nameAtletaPh); }
         if (bw && rb) {
           var isBiz = state.role === 'club' || state.role === 'especialista';
           bw.style.display = isBiz ? 'block' : 'none';
           rb.required = isBiz;
-          rb.placeholder = state.role === 'especialista' ? dict.bizSpecPh : dict.bizClubPh;
+          var bPh = state.role === 'especialista' ? dict.bizSpecPh : dict.bizClubPh;
+          rb.placeholder = bPh;
+          rb.setAttribute('aria-label', bPh);
         }
-        if (re) re.placeholder = dict.emailPh;
-        if (rw) rw.placeholder = dict.waPh;
+        if (re) { re.placeholder = dict.emailPh; re.setAttribute('aria-label', dict.emailPh); }
+        if (rw) { rw.placeholder = dict.waPh; rw.setAttribute('aria-label', dict.waPh); }
       }
 
       function applyLang(nextLang) {
@@ -1046,7 +1105,19 @@
           var k = el.getAttribute('data-i18n-html');
           if (dict[k]) el.innerHTML = dict[k];
         });
+        document.querySelectorAll('[data-snap-alt]').forEach(function (img) {
+          var idx = Number(img.getAttribute('data-snap-alt'));
+          if (dict.snapAlts && dict.snapAlts[idx]) img.alt = dict.snapAlts[idx];
+        });
+        var mOpen = document.getElementById('menuOpenBtn'); if (mOpen) mOpen.setAttribute('aria-label', dict.ariaMenuOpen);
+        var mClose = document.getElementById('menuCloseBtn'); if (mClose) mClose.setAttribute('aria-label', dict.ariaMenuClose);
+        var lBtn = document.getElementById('langBtn'); if (lBtn) lBtn.setAttribute('aria-label', dict.ariaLang);
+        var sPrev = document.getElementById('snapPrev'); if (sPrev) sPrev.setAttribute('aria-label', dict.ariaPrev);
+        var sNext = document.getElementById('snapNext'); if (sNext) sNext.setAttribute('aria-label', dict.ariaNext);
+        var sTrack = document.getElementById('snapTrack'); if (sTrack) sTrack.setAttribute('aria-label', dict.ariaTrack);
+        var fTrig = document.getElementById('founderCopyrightTrigger'); if (fTrig) fTrig.setAttribute('aria-label', dict.ariaFounder);
         updateFormPlaceholders();
+        if (typeof syncConsentUi === 'function') syncConsentUi();
         if (state.conciergeTyping) { clearTimeout(state.conciergeTyping); state.conciergeTyping = null; }
         state.conciergeSeq = (state.conciergeSeq || 0) + 1;
         state.chat = [];
@@ -1063,7 +1134,9 @@
         if (hl) hl.innerHTML = s[state.lang].h;
         if (sub) sub.textContent = s[state.lang].s;
         document.querySelectorAll('#sceneDots .scene-dot').forEach(function (dot, i) {
-          dot.classList.toggle('active', i === state.scene);
+          var act = i === state.scene;
+          dot.classList.toggle('active', act);
+          dot.setAttribute('aria-pressed', act ? 'true' : 'false');
         });
       }
 
@@ -1202,6 +1275,7 @@
         heroPauseBtn.addEventListener('click', function () {
           state.paused = !state.paused;
           heroPauseBtn.textContent = state.paused ? '▶' : '⏸';
+          heroPauseBtn.setAttribute('aria-pressed', state.paused ? 'true' : 'false');
         });
       }
 
@@ -1261,18 +1335,37 @@
       if (track && snapPrev && snapNext) {
         snapPrev.addEventListener('click', function () { track.scrollBy({ left: -330, behavior: 'smooth' }); });
         snapNext.addEventListener('click', function () { track.scrollBy({ left: 330, behavior: 'smooth' }); });
+        track.addEventListener('keydown', function (ev) {
+          if (ev.key === 'ArrowLeft') { ev.preventDefault(); track.scrollBy({ left: -330, behavior: 'smooth' }); }
+          if (ev.key === 'ArrowRight') { ev.preventDefault(); track.scrollBy({ left: 330, behavior: 'smooth' }); }
+        });
       }
 
-      // Drawer
+      // Drawer + Modales Accesibles (Teclado Tab/Escape/Restore Focus)
       var drawer = document.getElementById('navDrawer');
       var backdrop = document.getElementById('drawerBackdrop');
+      var menuOpenBtnEl = document.getElementById('menuOpenBtn');
+      var menuCloseBtnEl = document.getElementById('menuCloseBtn');
+      var lastFocusedEl = null;
+      function getFocusableNodes(root) {
+        if (!root) return [];
+        return Array.prototype.slice.call(root.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(function (el) {
+          return el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0;
+        });
+      }
       function setDrawer(open) {
         if (!drawer || !backdrop) return;
+        if (Boolean(open) === drawer.classList.contains('open')) return;
+        if (open && document.activeElement) lastFocusedEl = document.activeElement;
         drawer.classList.toggle('open', open);
         backdrop.classList.toggle('open', open);
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if (menuOpenBtnEl) menuOpenBtnEl.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (open && menuCloseBtnEl) { requestAnimationFrame(function () { menuCloseBtnEl.focus(); }); }
+        else if (!open && lastFocusedEl && typeof lastFocusedEl.focus === 'function') { lastFocusedEl.focus(); lastFocusedEl = null; }
       }
-      document.getElementById('menuOpenBtn').addEventListener('click', function () { setDrawer(true); });
-      document.getElementById('menuCloseBtn').addEventListener('click', function () { setDrawer(false); });
+      if (menuOpenBtnEl) menuOpenBtnEl.addEventListener('click', function () { setDrawer(true); });
+      if (menuCloseBtnEl) menuCloseBtnEl.addEventListener('click', function () { setDrawer(false); });
       backdrop.addEventListener('click', function () { setDrawer(false); });
       document.querySelectorAll('[data-close-drawer]').forEach(function (a) {
         a.addEventListener('click', function () { setDrawer(false); });
@@ -1330,14 +1423,21 @@
       setDrawer = function (open) { origSetDrawer(open); updateFabVisibility(); };
 
       function closeSheet() {
+        if (!overlay || !overlay.classList.contains('open')) return;
         state.conciergeSeq = (state.conciergeSeq || 0) + 1;
         if (state.conciergeTyping) { clearTimeout(state.conciergeTyping); state.conciergeTyping = null; }
-        if (overlay) overlay.classList.remove('open');
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
         updateFabVisibility();
+        if (lastFocusedEl && typeof lastFocusedEl.focus === 'function') {
+          lastFocusedEl.focus();
+          lastFocusedEl = null;
+        }
       }
       function openDetailSheet(key) {
         var item = DETAILS[key];
         if (!item || !overlay) return;
+        if (document.activeElement) lastFocusedEl = document.activeElement;
         var loc = item[state.lang];
         sheetTag.textContent = item.tag;
         sheetTitle.innerHTML = loc.t;
@@ -1345,7 +1445,10 @@
           loc.b.map(function (pt) { return '<li><span style="color:var(--cyan)">•</span><span>' + pt + '</span></li>'; }).join('') +
           '</ul><button type="button" id="sheetInviteBtn" class="btn-pill btn-cyan" style="width:100%">' + I18N[state.lang].wlSubmit + '</button>';
         overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
         updateFabVisibility();
+        var closeBtn = document.getElementById('sheetCloseBtn');
+        if (closeBtn) requestAnimationFrame(function () { closeBtn.focus(); });
         var btn = document.getElementById('sheetInviteBtn');
         if (btn) {
           btn.addEventListener('click', function () {
@@ -1406,7 +1509,7 @@
         if (/\b(comunidad|historia|historias|equipo|equipos|amigo|social|community|story|stories|squad|team)\b/.test(q)) {
           return {
             text: en
-              ? 'Connect with local athletes, organize squads for courts or group classes, and share real sessions via 24-hour venue stories.'
+              ? 'Connect with local athletes, organize training groups for courts or group classes, and share real sessions via 24-hour venue stories.'
               : 'Conecta con atletas de tu ciudad, organiza equipos para canchas o sesiones y comparte entrenamientos mediante historias efímeras de 24h desde cada sede.'
           };
         }
@@ -1565,8 +1668,11 @@
         sheetBody.appendChild(streamEl);
         sheetBody.appendChild(formEl);
         renderConciergeStream(streamEl, false);
+        if (document.activeElement) lastFocusedEl = document.activeElement;
         overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
         updateFabVisibility();
+        requestAnimationFrame(function () { inputEl.focus(); });
       }
       document.querySelectorAll('[data-detail]').forEach(function (el) {
         el.addEventListener('click', function () { openDetailSheet(el.getAttribute('data-detail')); });
@@ -1575,7 +1681,29 @@
       document.getElementById('drawerConciergeBtn').addEventListener('click', function () { setDrawer(false); openConciergeSheet(); });
       document.getElementById('sheetCloseBtn').addEventListener('click', closeSheet);
       overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSheet(); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeSheet(); setDrawer(false); } });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeSheet(); setDrawer(false); return; }
+        if (e.key !== 'Tab') return;
+        var activeContainer = (founderOverlay && founderOverlay.classList.contains('open'))
+          ? founderOverlay
+          : (overlay && overlay.classList.contains('open'))
+            ? overlay
+            : (drawer && drawer.classList.contains('open'))
+              ? drawer
+              : null;
+        if (!activeContainer) return;
+        var focusables = getFocusableNodes(activeContainer);
+        if (!focusables.length) return;
+        var first = focusables[0];
+        var last = focusables[focusables.length - 1];
+        if (!activeContainer.contains(document.activeElement)) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+          return;
+        }
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      });
 
       var waitlistSection = document.getElementById('waitlist');
       if (waitlistSection && 'IntersectionObserver' in window) {
@@ -1599,7 +1727,9 @@
       function selectRole(next) {
         state.role = next;
         document.querySelectorAll('.seg-btn').forEach(function (b) {
-          b.classList.toggle('active', b.getAttribute('data-role') === next);
+          var isSel = b.getAttribute('data-role') === next;
+          b.classList.toggle('active', isSel);
+          b.setAttribute('aria-selected', isSel ? 'true' : 'false');
         });
         updateFormPlaceholders();
         requestAnimationFrame(updateFabVisibility);
@@ -1616,8 +1746,30 @@
         document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
       });
 
-      // Envío Real a Supabase (public.fundadores_waitlist)
+      // Envío Real a Supabase (public.fundadores_waitlist con opt-in verificable LFPDPPP/TCPA)
+      var KINETIC_PRIVACY_VERSION = 'v2.8.6-2026-11';
       var form = document.getElementById('waitlistForm');
+      var consentEl = document.getElementById('regConsent');
+      var submitBtnEl = document.getElementById('submitBtn');
+      function syncConsentUi() {
+        if (!consentEl || !submitBtnEl) return;
+        var accepted = Boolean(consentEl.checked);
+        submitBtnEl.classList.toggle('btn-consent-locked', !accepted);
+        submitBtnEl.setAttribute('aria-disabled', accepted ? 'false' : 'true');
+        if (accepted) {
+          consentEl.removeAttribute('aria-invalid');
+          var eEl = document.getElementById('formErr');
+          if (eEl && (eEl.textContent === I18N.es.errConsent || eEl.textContent === I18N.en.errConsent)) {
+            eEl.style.display = 'none';
+            eEl.textContent = '';
+          }
+        }
+      }
+      if (consentEl) {
+        consentEl.checked = false;
+        consentEl.addEventListener('change', syncConsentUi);
+        syncConsentUi();
+      }
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         if (state.busy) return;
@@ -1639,6 +1791,15 @@
         var digits = rawWa.replace(/\D/g, '');
         errEl.style.display = 'none';
 
+        if (!consentEl || !consentEl.checked) {
+          errEl.textContent = dict.errConsent;
+          errEl.style.display = 'block';
+          if (consentEl) {
+            consentEl.setAttribute('aria-invalid', 'true');
+            consentEl.focus();
+          }
+          return;
+        }
         if (rawName.length < 2) { errEl.textContent = dict.errName; errEl.style.display = 'block'; return; }
         if (isBizRole && rawBiz.length < 2) { errEl.textContent = dict.errBiz; errEl.style.display = 'block'; return; }
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(rawEmail)) { errEl.textContent = dict.errEmail; errEl.style.display = 'block'; return; }
@@ -1661,26 +1822,27 @@
         var controller = new AbortController();
         var timer = setTimeout(function () { controller.abort(); }, 10000);
         try {
-          var endpoint = SUPABASE_URL + '/rest/v1/fundadores_waitlist';
           var headers = {
             'Content-Type': 'application/json',
             apikey: SUPABASE_KEY,
             Authorization: 'Bearer ' + SUPABASE_KEY,
             Prefer: 'return=minimal'
           };
-          var resp = await fetch(endpoint, {
+          var resp = await fetch(SUPABASE_URL + '/rest/v1/rpc/registrar_waitlist_con_consentimiento_v286', {
             method: 'POST', headers: headers, signal: controller.signal,
             body: JSON.stringify({
-              nombre: rawName, email: rawEmail, whatsapp: digits,
-              perfil_interes: tipoPerfil, zona: zoneNeutral, disciplina_favorita: discVal, origen: 'kineticapp.com.mx'
+              p_nombre: rawName, p_email: rawEmail, p_whatsapp: digits,
+              p_perfil_interes: tipoPerfil, p_zona: zoneNeutral, p_disciplina_favorita: discVal,
+              p_origen: 'kineticapp.com.mx', p_consent_accepted: true, p_privacy_version: KINETIC_PRIVACY_VERSION
             })
           });
-          if (!resp.ok && resp.status !== 201 && resp.status !== 409 && resp.status === 400) {
-            resp = await fetch(endpoint, {
+          if (resp.status === 404) {
+            resp = await fetch(SUPABASE_URL + '/rest/v1/fundadores_waitlist', {
               method: 'POST', headers: headers, signal: controller.signal,
               body: JSON.stringify({
-                nombre: rawName, email: rawEmail, telefono: digits,
-                tipo_perfil: tipoPerfil, ciudad_zona: zoneNeutral, disciplina_interes: discVal, origen: 'kineticapp.com.mx'
+                nombre: rawName, email: rawEmail, whatsapp: digits,
+                perfil_interes: tipoPerfil, zona: zoneNeutral, disciplina_favorita: discVal,
+                origen: 'kineticapp.com.mx', consent_accepted: true, consent_privacy_version: KINETIC_PRIVACY_VERSION
               })
             });
           }
@@ -1691,6 +1853,7 @@
               body: JSON.stringify({ action: 'notify_waitlist_admin', email: rawEmail })
             }).catch(function () {});
             if (rawBizEl) rawBizEl.value = '';
+            if (consentEl) { consentEl.checked = false; syncConsentUi(); }
             form.style.display = 'none';
             document.getElementById('formSuccess').style.display = 'block';
           } else {
@@ -1768,27 +1931,45 @@
         if (typeof updateFabVisibility === 'function') updateFabVisibility();
       }
       function closeFounderGate() {
-        if (founderOverlay) founderOverlay.classList.remove('open');
+        if (founderOverlay) {
+          founderOverlay.classList.remove('open');
+          founderOverlay.setAttribute('aria-hidden', 'true');
+        }
         var fgInviteErrEl = document.getElementById('fgInviteErr');
         if (fgInviteErrEl) { fgInviteErrEl.style.display = 'none'; fgInviteErrEl.textContent = ''; }
         var fgInviteInp = document.getElementById('fgInviteCode');
         if (fgInviteInp) fgInviteInp.value = '';
         updateFabVisibility();
+        if (lastFocusedEl && typeof lastFocusedEl.focus === 'function') {
+          lastFocusedEl.focus();
+          lastFocusedEl = null;
+        }
       }
 
       var founderTapCount = 0;
       var founderLastTapMs = 0;
       var founderTrigger = document.getElementById('founderCopyrightTrigger');
+      function handleFounderTapActivation() {
+        var nowTap = Date.now();
+        founderTapCount = nowTap - founderLastTapMs > 2800 ? 1 : founderTapCount + 1;
+        founderLastTapMs = nowTap;
+        if (founderTapCount >= 5) {
+          founderTapCount = 0;
+          founderLastTapMs = 0;
+          if (document.activeElement) lastFocusedEl = document.activeElement;
+          founderOverlay.classList.add('open');
+          founderOverlay.setAttribute('aria-hidden', 'false');
+          updateFabVisibility();
+          var fgClose = document.getElementById('founderGateCloseBtn');
+          if (fgClose) requestAnimationFrame(function () { fgClose.focus(); });
+        }
+      }
       if (founderTrigger && founderOverlay) {
-        founderTrigger.addEventListener('click', function () {
-          var nowTap = Date.now();
-          founderTapCount = nowTap - founderLastTapMs > 2800 ? 1 : founderTapCount + 1;
-          founderLastTapMs = nowTap;
-          if (founderTapCount >= 5) {
-            founderTapCount = 0;
-            founderLastTapMs = 0;
-            founderOverlay.classList.add('open');
-            updateFabVisibility();
+        founderTrigger.addEventListener('click', handleFounderTapActivation);
+        founderTrigger.addEventListener('keydown', function (ev) {
+          if (ev.key === 'Enter' || ev.key === ' ') {
+            ev.preventDefault();
+            handleFounderTapActivation();
           }
         });
       }
@@ -1808,8 +1989,15 @@
         btn.addEventListener('click', function () {
           var parent = btn.parentElement;
           var wasOpen = parent.classList.contains('open');
-          document.querySelectorAll('.acc-item').forEach(function (it) { it.classList.remove('open'); });
-          if (!wasOpen) parent.classList.add('open');
+          document.querySelectorAll('.acc-item').forEach(function (it) {
+            it.classList.remove('open');
+            var b = it.querySelector('.acc-btn');
+            if (b) b.setAttribute('aria-expanded', 'false');
+          });
+          if (!wasOpen) {
+            parent.classList.add('open');
+            btn.setAttribute('aria-expanded', 'true');
+          }
           setTimeout(updateFabVisibility, 160);
         });
       });
