@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "com.kineticapp.mx",
       "sha256_cert_fingerprints": [
-        "7A:46:6E:3F:9E:2A:4F:F1:BE:8B:EC:2D:49:D0:E8:36:28:A9:08:88:31:4A:FF:3C:FC:77:BB:BF:E3:FD:D6:DB"
+        "7A:46:6E:3F:9E:2A:4F:F1:BE:8B:EC:2D:49:D0:E8:36:28:A9:08:88:31:4A:FF:3C:FC:77:BB:BF:E3:FD:D6:DB",
+        "9A:5D:0E:CF:39:65:6B:CD:18:FD:04:C3:E9:36:EE:DD:C3:30:4B:76:EE:EB:5A:A0:61:3B:C0:44:C6:2A:86:A2"
       ]
     }
   }
